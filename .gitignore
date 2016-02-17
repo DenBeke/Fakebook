@@ -1,5 +1,10 @@
 *.class
 
+# Ignore the files from intellij
+Fakebook.iml
+src/META-INF/
+.idea/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
