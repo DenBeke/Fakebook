@@ -5,12 +5,12 @@ Fakebook.iml
 src/META-INF/
 .idea/
 
-# Ignore the netbeans project files
-nbproject/
+# Ignore the private netbeans project files
+nbproject/private/
 
 # Ignore the build artifacts
 build/
-build.xml
+
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
