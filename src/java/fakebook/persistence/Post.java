@@ -44,6 +44,12 @@ public class Post implements Serializable {
     // TODO , depending on assignment allow for images/video/...
 
     /**
+     * Empty Creator needed for Java EE.
+     */
+    public Post() {
+    }
+    
+    /**
      * Creates a new post object.
      * @param poster
      * @param wall
