@@ -6,11 +6,13 @@
 package fakebook.persistence;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 /**
  *
@@ -34,7 +36,9 @@ public class User implements Serializable {
     private String email;   // The email has to be unique, in order to avoid duplicate users.
     private String fbToken; // The token used to access the graph API for the user.
     private Boolean isAdmin;  // A boolean which indicates whether the user is an admin or not, TODO set default to false, so no problems can arrise.
-
+    @ManyToMany
+    private List<User> friends; // The friends of this user TODO make sure it is both ways.
+    
     /**
      * Creates a new User object, the Id is auto generated.
      * @param firstName
@@ -42,8 +46,9 @@ public class User implements Serializable {
      * @param email
      * @param fbToken
      * @param Admin
+     * @param friends
      */
-    public User(String firstName, String lastName, String email, String fbToken, Boolean Admin) {
+    public User(String firstName, String lastName, String email, String fbToken, Boolean Admin, List<User> friends) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -54,6 +59,20 @@ public class User implements Serializable {
         } else {
             this.isAdmin = false;   // Default to false, making sure that no-one gets admin rights by accident.
         }
+        this.friends = friends;
+    }
+
+    public Boolean addFriend(User friend) {
+        friends.add(friend);
+        return true;
+    }
+    
+    public List<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<User> friends) {
+        this.friends = friends;
     }
 
     public String getFirstName() {
