@@ -5,11 +5,12 @@
  */
 package fakebook.business;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import test.persistence.User;
+import fakebook.persistence.User;
 
 /**
  *
@@ -85,4 +86,17 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
     public List<User> getAllUsers() {
         return em.createNamedQuery("Users.getAll").getResultList();
     }
+
+    @Override
+    public List<User> getFriends(long userId) {
+        User u = this.getUser(userId);
+        if (u == null) {
+            return new ArrayList<>();
+        }
+        else {
+            return u.getFriends();
+        }
+    }
+    
+    
 }

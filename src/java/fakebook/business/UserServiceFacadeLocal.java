@@ -7,7 +7,7 @@ package fakebook.business;
 
 import java.util.List;
 import javax.ejb.Stateless;
-import test.persistence.User;
+import fakebook.persistence.User;
 
 /**
  *
@@ -48,5 +48,7 @@ public interface UserServiceFacadeLocal {
      * @return 
      */
     List<User> getAllUsers();
+
+    List<User> getFriends(long userId);
 }
 
