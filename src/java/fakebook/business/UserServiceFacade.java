@@ -97,6 +97,76 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
             return u.getFriends();
         }
     }
+
+    @Override
+    public Boolean beginFriendship(long userId1, long userId2) {
+        
+        User u1 = this.getUser(userId1);
+        User u2 = this.getUser(userId2);
+        if (u1 == null || u2 == null) {
+            // one of the users is not in the database.
+            return false;
+        }
+        if (u1.equals(u2)) {
+            // same user, not possible to add as friend
+            return false;
+        }
+        if (u1.getFriends().contains(u2)) {
+            // User1's friends already contains u2
+            return false;
+        }
+        if (u2.getFriends().contains(u1)) {
+            return false;
+        }
+        
+        List<User> f1 = u1.getFriends();
+        f1.add(u2);
+        u1.setFriends(f1);
+        List<User> f2 = u2.getFriends();
+        f2.add(u1);
+        u2.setFriends(f2);
+        
+        em.merge(u1);
+        em.merge(u2);
+        
+        return true;
+    }
+
+    @Override
+    public Boolean endFriendship(long userId1, long userId2) {
+        User u1 = this.getUser(userId1);
+        User u2 = this.getUser(userId2);
+        if (u1 == null || u2 == null) {
+            // one of the users is not in the database.
+            return false;
+        }
+        if (u1.equals(u2)) {
+            // same user, not possible to add as friend
+            return false;
+        }
+        if (!u1.getFriends().contains(u2)) {
+            // User1's friends does not contain u2
+            return false;
+        }
+        if (!u2.getFriends().contains(u1)) {
+            return false;
+        }
+        
+        List<User> f1 = u1.getFriends();
+        f1.remove(u2);
+        u1.setFriends(f1);
+        List<User> f2 = u2.getFriends();
+        f2.remove(u1);
+        u2.setFriends(f2);
+        
+        em.merge(u1);
+        em.merge(u2);
+        
+        return true;
+    }
+    
+    
+    
     
     
 }
