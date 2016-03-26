@@ -5,6 +5,7 @@
  */
 package fakebook.business;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import test.persistence.User;
 
@@ -33,5 +34,19 @@ public interface UserServiceFacadeLocal {
      * @return true if successful, false otherwise
      */
     public Boolean deleteAccount(long userId);
+
+    /**
+     * Gets the user with corresponding userId
+     * if userId is not used, it will return null
+     * @param userId
+     * @return 
+     */
+    User getUser(long userId);
+    
+    /**
+     * Returns a list with all users in the database.
+     * @return 
+     */
+    List<User> getAllUsers();
 }
 

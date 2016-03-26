@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
@@ -20,6 +22,7 @@ import javax.persistence.ManyToMany;
  * User Entity to store users in database
  */
 @Entity
+@NamedQueries({@NamedQuery(name="Users.getAll",query="SELECT e FROM Users e"), @NamedQuery(name="Users.getByEmail", query="SELECT u FROM Users e WHERE e.email LIKE :email")})
 public class User implements Serializable {
 
     public User() {
