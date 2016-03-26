@@ -41,6 +41,8 @@ public class User implements Serializable {
     private Boolean isAdmin;  // A boolean which indicates whether the user is an admin or not, TODO set default to false, so no problems can arrise.
     @ManyToMany
     private List<User> friends; // The friends of this user TODO make sure it is both ways.
+    @ManyToMany
+    private List<User> friendshipRequests; // The users to which this user has send a friendship request, not symetric
     
     /**
      * Creates a new User object, the Id is auto generated.
@@ -63,8 +65,17 @@ public class User implements Serializable {
             this.isAdmin = false;   // Default to false, making sure that no-one gets admin rights by accident.
         }
         this.friends = friends;
+        // users start with empty friendship lists.
     }
 
+    public List<User> getFriendshipRequests() {
+        return friendshipRequests;
+    }
+
+    public void setFriendshipRequests(List<User> friendshipRequests) {
+        this.friendshipRequests = friendshipRequests;
+    }
+    
     public Boolean addFriend(User friend) {
         friends.add(friend);
         return true;

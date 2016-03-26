@@ -164,9 +164,4 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
         
         return true;
     }
-    
-    
-    
-    
-    
 }
