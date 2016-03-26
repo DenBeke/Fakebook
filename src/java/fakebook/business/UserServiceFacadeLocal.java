@@ -25,13 +25,6 @@ public interface UserServiceFacadeLocal {
      */
     public int newUser(User user) ;
     
-    /**
-     * Checks if the provided password is correct, for the given user.
-     * @param userId
-     * @param passwd
-     * @return true if passwords match, false if they don't
-     */
-    public Boolean login(long userId, String passwd) ;
     
     /**
      * Deletes an account from the database
