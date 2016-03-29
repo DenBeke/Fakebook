@@ -13,7 +13,6 @@ import fakebook.persistence.User;
  *
  * @author robin
  */
-@Stateless
 public interface UserServiceFacadeLocal {
 
     /**
