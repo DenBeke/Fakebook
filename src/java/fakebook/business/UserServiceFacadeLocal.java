@@ -8,11 +8,13 @@ package fakebook.business;
 import java.util.List;
 import javax.ejb.Stateless;
 import fakebook.persistence.User;
+import javax.ejb.Local;
 
 /**
  *
  * @author robin
  */
+@Local
 public interface UserServiceFacadeLocal {
 
     /**
