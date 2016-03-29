@@ -21,8 +21,8 @@ import javax.persistence.NamedQuery;
  * @author robin
  * User Entity to store users in database
  */
-@Entity
-@NamedQueries({@NamedQuery(name="Users.getAll",query="SELECT e FROM Users e"), @NamedQuery(name="Users.getByEmail", query="SELECT u FROM Users e WHERE e.email LIKE :email")})
+@Entity(name = "FBUser")
+@NamedQueries({@NamedQuery(name="User.getAll",query="SELECT e FROM FBUser e"), @NamedQuery(name="User.getByEmail", query="SELECT e FROM FBUser e WHERE e.email LIKE :email")})
 public class User implements Serializable {
 
     public User() {

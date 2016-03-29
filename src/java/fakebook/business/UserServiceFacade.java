@@ -63,7 +63,7 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
      * @return true if email is in database, false otherwise.
      */
     private Boolean emailUsed(String email) {
-        List<User> users = em.createNamedQuery("Users.getByEmail")
+        List<User> users = em.createNamedQuery("User.getByEmail")
             .setParameter("email", email)
             .getResultList();
         if (!users.isEmpty()) {
@@ -84,7 +84,7 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
 
     @Override
     public List<User> getAllUsers() {
-        return em.createNamedQuery("Users.getAll").getResultList();
+        return em.createNamedQuery("User.getAll").getResultList();
     }
 
     @Override

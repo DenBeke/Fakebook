@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
 /**
@@ -21,6 +23,8 @@ import javax.persistence.OneToOne;
  * @author robin
  */
 @Entity
+@NamedQueries({@NamedQuery(name="Posts.getAll",query="SELECT p FROM Post p"), @NamedQuery(name="Posts.getByPoster", query="SELECT p FROM Post p WHERE p.poster LIKE :uId")})
+
 public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
