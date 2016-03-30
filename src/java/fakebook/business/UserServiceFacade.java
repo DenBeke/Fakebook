@@ -67,12 +67,7 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
         List<User> users = em.createNamedQuery("User.getByEmail")
             .setParameter("email", email)
             .getResultList();
-        if (!users.isEmpty()) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return !users.isEmpty();
     }
     
     @Override

@@ -59,7 +59,7 @@ public class RegisterServlet extends HttpServlet {
             
             // Check if the user is logging in with facebook
             if (fbToken != null) {
-                // TODO: Facebook login
+                // TODO: Check again whether token is valid?
             }
             else { // User is logging in normally
                 // The email and password values have to be provided
@@ -71,7 +71,7 @@ public class RegisterServlet extends HttpServlet {
             
             // TODO: Check if user already exists and handle accordingly
             
-            User user = new User(firstName, lastName, email, fbToken, false, new Vector<User>());
+            User user = new User(firstName, lastName, email, fbToken, password, false, new Vector<User>());
             userService.newUser(user);
             
             request.getRequestDispatcher("login").forward(request, response);

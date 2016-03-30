@@ -5,6 +5,7 @@
  */
 package fakebook.business;
 
+import fakebook.persistence.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -35,33 +36,60 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        String fbtoken = request.getParameter("fbtoken");
+        String fbToken = request.getParameter("fbToken");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
         // TODO: What is the value of email when facebook user refuses to share it?
         //       An error should be given when this happens
 
-        if (email == null) { // Accessing page directly
+        if (email == null && fbToken == null) { // Accessing page directly
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
         else {
-            // TODO: Make sure all parameters are provided
-            // - email must always be provided
-            // - if fbtoken is null, password must also be provided
-            // - if fbtoken is set, check if user already exists and log him in
+            if (fbToken != null) {
 
-            // Check if user exists
-            if (userService.emailUsed(email)) {
-                response.sendRedirect(request.getContextPath() + "/temp_welcome.jsp");
+                // TODO: Verify that the token is valid by trying to use it to access something
+                // TODO: Get all information here instead of by POST to prevent misuse
+
+                // Check if user exists
+                if (userService.emailUsed(email)) {
+                    // TODO: Check if merging (fbToken is passed now but null in database)
+                    
+                    response.sendRedirect(request.getContextPath() + "/temp_welcome.jsp");
+                }
+                else { // New account
+                    System.out.println("register");
+                    request.getRequestDispatcher("register").forward(request, response);
+                }
             }
-            else { // User did not exist yet
-                // TODO: If fbtoken is set, forward to register
-                
+            else { // Non-facebook login
                 request.setAttribute("email", email);
                 request.setAttribute("password", password);
-                request.setAttribute("error", "Incorrect username or password");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+
+                if (email.isEmpty() || password.isEmpty()) {
+                    request.setAttribute("error", "Please provide both an email and a password");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                }
+
+                // Check if user exists
+                if (userService.emailUsed(email)) {
+                    // TODO: Check if merging (password is passed now but null in database)
+
+                    // TODO
+                    // User user = userService.getUserByEmail(email); // TODO: emailUsed check is not needed, just check if this returns null
+                    // if (password.equals(user.getPassword())) {
+                        response.sendRedirect(request.getContextPath() + "/temp_welcome.jsp");
+                    //}
+                    //else {
+                    //    request.setAttribute("error", "Incorrect email or password");
+                    //    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    //}
+                }
+                else { // User did not exist yet
+                    request.setAttribute("error", "Incorrect email or password");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                }
             }
         }
     }
