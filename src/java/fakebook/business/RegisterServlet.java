@@ -5,8 +5,11 @@
  */
 package fakebook.business;
 
+import fakebook.persistence.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Vector;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,9 +20,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author texus
  */
-@WebServlet(name = "ProcessLogin", urlPatterns = {"/ProcessLogin"})
-public class ProcessLoginServlet extends HttpServlet {
+@WebServlet(name = "Register", urlPatterns = {"/register"})
+public class RegisterServlet extends HttpServlet {
 
+    @EJB
+    private UserServiceFacadeLocal userService;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -30,14 +36,46 @@ public class ProcessLoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        // Get information from request
+        
+        String fbToken = request.getParameter("fbToken");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        // TODO: Check user, dispatch back to login page when wrong account information
-
-        request.getRequestDispatcher("temp_welcome.jsp").forward(request, response);
+        if (email == null) {
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+        }
+        else {
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String gender = request.getParameter("gender");
+            String birthday = request.getParameter("birthday");
+            
+            request.setAttribute("email", request.getParameter("email"));
+            request.setAttribute("password", request.getParameter("password"));
+            request.setAttribute("firstName", firstName);
+            request.setAttribute("lastName", lastName);
+            request.setAttribute("gender", gender);
+            request.setAttribute("birthday", birthday);
+            
+            // Check if the user is logging in with facebook
+            if (fbToken != null) {
+                // TODO: Facebook login
+            }
+            else { // User is logging in normally
+                // The email and password values have to be provided
+                if (email.isEmpty() || password.isEmpty()) {
+                    request.setAttribute("error", "Email and password have to be provided");
+                    request.getRequestDispatcher("register.jsp").forward(request, response);
+                }
+            }
+            
+            // TODO: Check if user already exists and handle accordingly
+            
+            User user = new User(firstName, lastName, email, fbToken, false, new Vector<User>());
+            userService.newUser(user);
+            
+            request.getRequestDispatcher("login").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -76,7 +114,7 @@ public class ProcessLoginServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Process Login Servlet";
+        return "Login Servlet";
     }// </editor-fold>
 
 }
