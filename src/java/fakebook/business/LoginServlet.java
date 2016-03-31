@@ -53,7 +53,7 @@ public class LoginServlet extends HttpServlet {
                 // TODO: Get all information here instead of by POST to prevent misuse
 
                 // Check if user exists
-                if (userService.emailUsed(email)) {
+                if (userService.getUserByEmail(email) != null) {
                     // TODO: Check if merging (fbToken is passed now but null in database)
                     
                     response.sendRedirect(request.getContextPath() + "/temp_welcome.jsp");
@@ -73,7 +73,7 @@ public class LoginServlet extends HttpServlet {
                 }
 
                 // Check if user exists
-                if (userService.emailUsed(email)) {
+                if (userService.getUserByEmail(email) != null) {
                     // TODO: Check if merging (password is passed now but null in database)
 
                     // TODO

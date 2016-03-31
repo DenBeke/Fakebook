@@ -41,7 +41,7 @@ public interface UserServiceFacadeLocal {
      * @param email
      * @return true if email is in database, false otherwise.
      */
-    public Boolean emailUsed(String email);
+    public User getUserByEmail(String email);
 
     /**
      * Gets the user with corresponding userId

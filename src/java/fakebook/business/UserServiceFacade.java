@@ -35,7 +35,7 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
     @Override
     public int newUser(User user) {
         // Check if user email address is already in database.
-        if (this.emailUsed(user.getEmail())) {
+        if (this.getUserByEmail(user.getEmail()) != null) {
             return 1;
         } 
         // Email is not in database, persist the user
@@ -58,16 +58,20 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
     }
     
     /**
-     * checks if an email is already in the database.
+     * returns the user corresponding to the email
      * @param email
      * @return true if email is in database, false otherwise.
      */
     @Override
-    public Boolean emailUsed(String email) {
+    public User getUserByEmail(String email) {
         List<User> users = em.createNamedQuery("User.getByEmail")
             .setParameter("email", email)
             .getResultList();
-        return !users.isEmpty();
+        if (users.isEmpty()) {
+            return null;
+        } else {
+            return users.get(0);
+        }
     }
     
     @Override
