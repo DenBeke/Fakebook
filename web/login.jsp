@@ -46,7 +46,7 @@
                         input.name = "fbToken";
                         input.value = accessToken;
                         form.appendChild(input);
-                        
+                        /*
                         input = document.createElement('input');
                         input.type = "text";
                         input.name = "firstName";
@@ -76,7 +76,7 @@
                         input.name = "birthday";
                         input.value = response['birthday'];
                         form.appendChild(input);
-
+                        */
                         document.body.appendChild(form);
                         form.submit();
                     });

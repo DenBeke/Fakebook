@@ -8,7 +8,7 @@ package fakebook.business;
 import fakebook.persistence.User;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,7 +37,6 @@ public class RegisterServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        String fbToken = request.getParameter("fbToken");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -50,31 +49,39 @@ public class RegisterServlet extends HttpServlet {
             String gender = request.getParameter("gender");
             String birthday = request.getParameter("birthday");
             
-            request.setAttribute("email", request.getParameter("email"));
-            request.setAttribute("password", request.getParameter("password"));
+            request.setAttribute("email", email);
+            request.setAttribute("password", password);
             request.setAttribute("firstName", firstName);
             request.setAttribute("lastName", lastName);
             request.setAttribute("gender", gender);
             request.setAttribute("birthday", birthday);
             
-            // Check if the user is logging in with facebook
-            if (fbToken != null) {
-                // TODO: Check again whether token is valid?
+            // The email and password values have to be provided
+            if (password == null || email.isEmpty() || password.isEmpty()) {
+                request.setAttribute("error", "Email and password have to be provided");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
             }
-            else { // User is logging in normally
-                // The email and password values have to be provided
-                if (email.isEmpty() || password.isEmpty()) {
-                    request.setAttribute("error", "Email and password have to be provided");
+            
+            // Check if user already exists
+            User user = userService.getUserByEmail(email);
+            if (user != null) {
+                
+                // Check if existing user was a facebook account
+                if (user.getPassword() == null) {
+                    // TODO: Merge acount
+                    //       Security issue: shouldn't the user be asked to login to facebook at this point?
+                }
+                else { // Account was already registered
+                    request.setAttribute("error", "An account has already been created with the email address");
                     request.getRequestDispatcher("register.jsp").forward(request, response);
                 }
             }
-            
-            // TODO: Check if user already exists and handle accordingly
-            
-            User user = new User(firstName, lastName, email, fbToken, password, false, new Vector<User>());
-            userService.newUser(user);
-            
-            request.getRequestDispatcher("login").forward(request, response);
+            else { // Account did not exist yet
+                user = new User(firstName, lastName, email, "", password, false, new ArrayList<>());
+                userService.newUser(user);
+
+                request.getRequestDispatcher("login").forward(request, response);
+            }
         }
     }
 

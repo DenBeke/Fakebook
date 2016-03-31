@@ -5,9 +5,14 @@
  */
 package fakebook.business;
 
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.Parameter;
+import com.restfb.Version;
 import fakebook.persistence.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,51 +45,58 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        // TODO: What is the value of email when facebook user refuses to share it?
-        //       An error should be given when this happens
-
         if (email == null && fbToken == null) { // Accessing page directly
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
         else {
             if (fbToken != null) {
+                FacebookClient facebookClient = new DefaultFacebookClient(fbToken, Version.LATEST);
+                com.restfb.types.User user = facebookClient.fetchObject("me", com.restfb.types.User.class, Parameter.with("fields","first_name,last_name,email,gender,birthday"));
+                
+                if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+                    
+                    // Check if user exists
+                    if (userService.getUserByEmail(email) != null) {
+                        // TODO: Check if merging (fbToken is passed now but null in database)
+                    }
+                    else { // New account
+                        User newUser = new User(user.getFirstName(),
+                                                user.getLastName(),
+                                                user.getEmail(),
+                                                fbToken,
+                                                "",
+                                                false,
+                                                new ArrayList<>());
 
-                // TODO: Verify that the token is valid by trying to use it to access something
-                // TODO: Get all information here instead of by POST to prevent misuse
-
-                // Check if user exists
-                if (userService.getUserByEmail(email) != null) {
-                    // TODO: Check if merging (fbToken is passed now but null in database)
+                        userService.newUser(newUser);
+                    }
                     
                     response.sendRedirect(request.getContextPath() + "/temp_welcome.jsp");
                 }
-                else { // New account
-                    System.out.println("register");
-                    request.getRequestDispatcher("register").forward(request, response);
+                else {
+                    request.setAttribute("error", "Facebook did not provide an email address");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
                 }
             }
             else { // Non-facebook login
                 request.setAttribute("email", email);
                 request.setAttribute("password", password);
 
-                if (email.isEmpty() || password.isEmpty()) {
+                if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
                     request.setAttribute("error", "Please provide both an email and a password");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                 }
 
                 // Check if user exists
-                if (userService.getUserByEmail(email) != null) {
-                    // TODO: Check if merging (password is passed now but null in database)
-
-                    // TODO
-                    // User user = userService.getUserByEmail(email); // TODO: emailUsed check is not needed, just check if this returns null
-                    // if (password.equals(user.getPassword())) {
+                User user = userService.getUserByEmail(email);
+                if (user != null) {
+                    if (password != null && !password.isEmpty() && password.equals(user.getPassword())) {
                         response.sendRedirect(request.getContextPath() + "/temp_welcome.jsp");
-                    //}
-                    //else {
-                    //    request.setAttribute("error", "Incorrect email or password");
-                    //    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    //}
+                    }
+                    else {
+                        request.setAttribute("error", "Incorrect email or password");
+                        request.getRequestDispatcher("login.jsp").forward(request, response);
+                    }
                 }
                 else { // User did not exist yet
                     request.setAttribute("error", "Incorrect email or password");

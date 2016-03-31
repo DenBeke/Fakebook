@@ -22,5 +22,6 @@
             </table>
             <input type="submit" name="action" class="btn btn-default" value="Register" />
         </form>
+        <p>Already have an account? Go to <a href="login">login page</a>.</p>
     </body>
 </html>
