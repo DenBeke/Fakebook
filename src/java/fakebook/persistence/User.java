@@ -38,6 +38,7 @@ public class User implements Serializable {
     @Column(unique = true)
     private String email;   // The email has to be unique, in order to avoid duplicate users.
     private String fbToken; // The token used to access the graph API for the user.
+    private String password; // TODO: We should store a hash instead
     private Boolean isAdmin;  // A boolean which indicates whether the user is an admin or not, TODO set default to false, so no problems can arrise.
     @ManyToMany
     private List<User> friends; // The friends of this user TODO make sure it is both ways.
@@ -50,14 +51,17 @@ public class User implements Serializable {
      * @param lastName
      * @param email
      * @param fbToken
+     * @param password
      * @param Admin
      * @param friends
      */
-    public User(String firstName, String lastName, String email, String fbToken, Boolean Admin, List<User> friends) {
+    public User(String firstName, String lastName, String email, String fbToken, String password, Boolean Admin, List<User> friends) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.fbToken = fbToken;
+        this.password = password;
+
         // Make sure that admin is not null.
         if (Admin != null) {
             this.isAdmin = Admin;
@@ -119,6 +123,14 @@ public class User implements Serializable {
 
     public void setFbToken(String fbToken) {
         this.fbToken = fbToken;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Boolean getIsAdmin() {

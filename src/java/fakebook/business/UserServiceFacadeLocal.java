@@ -8,12 +8,13 @@ package fakebook.business;
 import java.util.List;
 import javax.ejb.Stateless;
 import fakebook.persistence.User;
+import javax.ejb.Local;
 
 /**
  *
  * @author robin
  */
-@Stateless
+@Local
 public interface UserServiceFacadeLocal {
 
     /**
@@ -34,6 +35,13 @@ public interface UserServiceFacadeLocal {
      * @return true if successful, false otherwise
      */
     public Boolean deleteAccount(long userId);
+    
+    /**
+     * checks if an email is already in the database.
+     * @param email
+     * @return true if email is in database, false otherwise.
+     */
+    public Boolean emailUsed(String email);
 
     /**
      * Gets the user with corresponding userId
