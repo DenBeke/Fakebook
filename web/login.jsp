@@ -6,6 +6,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Login page</title>
         
+        <link rel="stylesheet" type="text/css" class="ui" href="semantic/semantic.min.css">
+        
         <script>
             window.fbAsyncInit = function() {
                 FB.init({
@@ -88,26 +90,75 @@
           </script>
     </head>
     <body>
-        <h1>Login</h1>
-
-        <c:if test="${not empty error}"><p style="background: red; color: white;"><b>${error}</b></p></c:if>
         
-        <form action="login" method="POST">
-            <table>
-                <tr>
-                    <td>Email</td>
-                    <td><input type="text" name="email" value="${email}" /></td>
-                </tr>
-                <tr>
-                    <td>Password</td>
-                    <td><input type="password" name="password" value="${password}" /></td>
-                </tr>
-            </table>
-            <input type="submit" name="action" class="btn btn-default" value="Login" />
-        </form>
-
-        <p><a href="register">Register</a></p>
+        <p></p>
         
-        <fb:login-button scope="public_profile,user_birthday,email" onlogin="checkLoginState();"></fb:login-button>
+        <div id="header" class="ui container">
+            <div class="ui menu">
+                <div class="header item">
+                    Fakebook
+                </div>
+                <a class="item">
+                    Home
+                </a>
+                <a class="item">
+                    Login
+                </a>
+            </div>
+        </div>
+        
+        <div class="ui container">
+            
+            <h2></h2>
+            
+            <h2 class="ui dividing header">Login</h2>
+            
+            <h2></h2>
+
+            <c:if test="${not empty error}"><p style="background: red; color: white;"><b>${error}</b></p></c:if>
+
+            
+            <div class="ui three column very relaxed grid">
+            
+                <div class="eight wide column">
+                
+                <form action="login" method="POST" class="ui form">
+
+                    <div class="field">
+                        <label>Email</label>
+                        <input type="text" name="email" value="${email}" />
+                    </div>
+
+                    <div class="field">
+                        <label>Password</label>
+                        <input type="password" name="password" value="${password}" />
+                    </div>
+
+                    <!--<table>
+                        <tr>
+                            <td>Email</td>
+                            <td><input type="text" name="email" value="${email}" /></td>
+                        </tr>
+                        <tr>
+                            <td>Password</td>
+                            <td><input type="password" name="password" value="${password}" /></td>
+                        </tr>
+                    </table>
+                    -->
+                    <input type="submit" name="action" class="btn btn-default ui primary button" value="Login" />
+                    <a href="register" class="ui button">Register</a>
+                </form>
+                
+                </div>
+                       
+
+                <div class="eight wide column">
+                        
+                    <fb:login-button class="" scope="public_profile,user_birthday,email" onlogin="checkLoginState();"></fb:login-button>
+                    
+                </div>
+            
+        </div>
+            
     </body>
 </html>
