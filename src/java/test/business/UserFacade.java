@@ -49,7 +49,7 @@ public class UserFacade implements UserFacadeLocal {
 
     @Override
     public List<User> getAllUsers() {
-        return em.createNamedQuery("Users.getAll").getResultList();
+        return em.createNamedQuery("getAll").getResultList();
     }
 
     // Add business logic below. (Right-click in editor and choose
