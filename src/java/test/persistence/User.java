@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -23,7 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity(name = "Users")
 @Table
 @NamedQueries({@NamedQuery(name="Users.getAll",query="SELECT e FROM Users e")})
-@XmlRootElement
 public class User implements Serializable {
 
     public User() {
