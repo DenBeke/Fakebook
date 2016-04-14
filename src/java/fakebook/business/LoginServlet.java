@@ -51,39 +51,39 @@ public class LoginServlet extends HttpServlet {
         else {
             if (fbToken != null) {
                 FacebookClient facebookClient = new DefaultFacebookClient(fbToken, Version.LATEST);
-                com.restfb.types.User user = facebookClient.fetchObject("me", com.restfb.types.User.class, Parameter.with("fields","first_name,last_name,email,gender,birthday"));
+                com.restfb.types.User fbuser = facebookClient.fetchObject("me", com.restfb.types.User.class, Parameter.with("fields","first_name,last_name,email,gender,birthday"));
                 
-                if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+                if (fbuser.getEmail() != null && !fbuser.getEmail().isEmpty()) {
                     
                     // Check if user exists
-                    User existingUser = userService.getUserByEmail(email);
-                    if (existingUser != null) {
+                    User user = userService.getUserByEmail(email);
+                    if (user != null) {
                         // TODO: Check if merging (fbToken is passed now but null in database)
                         
                         // Update user data
-                        if (user.getFirstName() != null && !user.getFirstName().isEmpty())
-                            existingUser.setFirstName(user.getFirstName());
-                        if (user.getLastName() != null && !user.getLastName().isEmpty())
-                            existingUser.setLastName(user.getLastName());
-                        if (user.getGender() != null && !user.getGender().isEmpty())
-                            existingUser.setGender(user.getGender());
-                        if (user.getBirthday() != null && !user.getBirthday().isEmpty())
-                            existingUser.setBirthday(user.getBirthday());
+                        if (fbuser.getFirstName() != null && !fbuser.getFirstName().isEmpty())
+                            user.setFirstName(fbuser.getFirstName());
+                        if (fbuser.getLastName() != null && !fbuser.getLastName().isEmpty())
+                            user.setLastName(fbuser.getLastName());
+                        if (fbuser.getGender() != null && !fbuser.getGender().isEmpty())
+                            user.setGender(fbuser.getGender());
+                        if (fbuser.getBirthday() != null && !fbuser.getBirthday().isEmpty())
+                            user.setBirthday(fbuser.getBirthday());
                     }
                     else { // New account
-                        User newUser = new User(user.getEmail(),
-                                                fbToken,
-                                                null,
-                                                user.getFirstName(),
-                                                user.getLastName(),
-                                                user.getGender(),
-                                                user.getBirthday(),
-                                                false);
+                        user = new User(fbuser.getEmail(),
+                                        fbToken,
+                                        null,
+                                        fbuser.getFirstName(),
+                                        fbuser.getLastName(),
+                                        fbuser.getGender(),
+                                        fbuser.getBirthday(),
+                                        false);
 
-                        userService.newUser(newUser);
+                        userService.newUser(user);
                     }
                     
-                    response.sendRedirect(request.getContextPath() + "/temp_welcome.jsp");
+                    response.sendRedirect(request.getContextPath() + "/wall?uid=" + user.getId());
                 }
                 else {
                     request.setAttribute("error", "Facebook did not provide an email address");
@@ -103,7 +103,7 @@ public class LoginServlet extends HttpServlet {
                 User user = userService.getUserByEmail(email);
                 if (user != null) {
                     if (password != null && !password.isEmpty() && password.equals(user.getPassword())) {
-                        response.sendRedirect(request.getContextPath() + "/temp_welcome.jsp");
+                        response.sendRedirect(request.getContextPath() + "/wall?uid=" + user.getId());
                     }
                     else {
                         request.setAttribute("error", "Incorrect email or password");
