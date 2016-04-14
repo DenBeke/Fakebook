@@ -8,6 +8,11 @@
     </head>
     <body>
         <h1>Wall of user ${user}</h1>
-        <p>Nothing to show</p>
+        
+        <c:if test="${empty posts}"><p>This user has no posts on his wall yet.</p></c:if>
+        
+        <c:forEach items="${posts}" var="post">
+            <p><c:out value="${post.getText()}" escapeXml="true"/></p>
+        </c:forEach>
     </body>
 </html>

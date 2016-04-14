@@ -34,14 +34,19 @@ public class PostServiceFacade implements PostServiceFacadeLocal {
     public List<Post> getAllPosts() {
         return em.createNamedQuery("Posts.getAll").getResultList();
     }
-
+    
     @Override
-    public List<Post> getPostByPoster(long userId) {
-        return em.createNamedQuery("Posts.getAll").setParameter("uId", userId).getResultList();
+    public List<Post> getPostsOnWall(long userId) {
+        return em.createNamedQuery("Posts.getOnWall").setParameter("uId", userId).getResultList();
     }
 
     @Override
-    public List<Post> getPostByMention(long userId) {
+    public List<Post> getPostsByPoster(long userId) {
+        return em.createNamedQuery("Posts.getByPoster").setParameter("uId", userId).getResultList();
+    }
+
+    @Override
+    public List<Post> getPostsByMention(long userId) {
         //TODO
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

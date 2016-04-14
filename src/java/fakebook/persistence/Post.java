@@ -23,7 +23,9 @@ import javax.persistence.OneToOne;
  * @author robin
  */
 @Entity
-@NamedQueries({@NamedQuery(name="Posts.getAll",query="SELECT p FROM Post p"), @NamedQuery(name="Posts.getByPoster", query="SELECT p FROM Post p WHERE p.poster LIKE :uId")})
+@NamedQueries({@NamedQuery(name="Posts.getAll",query="SELECT p FROM Post p"),
+               @NamedQuery(name="Posts.getOnWall", query="SELECT p FROM Post p WHERE p.wall.id = :uId"),
+               @NamedQuery(name="Posts.getByPoster", query="SELECT p FROM Post p WHERE p.poster.id = :uId")})
 
 public class Post implements Serializable {
 

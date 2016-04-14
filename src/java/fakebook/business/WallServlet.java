@@ -9,10 +9,12 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.Version;
+import fakebook.persistence.Post;
 import fakebook.persistence.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,10 +44,15 @@ public class WallServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userIdStr = request.getParameter("uid");
         if (userIdStr != null) {
-            request.setAttribute("user", Long.decode(userIdStr));
+            long userId = Long.decode(userIdStr);
+            request.setAttribute("user", userId);
+            
+            List<Post> posts = postService.getPostsOnWall(userId);
+            request.setAttribute("posts", posts);
         }
         else { // TODO: How to figure out who the current user is?
             request.setAttribute("user", -1);
+            request.setAttribute("posts", new ArrayList<>());
         }
         request.getRequestDispatcher("wall.jsp").forward(request, response);
     }

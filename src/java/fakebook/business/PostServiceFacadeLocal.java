@@ -36,16 +36,24 @@ public interface PostServiceFacadeLocal {
     public List<Post> getAllPosts();
     
     /**
+     * Return all posts on the wall of a single user.
+     * @param userId
+     * @return 
+     */
+    public List<Post> getPostsOnWall(long userId);
+    
+    /**
      * Return all posts by a single user.
      * @param userId
      * @return 
      */
-    public List<Post> getPostByPoster(long userId);
+    public List<Post> getPostsByPoster(long userId);
+    
     
     /**
      * Return all posts the user is mentioned in
      * @param userId
      * @return 
      */
-    public List<Post> getPostByMention(long userId);
+    public List<Post> getPostsByMention(long userId);
 }

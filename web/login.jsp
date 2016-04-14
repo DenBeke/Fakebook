@@ -48,37 +48,7 @@
                         input.name = "fbToken";
                         input.value = accessToken;
                         form.appendChild(input);
-                        /*
-                        input = document.createElement('input');
-                        input.type = "text";
-                        input.name = "firstName";
-                        input.value = response['first_name'];
-                        form.appendChild(input);
-                        
-                        input = document.createElement('input');
-                        input.type = "text";
-                        input.name = "lastName";
-                        input.value = response['last_name'];
-                        form.appendChild(input);
-                        
-                        input = document.createElement('input');
-                        input.type = "text";
-                        input.name = "email";
-                        input.value = response['email'];
-                        form.appendChild(input);
-                        
-                        input = document.createElement('input');
-                        input.type = "text";
-                        input.name = "gender";
-                        input.value = response['gender'];
-                        form.appendChild(input);
-                        
-                        input = document.createElement('input');
-                        input.type = "text";
-                        input.name = "birthday";
-                        input.value = response['birthday'];
-                        form.appendChild(input);
-                        */
+
                         document.body.appendChild(form);
                         form.submit();
                     });
@@ -134,17 +104,6 @@
                         <input type="password" name="password" value="${password}" />
                     </div>
 
-                    <!--<table>
-                        <tr>
-                            <td>Email</td>
-                            <td><input type="text" name="email" value="${email}" /></td>
-                        </tr>
-                        <tr>
-                            <td>Password</td>
-                            <td><input type="password" name="password" value="${password}" /></td>
-                        </tr>
-                    </table>
-                    -->
                     <input type="submit" name="action" class="btn btn-default ui primary button" value="Login" />
                     <a href="register" class="ui button">Register</a>
                 </form>
