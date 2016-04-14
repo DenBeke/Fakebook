@@ -6,6 +6,7 @@
 package fakebook.persistence;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,34 +34,43 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private String firstName;
-    private String lastName;
     @Column(unique = true)
     private String email;   // The email has to be unique, in order to avoid duplicate users.
+    
+    private String firstName;
+    private String lastName;
+    private String gender;
+    private String birthday;
+
     private String fbToken; // The token used to access the graph API for the user.
     private String password; // TODO: We should store a hash instead
     private Boolean isAdmin;  // A boolean which indicates whether the user is an admin or not, TODO set default to false, so no problems can arrise.
+    
     @ManyToMany
     private List<User> friends; // The friends of this user TODO make sure it is both ways.
+    
     @ManyToMany
     private List<User> friendshipRequests; // The users to which this user has send a friendship request, not symetric
     
     /**
      * Creates a new User object, the Id is auto generated.
-     * @param firstName
-     * @param lastName
      * @param email
      * @param fbToken
      * @param password
+     * @param firstName
+     * @param lastName
+     * @param gender
+     * @param birthday
      * @param Admin
-     * @param friends
      */
-    public User(String firstName, String lastName, String email, String fbToken, String password, Boolean Admin, List<User> friends) {
+    public User(String email, String fbToken, String password, String firstName, String lastName, String gender, String birthday, Boolean Admin) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.fbToken = fbToken;
         this.password = password;
+        this.gender = gender;
+        this.birthday = birthday;
 
         // Make sure that admin is not null.
         if (Admin != null) {
@@ -68,7 +78,7 @@ public class User implements Serializable {
         } else {
             this.isAdmin = false;   // Default to false, making sure that no-one gets admin rights by accident.
         }
-        this.friends = friends;
+        this.friends = new ArrayList<>();
         // users start with empty friendship lists.
     }
 
@@ -131,6 +141,22 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public Boolean getIsAdmin() {

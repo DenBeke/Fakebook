@@ -56,17 +56,29 @@ public class LoginServlet extends HttpServlet {
                 if (user.getEmail() != null && !user.getEmail().isEmpty()) {
                     
                     // Check if user exists
-                    if (userService.getUserByEmail(email) != null) {
+                    User existingUser = userService.getUserByEmail(email);
+                    if (existingUser != null) {
                         // TODO: Check if merging (fbToken is passed now but null in database)
+                        
+                        // Update user data
+                        if (user.getFirstName() != null && !user.getFirstName().isEmpty())
+                            existingUser.setFirstName(user.getFirstName());
+                        if (user.getLastName() != null && !user.getLastName().isEmpty())
+                            existingUser.setLastName(user.getLastName());
+                        if (user.getGender() != null && !user.getGender().isEmpty())
+                            existingUser.setGender(user.getGender());
+                        if (user.getBirthday() != null && !user.getBirthday().isEmpty())
+                            existingUser.setBirthday(user.getBirthday());
                     }
                     else { // New account
-                        User newUser = new User(user.getFirstName(),
-                                                user.getLastName(),
-                                                user.getEmail(),
+                        User newUser = new User(user.getEmail(),
                                                 fbToken,
-                                                "",
-                                                false,
-                                                new ArrayList<>());
+                                                null,
+                                                user.getFirstName(),
+                                                user.getLastName(),
+                                                user.getGender(),
+                                                user.getBirthday(),
+                                                false);
 
                         userService.newUser(newUser);
                     }

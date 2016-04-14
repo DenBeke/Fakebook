@@ -70,6 +70,9 @@ public class RegisterServlet extends HttpServlet {
                 if (user.getPassword() == null) {
                     // TODO: Merge acount
                     //       Security issue: shouldn't the user be asked to login to facebook at this point?
+
+                    user.setPassword(password);
+                    request.getRequestDispatcher("login").forward(request, response);
                 }
                 else { // Account was already registered
                     request.setAttribute("error", "An account has already been created with the email address");
@@ -77,7 +80,7 @@ public class RegisterServlet extends HttpServlet {
                 }
             }
             else { // Account did not exist yet
-                user = new User(firstName, lastName, email, "", password, false, new ArrayList<>());
+                user = new User(email, null, password, firstName, lastName, gender, birthday, false);
                 userService.newUser(user);
 
                 request.getRequestDispatcher("login").forward(request, response);
