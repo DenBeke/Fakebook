@@ -23,7 +23,7 @@
                 <c:if test="${not empty post.getMentioned()}">
                     Mentioned:
                     <c:forEach items="${post.getMentioned()}" var="mentionedUser">
-                        <c:out value="${mentionedUser.getFirstName()} ${mentionedUser.getLastName()} <${mentionedUser.getEmail()}>" escapeXml="true"/><br>
+                        <a href="wall?uid=${mentionedUser.getId()}"><c:out value="${mentionedUser.getFirstName()} ${mentionedUser.getLastName()} <${mentionedUser.getEmail()}>" escapeXml="true"/></a><br>
                     </c:forEach>
                 </c:if>
                 <c:if test="${not empty post.getComments()}">
