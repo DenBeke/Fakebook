@@ -30,6 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 public class WallServlet extends HttpServlet {
 
     @EJB
+    private UserServiceFacadeLocal userService;
+    
+    @EJB
     private PostServiceFacadeLocal postService;
     
     /**
@@ -42,17 +45,27 @@ public class WallServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userIdStr = request.getParameter("uid");
-        if (userIdStr != null) {
-            long userId = Long.decode(userIdStr);
-            request.setAttribute("user", userId);
-            
+
+        long userId = -1;
+        if (request.getParameter("uid") != null) {
+            try {
+                userId = Long.decode(request.getParameter("uid"));
+
+                if (userService.getUser(userId) == null) {
+                    userId = -1;
+                }
+            }
+            catch (NumberFormatException e) {
+            }
+        }
+
+        request.setAttribute("user", userId);
+        if (userId != -1) {
             List<Post> posts = postService.getPostsOnWall(userId);
             request.setAttribute("posts", posts);
         }
         else { // TODO: How to figure out who the current user is?
             request.setAttribute("user", -1);
-            request.setAttribute("posts", new ArrayList<>());
         }
         request.getRequestDispatcher("wall.jsp").forward(request, response);
     }

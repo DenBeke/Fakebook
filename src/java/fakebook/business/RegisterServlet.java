@@ -72,6 +72,8 @@ public class RegisterServlet extends HttpServlet {
                     //       Security issue: shouldn't the user be asked to login to facebook at this point?
 
                     user.setPassword(password);
+                    userService.editUser(user);
+                    
                     request.getRequestDispatcher("login").forward(request, response);
                 }
                 else { // Account was already registered

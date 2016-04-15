@@ -36,7 +36,7 @@
             function fblogin(response) {
                 if (response.status === 'connected') {
                     accessToken = response.authResponse.accessToken;
-                    FB.api('/me', { access_token: accessToken, fields: 'first_name,last_name,email,gender,birthday' }, function(response) {
+                    FB.api('/me', { access_token: accessToken }, function(response) {
 
                         var form = document.createElement('form');
                         form.hidden = true;
@@ -113,7 +113,7 @@
 
                 <div class="eight wide column">
                         
-                    <fb:login-button class="" scope="public_profile,user_birthday,email" onlogin="checkLoginState();"></fb:login-button>
+                    <fb:login-button class="" scope="public_profile,user_birthday,email,user_posts" onlogin="checkLoginState();"></fb:login-button>
                     
                 </div>
             

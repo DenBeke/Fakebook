@@ -29,6 +29,13 @@ public interface UserServiceFacadeLocal {
     
     
     /**
+     * Edits an existing user
+     * @param user 
+     */
+    public void editUser(User user);
+    
+    
+    /**
      * Deletes an account from the database
      * Also in waterfall fashion deletes all posts and friendships.
      * @param userId

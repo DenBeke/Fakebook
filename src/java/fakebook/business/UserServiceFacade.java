@@ -46,6 +46,11 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
         }
         return 0;
     }
+    
+    @Override
+    public void editUser(User user) {
+        em.merge(user);
+    }
 
     @Override
     public Boolean deleteAccount(long userId) {

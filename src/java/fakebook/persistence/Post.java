@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -40,8 +41,8 @@ public class Post implements Serializable {
     private User wall;    // The user on whose wall it will be posted, not necessarily the same as poster.
     @ManyToMany
     private List<User> mentioned; // All users who are mentioned in the post, so on
-    @OneToOne
-    private Post post;  // If not null: post on which this was a comment.
+    @OneToMany
+    private List<Post> comments;  // Comments on this post
     
     private Date timestamp; // The time the post was posted
     
@@ -64,11 +65,11 @@ public class Post implements Serializable {
      * @param timestamp
      * @param text
      */
-    public Post(User poster, User wall, List<User> mentioned, Post post, Date timestamp, String text) {
+    public Post(User poster, User wall, List<User> mentioned, List<Post> comments, Date timestamp, String text) {
         this.poster = poster;
         this.wall = wall;
         this.mentioned = mentioned;
-        this.post = post;
+        this.comments = comments;
         this.timestamp = timestamp;
         this.text = text;
     }        
@@ -105,12 +106,12 @@ public class Post implements Serializable {
         this.mentioned = mentioned;
     }
 
-    public Post getPost() {
-        return post;
+    public List<Post> getComments() {
+        return comments;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setPost(List<Post> comments) {
+        this.comments = comments;
     }
 
     public Date getTimestamp() {
