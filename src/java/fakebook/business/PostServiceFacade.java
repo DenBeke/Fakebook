@@ -24,6 +24,11 @@ public class PostServiceFacade implements PostServiceFacadeLocal {
         em.persist(p);
         return true;
     }
+    
+    @Override
+    public void updatePost(Post post) {
+        em.merge(post);
+    }
 
     @Override
     public Post getPost(long pId) {

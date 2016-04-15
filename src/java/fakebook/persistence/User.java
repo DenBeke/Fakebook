@@ -22,14 +22,15 @@ import javax.persistence.NamedQuery;
  * @author robin
  * User Entity to store users in database
  */
-@Entity(name = "FBUser")
-@NamedQueries({@NamedQuery(name="User.getAll",query="SELECT e FROM FBUser e"), @NamedQuery(name="User.getByEmail", query="SELECT e FROM FBUser e WHERE e.email = :email")})
-public class User implements Serializable {
+@Entity(name="FBUser")
+@NamedQueries({@NamedQuery(name="User.getAll",query="SELECT e FROM FBUser e"),
+               @NamedQuery(name="User.getByEmail", query="SELECT e FROM FBUser e WHERE e.email = :email"),
+               @NamedQuery(name="User.getByFbId", query="SELECT e FROM FBUser e WHERE e.fbId = :fbId")})
+public class User {
 
     public User() {
     }
     
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,7 +43,7 @@ public class User implements Serializable {
     private String gender;
     private String birthday;
 
-    private String fbToken; // The token used to access the graph API for the user.
+    private String fbId; // Facebook id of the user.
     private String password; // TODO: We should store a hash instead
     private Boolean isAdmin;  // A boolean which indicates whether the user is an admin or not, TODO set default to false, so no problems can arrise.
     
@@ -55,7 +56,7 @@ public class User implements Serializable {
     /**
      * Creates a new User object, the Id is auto generated.
      * @param email
-     * @param fbToken
+     * @param fbId
      * @param password
      * @param firstName
      * @param lastName
@@ -63,11 +64,11 @@ public class User implements Serializable {
      * @param birthday
      * @param Admin
      */
-    public User(String email, String fbToken, String password, String firstName, String lastName, String gender, String birthday, Boolean Admin) {
+    public User(String email, String fbId, String password, String firstName, String lastName, String gender, String birthday, Boolean Admin) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.fbToken = fbToken;
+        this.fbId = fbId;
         this.password = password;
         this.gender = gender;
         this.birthday = birthday;
@@ -127,12 +128,12 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getFbToken() {
-        return fbToken;
+    public String getFbId() {
+        return fbId;
     }
 
-    public void setFbToken(String fbToken) {
-        this.fbToken = fbToken;
+    public void setFbId(String fbId) {
+        this.fbId = fbId;
     }
 
     public String getPassword() {

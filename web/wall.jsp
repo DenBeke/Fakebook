@@ -32,6 +32,15 @@
                         <pre><c:out value="${comment.getText()}" escapeXml="true"/></pre>
                         Comment posted by: <a href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getFirstName()} ${comment.getPoster().getLastName()} <${comment.getPoster().getEmail()}>" escapeXml="true"/></a><br>
                         Comment timestamp: <c:out value="${comment.getTimestamp()}" escapeXml="true"/><br>
+                        <c:if test="${not empty comment.getComments()}">
+                            Sub-comments:
+                            <c:forEach items="${comment.getComments()}" var="subcomment">
+                                <pre><c:out value="${subcomment.getText()}" escapeXml="true"/></pre>
+                                Sub-comment posted by: <a href="wall?uid=${subcomment.getPoster().getId()}"><c:out value="${subcomment.getPoster().getFirstName()} ${subcomment.getPoster().getLastName()} <${subcomment.getPoster().getEmail()}>" escapeXml="true"/></a><br>
+                                Sub-comment timestamp: <c:out value="${subcomment.getTimestamp()}" escapeXml="true"/><br>
+                                <br>
+                            </c:forEach>
+                        </c:if>
                         <br>
                     </c:forEach>
                 </c:if>

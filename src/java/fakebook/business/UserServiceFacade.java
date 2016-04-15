@@ -48,7 +48,7 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
     }
     
     @Override
-    public void editUser(User user) {
+    public void updateUser(User user) {
         em.merge(user);
     }
 
@@ -65,12 +65,28 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
     /**
      * returns the user corresponding to the email
      * @param email
-     * @return true if email is in database, false otherwise.
+     * @return the user if it exists, null otherwise
      */
     @Override
     public User getUserByEmail(String email) {
         List<User> users = em.createNamedQuery("User.getByEmail")
             .setParameter("email", email)
+            .getResultList();
+        if (users.isEmpty()) {
+            return null;
+        } else {
+            return users.get(0);
+        }
+    }
+    
+    /**
+     * returns the user corresponding to its facebook id
+     * @param fbId
+     */
+    @Override
+    public User getUserByFacebookId(String fbId) {
+        List<User> users = em.createNamedQuery("User.getByFbId")
+            .setParameter("fbId", fbId)
             .getResultList();
         if (users.isEmpty()) {
             return null;

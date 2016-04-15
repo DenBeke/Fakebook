@@ -72,7 +72,7 @@ public class RegisterServlet extends HttpServlet {
                     //       Security issue: shouldn't the user be asked to login to facebook at this point?
 
                     user.setPassword(password);
-                    userService.editUser(user);
+                    userService.updateUser(user);
                     
                     request.getRequestDispatcher("login").forward(request, response);
                 }

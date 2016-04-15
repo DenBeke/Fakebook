@@ -29,10 +29,10 @@ public interface UserServiceFacadeLocal {
     
     
     /**
-     * Edits an existing user
+     * Update an existing user
      * @param user 
      */
-    public void editUser(User user);
+    public void updateUser(User user);
     
     
     /**
@@ -44,11 +44,17 @@ public interface UserServiceFacadeLocal {
     public Boolean deleteAccount(long userId);
     
     /**
-     * checks if an email is already in the database.
+     * returns the user corresponding to the email
      * @param email
-     * @return true if email is in database, false otherwise.
+     * @return the user if it exists, null otherwise
      */
     public User getUserByEmail(String email);
+    
+    /**
+     * returns the user corresponding to its facebook id.
+     * @param fbId
+     */
+    public User getUserByFacebookId(String fbId);
 
     /**
      * Gets the user with corresponding userId

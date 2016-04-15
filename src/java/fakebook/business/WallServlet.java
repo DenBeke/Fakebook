@@ -14,6 +14,8 @@ import fakebook.persistence.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -62,6 +64,14 @@ public class WallServlet extends HttpServlet {
         request.setAttribute("user", userId);
         if (userId != -1) {
             List<Post> posts = postService.getPostsOnWall(userId);
+            
+            // Sort the posts based on their creation time (newest first)
+            Collections.sort(posts, new Comparator<Post>() {
+                public int compare(Post post1, Post post2) {
+                    return post2.getTimestamp().compareTo(post1.getTimestamp());
+                }
+            });
+            
             request.setAttribute("posts", posts);
         }
         else { // TODO: How to figure out who the current user is?

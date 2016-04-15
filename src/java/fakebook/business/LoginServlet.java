@@ -65,7 +65,7 @@ public class LoginServlet extends HttpServlet {
         else {
             if (fbToken != null) {
                 FacebookClient facebookClient = new DefaultFacebookClient(fbToken, Version.LATEST);
-                com.restfb.types.User fbuser = facebookClient.fetchObject("me", com.restfb.types.User.class, Parameter.with("fields","first_name,last_name,email,gender,birthday"));
+                com.restfb.types.User fbuser = facebookClient.fetchObject("me", com.restfb.types.User.class, Parameter.with("fields","id,first_name,last_name,email,gender,birthday"));
                 
                 if (fbuser.getEmail() != null && !fbuser.getEmail().isEmpty()) {
                     email = fbuser.getEmail();
@@ -75,7 +75,6 @@ public class LoginServlet extends HttpServlet {
                     if (user != null) {
 
                         // Update user data
-                        user.setFbToken(fbToken);
                         if (fbuser.getFirstName() != null && !fbuser.getFirstName().isEmpty())
                             user.setFirstName(fbuser.getFirstName());
                         if (fbuser.getLastName() != null && !fbuser.getLastName().isEmpty())
@@ -85,11 +84,11 @@ public class LoginServlet extends HttpServlet {
                         if (fbuser.getBirthday() != null && !fbuser.getBirthday().isEmpty())
                             user.setBirthday(fbuser.getBirthday());
                         
-                        userService.editUser(user);
+                        userService.updateUser(user);
                     }
                     else { // New account
                         user = new User(fbuser.getEmail(),
-                                        fbToken,
+                                        fbuser.getId(),
                                         null,
                                         fbuser.getFirstName(),
                                         fbuser.getLastName(),
@@ -139,74 +138,105 @@ public class LoginServlet extends HttpServlet {
     
     private void syncFacebook(FacebookClient facebookClient, User user)
     {
-        // TODO: Also sync post that you created on someone elses wall
-        
-        List<com.restfb.types.Post> fbposts = facebookClient.fetchConnection("me/feed", com.restfb.types.Post.class,  Parameter.with("fields","message,from,to,comments,created_time")).getData();
+        List<com.restfb.types.Post> fbposts = facebookClient.fetchConnection("me/feed", com.restfb.types.Post.class, Parameter.with("fields","message,from,to,comments,created_time")).getData();
         for (com.restfb.types.Post fbpost : fbposts) {
             if (fbpost.getCreatedTime() == null || fbpost.getMessage() == null || fbpost.getMessage().isEmpty()) {
                 continue;
             }
-            
-            // Don't continue if post was already imported
-            boolean postAlreadyExists = false;
-            List<Post> existingPosts = postService.getPostsOnWall(user.getId());
-            for (Post post : existingPosts) {
-                if (post.getTimestamp().equals(fbpost.getCreatedTime())) {
-                    postAlreadyExists = true;
-                    break;
-                }
-            }
-            if (postAlreadyExists) {
-                continue;
-            }
-            
-            // Gather the mentions in the post
-            List<User> mentions = new ArrayList<>();
-            for (NamedFacebookType fbmention : fbpost.getTo()) {
-                try {
-                    com.restfb.types.User mentionedUser = facebookClient.fetchObject(fbmention.getId(), com.restfb.types.User.class, Parameter.with("fields","email"));
-                    if (mentionedUser.getEmail() != null && !mentionedUser.getEmail().isEmpty()) {
-                        User existingUser = userService.getUserByEmail(mentionedUser.getEmail());
-                        if (existingUser != null) {
-                            mentions.add(existingUser);
-                        }
+
+            User poster = userService.getUserByFacebookId(fbpost.getFrom().getId());
+            if (poster != null) {
+                
+                // Check if we already have the post (there could still be new comments even if we do)
+                Post existingPost = null;
+                List<Post> comments = new ArrayList<>();
+                for (Post post : postService.getPostsOnWall(user.getId())) {
+                    if (post.getTimestamp().equals(fbpost.getCreatedTime())) {
+                        existingPost = post;
+                        comments = existingPost.getComments();
+                        break;
                     }
                 }
-                catch (FacebookOAuthException e) {
-                    // id did not belong to a User, so just ignore this mention
-                }
-            }
-
-            try {
-                com.restfb.types.User fbposter = facebookClient.fetchObject(fbpost.getFrom().getId(), com.restfb.types.User.class, Parameter.with("fields","email"));
-                User poster = userService.getUserByEmail(fbposter.getEmail());
-                if (poster != null) {
-                    // Add the comments
-                    List<Post> comments = new ArrayList<>();
-                    Comments fbcomments = fbpost.getComments();
-                    if (fbcomments != null) {
-                        for (Comment fbcomment : fbcomments.getData()) {
-                            try {
-                                fbposter = facebookClient.fetchObject(fbcomment.getFrom().getId(), com.restfb.types.User.class, Parameter.with("fields","email"));
-                                poster = userService.getUserByEmail(fbposter.getEmail());
-                                if (poster != null && fbcomment.getMessage() != null && !fbcomment.getMessage().isEmpty()) {
-                                    Post comment = new Post(poster, null, null, null, fbcomment.getCreatedTime(), fbcomment.getMessage());
-                                    comments.add(comment);
-                                    postService.newPost(comment);
+                
+                // Gather the comments
+                Comments fbcomments = fbpost.getComments();
+                if (fbcomments != null) {
+                    for (Comment fbcommentData : fbcomments.getData()) {
+                        com.restfb.types.Post fbcomment = facebookClient.fetchObject(fbcommentData.getId(), com.restfb.types.Post.class, Parameter.with("fields","message,from,comments,created_time"));
+                        poster = userService.getUserByFacebookId(fbcomment.getFrom().getId());
+                        if (poster != null && fbcomment.getMessage() != null && !fbcomment.getMessage().isEmpty()) {
+                            
+                            // Check if we already have the comment (there could still be new subcomments even if we do)
+                            Post existingComment = null;
+                            List<Post> subcomments = new ArrayList<>();
+                            if (existingPost != null) {
+                                for (Post comment : existingPost.getComments()) {
+                                    if (comment.getTimestamp().equals(fbcomment.getCreatedTime())) {
+                                        existingComment = comment;
+                                        subcomments = existingComment.getComments();
+                                        break;
+                                    }
                                 }
                             }
-                            catch (FacebookOAuthException e) {
-                                // poster is not a User (could e.g. be a Page), so ignore the post
+                            
+                            // Get subcomments
+                            if (fbcomment.getComments() != null) {
+                                Comments fbSubComments = fbcomment.getComments();
+                                for (Comment fbSubComment : fbSubComments.getData()) {
+                                    User subCommentPoster = userService.getUserByFacebookId(fbSubComment.getFrom().getId());
+                                    if (subCommentPoster != null && fbSubComment.getMessage() != null && !fbSubComment.getMessage().isEmpty()) {
+
+                                        // Don't duplicate subcomments
+                                        Post existingSubComment = null;
+                                        if (existingComment != null) {
+                                            for (Post subcomment : existingComment.getComments()) {
+                                                if (subcomment.getTimestamp().equals(fbSubComment.getCreatedTime())) {
+                                                    existingSubComment = subcomment;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if (existingSubComment != null) {
+                                            continue;
+                                        }
+
+                                        Post subcomment = new Post(subCommentPoster, null, null, null, fbSubComment.getCreatedTime(), fbSubComment.getMessage());
+                                        subcomments.add(subcomment);
+                                        postService.newPost(subcomment);
+                                    }
+                                }
                             }
+                            
+                            // Don't continue if comment was already imported
+                            if (existingComment != null) {
+                                postService.updatePost(existingComment);
+                                continue;
+                            }
+                            
+                            Post comment = new Post(poster, null, null, subcomments, fbcomment.getCreatedTime(), fbcomment.getMessage());
+                            comments.add(comment);
+                            postService.newPost(comment);
                         }
                     }
-                    
-                    Post post = new Post(poster, user, mentions, comments, fbpost.getCreatedTime(), fbpost.getMessage());
-                    postService.newPost(post);
                 }
-            }
-            catch (FacebookOAuthException e) {
-                // poster is not a User (could e.g. be a Page), so ignore the post
+
+                // Don't continue if post was already imported
+                if (existingPost != null) {
+                    postService.updatePost(existingPost);
+                    continue;
+                }
+                
+                // Gather the mentions in the post
+                List<User> mentions = new ArrayList<>();
+                for (NamedFacebookType fbmention : fbpost.getTo()) {
+                    User existingUser = userService.getUserByFacebookId(fbmention.getId());
+                    if (existingUser != null) {
+                        mentions.add(existingUser);
+                    }
+                }
+                
+                Post post = new Post(poster, user, mentions, comments, fbpost.getCreatedTime(), fbpost.getMessage());
+                postService.newPost(post);
             }
         }
     }

@@ -27,10 +27,8 @@ import javax.persistence.OneToOne;
 @NamedQueries({@NamedQuery(name="Posts.getAll",query="SELECT p FROM Post p"),
                @NamedQuery(name="Posts.getOnWall", query="SELECT p FROM Post p WHERE p.wall.id = :uId"),
                @NamedQuery(name="Posts.getByPoster", query="SELECT p FROM Post p WHERE p.poster.id = :uId")})
+public class Post {
 
-public class Post implements Serializable {
-
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

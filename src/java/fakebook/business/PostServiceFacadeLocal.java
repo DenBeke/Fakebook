@@ -23,6 +23,13 @@ public interface PostServiceFacadeLocal {
     public Boolean newPost(Post p);
     
     /**
+     * Updates a post
+     * @param post
+     * @return 
+     */
+    public void updatePost(Post post);
+    
+    /**
      * Get post corresponding to pId
      * @param pId
      * @return 
