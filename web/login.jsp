@@ -1,12 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login page</title>
-        
-        <link rel="stylesheet" type="text/css" class="ui" href="semantic/semantic.min.css">
+<jsp:include page="header.jsp" />
         
         <script>
             window.fbAsyncInit = function() {
@@ -58,24 +50,6 @@
                 }
             }
           </script>
-    </head>
-    <body>
-        
-        <p></p>
-        
-        <div id="header" class="ui container">
-            <div class="ui menu">
-                <div class="header item">
-                    Fakebook
-                </div>
-                <a class="item">
-                    Home
-                </a>
-                <a class="item">
-                    Login
-                </a>
-            </div>
-        </div>
         
         <div class="ui container">
             
@@ -104,7 +78,7 @@
                         <input type="password" name="password" value="${password}" />
                     </div>
 
-                    <input type="submit" name="action" class="btn btn-default ui primary button" value="Login" />
+                    <input type="submit" name="action" class="ui primary button" value="Login" />
                     <a href="register" class="ui button">Register</a>
                 </form>
                 
@@ -118,6 +92,5 @@
                 </div>
             
         </div>
-            
-    </body>
-</html>
+
+<jsp:include page="footer.jsp" />
