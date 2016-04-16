@@ -13,6 +13,14 @@
         </c:if>
         <c:if test="${user != -1}">
             <h1>Wall of user ${user}</h1>
+            
+            
+            <form action="?uid=${user}" id="wall_form" method="POST">
+                <textarea name="new_wall_post"></textarea>
+                <input type="hidden" name="wall_user_id" value="${user}">
+                <input type="submit" value="Write on wall" >
+            </form>
+            
 
             <c:if test="${empty posts}"><p>This user has no posts on his wall yet.</p></c:if>
 

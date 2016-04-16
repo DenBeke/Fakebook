@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  *
@@ -47,7 +48,7 @@ public class WallServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        
         long userId = -1;
         if (request.getParameter("uid") != null) {
             try {
@@ -63,6 +64,16 @@ public class WallServlet extends HttpServlet {
 
         request.setAttribute("user", userId);
         if (userId != -1) {
+            
+            // Check for new wall post form
+            if(request.getMethod().equals("POST")) {
+                if(request.getParameter("new_wall_post") != null) {
+                    String newPost = request.getParameter("new_wall_post");
+                    postService.newPost(new Post(userService.getUser(userId), userService.getUser(userId), null, null, new Date(), newPost));
+                }
+            }
+            
+            
             List<Post> posts = postService.getPostsOnWall(userId);
             
             // Sort the posts based on their creation time (newest first)
