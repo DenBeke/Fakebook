@@ -28,7 +28,7 @@
 
                         <div class="comment">
                             <a class="avatar">
-                                <img src="https://www.kirkleescollege.ac.uk/wp-content/uploads/2015/09/default-avatar.png">
+                                <img src="<c:out value="${post.getPoster().getProfilePic()}" escapeXml="true"/>">
                             </a>
                             <div class="content">
                                 <a class="author" href="wall?uid=${post.getPoster().getId()}"><c:out value="${post.getPoster().getFirstName()} ${post.getPoster().getLastName()} <${post.getPoster().getEmail()}>" escapeXml="true"/></a>

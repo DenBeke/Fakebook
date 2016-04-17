@@ -47,6 +47,8 @@ public class User {
     private String password; // TODO: We should store a hash instead
     private Boolean isAdmin;  // A boolean which indicates whether the user is an admin or not, TODO set default to false, so no problems can arrise.
     
+    private String profilePic; // Url to profile pic
+    
     @ManyToMany
     private List<User> friends; // The friends of this user TODO make sure it is both ways.
     
@@ -64,7 +66,7 @@ public class User {
      * @param birthday
      * @param Admin
      */
-    public User(String email, String fbId, String password, String firstName, String lastName, String gender, String birthday, Boolean Admin) {
+    public User(String email, String fbId, String password, String firstName, String lastName, String gender, String birthday, Boolean Admin, String profilePic) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -72,6 +74,7 @@ public class User {
         this.password = password;
         this.gender = gender;
         this.birthday = birthday;
+        this.profilePic = profilePic;
 
         // Make sure that admin is not null.
         if (Admin != null) {
@@ -175,6 +178,18 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    public String getProfilePic() {
+        if(this.profilePic.equals("") || this.profilePic == null) {
+            return "profile_default.jpg";
+        }
+        return this.profilePic;
+    }
+    
+    public void setProfilePic(String p) {
+        this.profilePic = p;
+    }
+    
 
     @Override
     public int hashCode() {

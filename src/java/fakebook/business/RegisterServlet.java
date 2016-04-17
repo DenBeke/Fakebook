@@ -82,7 +82,7 @@ public class RegisterServlet extends HttpServlet {
                 }
             }
             else { // Account did not exist yet
-                user = new User(email, null, password, firstName, lastName, gender, birthday, false);
+                user = new User(email, null, password, firstName, lastName, gender, birthday, false, "");
                 userService.newUser(user);
 
                 request.getRequestDispatcher("login").forward(request, response);

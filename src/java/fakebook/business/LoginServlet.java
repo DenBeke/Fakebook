@@ -94,7 +94,8 @@ public class LoginServlet extends HttpServlet {
                                         fbuser.getLastName(),
                                         fbuser.getGender(),
                                         fbuser.getBirthday(),
-                                        false);
+                                        false,
+                                        "");
 
                         userService.newUser(user);
                     }
