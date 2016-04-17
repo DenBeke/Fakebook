@@ -65,14 +65,27 @@ public class LoginServlet extends HttpServlet {
         else {
             if (fbToken != null) {
                 FacebookClient facebookClient = new DefaultFacebookClient(fbToken, Version.LATEST);
-                com.restfb.types.User fbuser = facebookClient.fetchObject("me", com.restfb.types.User.class, Parameter.with("fields","id,first_name,last_name,email,gender,birthday"));
+                com.restfb.types.User fbuser = facebookClient.fetchObject("me", com.restfb.types.User.class, Parameter.with("fields","id,first_name,last_name,email,gender,birthday,picture"));
                 
                 if (fbuser.getEmail() != null && !fbuser.getEmail().isEmpty()) {
                     email = fbuser.getEmail();
                     
+                    String profilePic = null;
+                    if (fbuser.getPicture() != null)
+                        profilePic = fbuser.getPicture().getUrl();
+
                     // Check if user exists
+                    boolean firstFacebookLogin;
                     User user = userService.getUserByEmail(email);
                     if (user != null) {
+                        
+                        if (user.getFbId() != null) {
+                            firstFacebookLogin = false;
+                        }
+                        else {
+                            firstFacebookLogin = true;
+                            user.setFbId(fbuser.getId());
+                        }
 
                         // Update user data
                         if (fbuser.getFirstName() != null && !fbuser.getFirstName().isEmpty())
@@ -83,10 +96,14 @@ public class LoginServlet extends HttpServlet {
                             user.setGender(fbuser.getGender());
                         if (fbuser.getBirthday() != null && !fbuser.getBirthday().isEmpty())
                             user.setBirthday(fbuser.getBirthday());
+                        if (profilePic != null && !fbuser.getPicture().getIsSilhouette())
+                            user.setProfilePic(profilePic);
                         
                         userService.updateUser(user);
                     }
                     else { // New account
+                        firstFacebookLogin = true;
+                        
                         user = new User(fbuser.getEmail(),
                                         fbuser.getId(),
                                         null,
@@ -95,12 +112,17 @@ public class LoginServlet extends HttpServlet {
                                         fbuser.getGender(),
                                         fbuser.getBirthday(),
                                         false,
-                                        "");
+                                        profilePic);
 
                         userService.newUser(user);
                     }
 
                     syncFacebook(facebookClient, user);
+
+                    // If this is the first login then sync the friends
+                    if (firstFacebookLogin) {
+                        // TODO
+                    }
 
                     response.sendRedirect(request.getContextPath() + "/wall?uid=" + user.getId());
                 }
