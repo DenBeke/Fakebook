@@ -129,25 +129,9 @@ public class LoginServlet extends HttpServlet {
                         for (com.restfb.types.User fbfriend : fbfriends) {
                             User friend = userService.getUserByFacebookId(fbfriend.getId());
                             if (friend != null) {
-                                System.out.println("Friending user " + Long.toString(user.getId()) + " " + Long.toString(friend.getId()));
-                                
-                                // Add the friend to the current user
-                                List<User> friendList = user.getFriends();
-                                if (friendList == null) {
-                                    friendList = new ArrayList<>();
-                                }
-                                friendList.add(friend);
-                                user.setFriends(friendList);
-                                
-                                // Add the current user to the friend
-                                friendList = friend.getFriends();
-                                if (friendList == null) {
-                                    friendList = new ArrayList<>();
-                                }
-                                friendList.add(user);
-                                friend.setFriends(friendList);
-                                
-                                // Persist the users
+                                user.addFriend(friend);
+                                friend.addFriend(user);
+
                                 userService.updateUser(user);
                                 userService.updateUser(friend);
                             }

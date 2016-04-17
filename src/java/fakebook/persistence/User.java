@@ -13,9 +13,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  *
@@ -50,9 +53,15 @@ public class User {
     private String profilePic; // Url to profile pic
     
     @ManyToMany
+    @JoinTable(name="USER_FRIENDS",
+               joinColumns=@JoinColumn(name="USER_ID"),
+               inverseJoinColumns=@JoinColumn(name="FRIEND_ID"))
     private List<User> friends; // The friends of this user TODO make sure it is both ways.
     
     @ManyToMany
+    @JoinTable(name="USER_FRIEND_REQUESTS",
+               joinColumns=@JoinColumn(name="USER_ID"),
+               inverseJoinColumns=@JoinColumn(name="FRIEND_ID"))
     private List<User> friendshipRequests; // The users to which this user has send a friendship request, not symetric
     
     /**
@@ -82,8 +91,10 @@ public class User {
         } else {
             this.isAdmin = false;   // Default to false, making sure that no-one gets admin rights by accident.
         }
+        
+        // users start with empty friendship lists
         this.friends = new ArrayList<>();
-        // users start with empty friendship lists.
+        this.friendshipRequests = new ArrayList<>();
     }
 
     public List<User> getFriendshipRequests() {
