@@ -122,6 +122,36 @@ public class LoginServlet extends HttpServlet {
                     // If this is the first login then sync the friends
                     if (firstFacebookLogin) {
                         // TODO
+                        com.restfb.types.FriendList friends1 = facebookClient.fetchObject("me/friends", com.restfb.types.FriendList.class);
+                        System.out.println(friends1);
+                        
+                        List<com.restfb.types.User> fbfriends = facebookClient.fetchConnection("me/friends", com.restfb.types.User.class, Parameter.with("fields", "id")).getData();
+                        for (com.restfb.types.User fbfriend : fbfriends) {
+                            User friend = userService.getUserByFacebookId(fbfriend.getId());
+                            if (friend != null) {
+                                System.out.println("Friending user " + Long.toString(user.getId()) + " " + Long.toString(friend.getId()));
+                                
+                                // Add the friend to the current user
+                                List<User> friendList = user.getFriends();
+                                if (friendList == null) {
+                                    friendList = new ArrayList<>();
+                                }
+                                friendList.add(friend);
+                                user.setFriends(friendList);
+                                
+                                // Add the current user to the friend
+                                friendList = friend.getFriends();
+                                if (friendList == null) {
+                                    friendList = new ArrayList<>();
+                                }
+                                friendList.add(user);
+                                friend.setFriends(friendList);
+                                
+                                // Persist the users
+                                userService.updateUser(user);
+                                userService.updateUser(friend);
+                            }
+                        }
                     }
 
                     response.sendRedirect(request.getContextPath() + "/wall?uid=" + user.getId());
