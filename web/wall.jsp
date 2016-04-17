@@ -49,7 +49,7 @@
                                 
                                 <div class="comment">
                                     <a class="avatar">
-                                        <img src="https://www.kirkleescollege.ac.uk/wp-content/uploads/2015/09/default-avatar.png">
+                                        <img src="${comment.getPoster().getProfilePic()}">
                                     </a>
                                     <div class="content">
                                         <a class="author" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getFirstName()} ${comment.getPoster().getLastName()} <${comment.getPoster().getEmail()}>" escapeXml="true"/></a>
@@ -71,7 +71,7 @@
 
                                                         <div class="comment">
                                                             <a class="avatar">
-                                                                <img src="https://www.kirkleescollege.ac.uk/wp-content/uploads/2015/09/default-avatar.png">
+                                                                <img src="${subComment.getPoster().getProfilePic()}">
                                                             </a>
                                                             <div class="content">
                                                                 <a class="author" href="wall?uid=${subComment.getPoster().getId()}"><c:out value="${subComment.getPoster().getFirstName()} ${subComment.getPoster().getLastName()} <${subComment.getPoster().getEmail()}>" escapeXml="true"/></a>

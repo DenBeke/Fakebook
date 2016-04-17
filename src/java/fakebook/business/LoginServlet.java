@@ -121,10 +121,6 @@ public class LoginServlet extends HttpServlet {
 
                     // If this is the first login then sync the friends
                     if (firstFacebookLogin) {
-                        // TODO
-                        com.restfb.types.FriendList friends1 = facebookClient.fetchObject("me/friends", com.restfb.types.FriendList.class);
-                        System.out.println(friends1);
-                        
                         List<com.restfb.types.User> fbfriends = facebookClient.fetchConnection("me/friends", com.restfb.types.User.class, Parameter.with("fields", "id")).getData();
                         for (com.restfb.types.User fbfriend : fbfriends) {
                             User friend = userService.getUserByFacebookId(fbfriend.getId());
