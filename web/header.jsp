@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Wall</title>
+        <title>Fakebook</title>
         
         <link rel="stylesheet" type="text/css" class="ui" href="semantic/semantic.min.css">
         

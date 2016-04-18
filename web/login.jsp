@@ -29,7 +29,6 @@
             function fblogin(response) {
                 if (response.status === 'connected') {
                     accessToken = response.authResponse.accessToken;
-                    alert(accessToken)
                     FB.api('/me', { access_token: accessToken }, function(response) {
 
                         var form = document.createElement('form');
