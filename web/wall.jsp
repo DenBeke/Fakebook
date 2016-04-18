@@ -3,6 +3,8 @@
         
         <div class="ui container">
 
+            User: <c:out value="${currentUser.getUser().getName()}" escapeXml="true"/>
+            
             <c:if test="${user == -1}">
                 <h1>Wall of user</h1>
                 <p>Error: The user you tried to access does not exist!</p>

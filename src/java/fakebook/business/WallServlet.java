@@ -38,6 +38,9 @@ public class WallServlet extends HttpServlet {
     @EJB
     private PostServiceFacadeLocal postService;
     
+    @EJB
+    private CurrentUser currentUserService;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,6 +51,8 @@ public class WallServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //System.out.println(currentUserService.getUser());
         
         long userId = -1;
         if (request.getParameter("uid") != null) {

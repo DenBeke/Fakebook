@@ -43,6 +43,9 @@ public class LoginServlet extends HttpServlet {
     @EJB
     private PostServiceFacadeLocal postService;
     
+    @EJB
+    private CurrentUser currentUserService;
+    
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -117,6 +120,7 @@ public class LoginServlet extends HttpServlet {
                         userService.newUser(user);
                     }
 
+                    currentUserService = new CurrentUser(user);
                     syncFacebook(facebookClient, user);
 
                     // If this is the first login then sync the friends
@@ -174,6 +178,7 @@ public class LoginServlet extends HttpServlet {
                 User user = userService.getUserByEmail(email);
                 if (user != null) {
                     if (password != null && !password.isEmpty() && password.equals(user.getPassword())) {
+                        currentUserService = new CurrentUser(user);
                         response.sendRedirect(request.getContextPath() + "/wall?uid=" + user.getId());
                     }
                     else {
