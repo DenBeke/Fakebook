@@ -3,7 +3,7 @@
         
         <div class="ui container">
 
-            User: <c:out value="${currentUser.getUser().getName()}" escapeXml="true"/>
+            User: <c:out value="${currentUser.getName()}" escapeXml="true"/>
             
             <c:if test="${user == -1}">
                 <h1>Wall of user</h1>

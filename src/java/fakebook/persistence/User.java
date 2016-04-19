@@ -118,6 +118,10 @@ public class User {
         this.friends = friends;
     }
 
+    public String getName() {
+        return this.getFirstName() + " " + this.getLastName();
+    }
+    
     public String getFirstName() {
         return firstName;
     }

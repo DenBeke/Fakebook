@@ -38,8 +38,7 @@ public class WallServlet extends HttpServlet {
     @EJB
     private PostServiceFacadeLocal postService;
     
-    @EJB
-    private CurrentUser currentUserService;
+    public User currentUser;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,8 +50,6 @@ public class WallServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        //System.out.println(currentUserService.getUser());
         
         long userId = -1;
         if (request.getParameter("uid") != null) {
@@ -67,6 +64,16 @@ public class WallServlet extends HttpServlet {
             }
         }
 
+        this.currentUser = (User)(request.getSession().getAttribute("currentUser"));
+        /*
+        if(this.currentUser == null) {
+            System.out.println("No current user found");
+            this.currentUser = new User();
+        } else {
+            System.out.println("Current user found: " + currentUser.getName());
+        }
+        */
+        
         request.setAttribute("user", userId);
         if (userId != -1) {
             
@@ -90,8 +97,14 @@ public class WallServlet extends HttpServlet {
             
             request.setAttribute("posts", posts);
         }
-        else { // TODO: How to figure out who the current user is?
-            request.setAttribute("user", -1);
+        else {
+            if(currentUser == null) {
+                request.setAttribute("user", -1);
+            }
+            else {
+                request.setAttribute("user", currentUser.getId());
+            }
+            
         }
         request.getRequestDispatcher("wall.jsp").forward(request, response);
     }

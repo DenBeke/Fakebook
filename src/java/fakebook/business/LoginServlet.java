@@ -43,9 +43,6 @@ public class LoginServlet extends HttpServlet {
     @EJB
     private PostServiceFacadeLocal postService;
     
-    @EJB
-    private CurrentUser currentUserService;
-    
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -120,8 +117,8 @@ public class LoginServlet extends HttpServlet {
                         userService.newUser(user);
                     }
 
-                    currentUserService = new CurrentUser(user);
                     syncFacebook(facebookClient, user);
+                    request.setAttribute("currentUser", user);
 
                     // If this is the first login then sync the friends
                     if (firstFacebookLogin) {
@@ -158,7 +155,8 @@ public class LoginServlet extends HttpServlet {
                 User user = userService.getUserByEmail(email);
                 if (user != null) {
                     if (password != null && !password.isEmpty() && password.equals(user.getPassword())) {
-                        currentUserService = new CurrentUser(user);
+                        
+                        request.getSession().setAttribute("currentUser", user);
                         response.sendRedirect(request.getContextPath() + "/wall?uid=" + user.getId());
                     }
                     else {
@@ -201,8 +199,8 @@ public class LoginServlet extends HttpServlet {
                 if (fbcomments != null) {
                     for (Comment fbcommentData : fbcomments.getData()) {
                         com.restfb.types.Post fbcomment = facebookClient.fetchObject(fbcommentData.getId(), com.restfb.types.Post.class, Parameter.with("fields","message,from,comments,created_time"));
-                        poster = userService.getUserByFacebookId(fbcomment.getFrom().getId());
-                        if (poster != null && fbcomment.getMessage() != null && !fbcomment.getMessage().isEmpty()) {
+                        User commentPoster = userService.getUserByFacebookId(fbcomment.getFrom().getId());
+                        if (commentPoster != null && fbcomment.getMessage() != null && !fbcomment.getMessage().isEmpty()) {
                             
                             // Check if we already have the comment (there could still be new subcomments even if we do)
                             Post existingComment = null;
@@ -251,7 +249,7 @@ public class LoginServlet extends HttpServlet {
                                 continue;
                             }
                             
-                            Post comment = new Post(poster, null, null, subcomments, fbcomment.getCreatedTime(), fbcomment.getMessage());
+                            Post comment = new Post(commentPoster, null, null, subcomments, fbcomment.getCreatedTime(), fbcomment.getMessage());
                             comments.add(comment);
                             postService.newPost(comment);
                         }
