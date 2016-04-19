@@ -75,7 +75,7 @@
                         <input type="password" name="password" value="${password}" />
                     </div>
 
-                    <input type="submit" name="action" class="ui primary button" value="Login" />
+                    <input type="submit" name="action" class="ui teal button" value="Login" />
                     <a href="register" class="ui button">Register</a>
                 </form>
                 

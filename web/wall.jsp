@@ -17,7 +17,7 @@
                         <textarea name="new_wall_post"></textarea>
                     </div>
                     <input type="hidden" name="wall_user_id" value="${user}">
-                    <input type="submit" value="Write on wall" class="ui primary button">
+                    <input type="submit" value="Write on wall" class="ui teal button">
                 </form>
 
 
@@ -32,7 +32,7 @@
                                 <img src="<c:out value="${post.getPoster().getProfilePic()}" escapeXml="true"/>">
                             </a>
                             <div class="content">
-                                <a class="author" href="wall?uid=${post.getPoster().getId()}"><c:out value="${post.getPoster().getFirstName()} ${post.getPoster().getLastName()} <${post.getPoster().getEmail()}>" escapeXml="true"/></a>
+                                <a class="author" href="wall?uid=${post.getPoster().getId()}"><c:out value="${post.getPoster().getFirstName()} ${post.getPoster().getLastName()}" escapeXml="true"/></a>
                                 <div class="metadata">
                                     <span class="date"><c:out value="${post.getTimestamp()}" escapeXml="true"/></span>
                                 </div>
@@ -53,7 +53,7 @@
                                         <img src="${comment.getPoster().getProfilePic()}">
                                     </a>
                                     <div class="content">
-                                        <a class="author" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getFirstName()} ${comment.getPoster().getLastName()} <${comment.getPoster().getEmail()}>" escapeXml="true"/></a>
+                                        <a class="author" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getFirstName()} ${comment.getPoster().getLastName()}" escapeXml="true"/></a>
                                         <div class="metadata">
                                             <span class="date"><c:out value="${comment.getTimestamp()}" escapeXml="true"/></span>
                                         </div>
@@ -75,7 +75,7 @@
                                                                 <img src="${subComment.getPoster().getProfilePic()}">
                                                             </a>
                                                             <div class="content">
-                                                                <a class="author" href="wall?uid=${subComment.getPoster().getId()}"><c:out value="${subComment.getPoster().getFirstName()} ${subComment.getPoster().getLastName()} <${subComment.getPoster().getEmail()}>" escapeXml="true"/></a>
+                                                                <a class="author" href="wall?uid=${subComment.getPoster().getId()}"><c:out value="${subComment.getPoster().getFirstName()} ${subComment.getPoster().getLastName()}" escapeXml="true"/></a>
                                                                 <div class="metadata">
                                                                     <span class="date"><c:out value="${subComment.getTimestamp()}" escapeXml="true"/></span>
                                                                 </div>
@@ -103,37 +103,6 @@
                                 
                         </div>
 
-
-                        <!--
-                        <pre><c:out value="${post.getText()}" escapeXml="true"/></pre>
-                        Posted by: <a href="wall?uid=${post.getPoster().getId()}"><c:out value="${post.getPoster().getFirstName()} ${post.getPoster().getLastName()} <${post.getPoster().getEmail()}>" escapeXml="true"/></a><br>
-                        Timestamp: <c:out value="${post.getTimestamp()}" escapeXml="true"/><br>
-                        <c:if test="${not empty post.getMentioned()}">
-                            Mentioned:
-                            <c:forEach items="${post.getMentioned()}" var="mentionedUser">
-                                <a href="wall?uid=${mentionedUser.getId()}"><c:out value="${mentionedUser.getFirstName()} ${mentionedUser.getLastName()} <${mentionedUser.getEmail()}>" escapeXml="true"/></a><br>
-                            </c:forEach>
-                        </c:if>
-                        <c:if test="${not empty post.getComments()}">
-                            Comments:
-                            <c:forEach items="${post.getComments()}" var="comment">
-                                <pre><c:out value="${comment.getText()}" escapeXml="true"/></pre>
-                                Comment posted by: <a href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getFirstName()} ${comment.getPoster().getLastName()} <${comment.getPoster().getEmail()}>" escapeXml="true"/></a><br>
-                                Comment timestamp: <c:out value="${comment.getTimestamp()}" escapeXml="true"/><br>
-                                <c:if test="${not empty comment.getComments()}">
-                                    Sub-comments:
-                                    <c:forEach items="${comment.getComments()}" var="subcomment">
-                                        <pre><c:out value="${subcomment.getText()}" escapeXml="true"/></pre>
-                                        Sub-comment posted by: <a href="wall?uid=${subcomment.getPoster().getId()}"><c:out value="${subcomment.getPoster().getFirstName()} ${subcomment.getPoster().getLastName()} <${subcomment.getPoster().getEmail()}>" escapeXml="true"/></a><br>
-                                        Sub-comment timestamp: <c:out value="${subcomment.getTimestamp()}" escapeXml="true"/><br>
-                                        <br>
-                                    </c:forEach>
-                                </c:if>
-                                <br>
-                            </c:forEach>
-                        </c:if>
-                        -->
-                        <!--<br><br>-->
                     </c:forEach>
 
                 </div>

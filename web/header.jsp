@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Fakebook</title>
         
+        <link href='https://fonts.googleapis.com/css?family=Exo+2' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" class="ui" href="semantic/semantic.min.css">
         <link rel="stylesheet" type="text/css" class="ui" href="style.css">
         
@@ -41,11 +42,11 @@
             </c:if>
             
             <c:if test="${!empty currentUser}">
-                <a class="item" href="login">
+                <a class="item" href="wall">
                     <i class="smile icon"></i>
                     Wall
                 </a>
-                <a class="item" href="register">
+                <a class="item" href="friends">
                     <i class="users icon"></i>
                     Friends
                 </a>

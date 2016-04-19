@@ -47,7 +47,7 @@
                         <input name="birthday" type="text" placeholder="9/05/1994" value="${birthday}">
                     </div>
                     <div class="field">
-                        <input type="submit" name="action" class="ui primary button" value="Register" />
+                        <input type="submit" name="action" class="ui teal button" value="Register" />
                     </div>
                 </form>
 
