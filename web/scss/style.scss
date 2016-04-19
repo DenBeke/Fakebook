@@ -31,3 +31,31 @@ body {
         border-radius: 50% !important;
     }
 }
+
+#bully-indicator {
+    
+    width: 100%;
+    padding: 20px;
+    background-color: gray;
+    
+    -webkit-transition: all 0.5s; /* Safari */
+    
+    &.error {
+        background-color: #c0392b;
+    }
+    
+    &.warning {
+        background-color: #d35400;
+    }
+    
+    &.success {
+        background-color: #27ae60;
+    }
+    
+    h2,
+    h3 {
+        text-align: center;
+        color: #fff;
+    }
+    
+}

@@ -51,6 +51,8 @@ public class WallServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        
         long userId = -1;
         if (request.getParameter("uid") != null) {
             try {

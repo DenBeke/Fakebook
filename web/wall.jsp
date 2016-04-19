@@ -107,7 +107,56 @@
 
                 </div>
             </c:if>
-                                    
+                
         </div>
+
+
+<script>
+    
+    var client = new $.RestClient("http://localhost:5000/");
+
+    post = client.add("post")
+    
+    $('.text').click(function() {
+        var postContent = $(this).text().trim().replace(" ", "%20");
+        
+        post.read(postContent).done(function (data){
+            //alert('I have data: ' + data.Value);
+            
+            console.log(data)
+            
+            $.when(function() {
+                
+                /*
+                $('#bully-indicator').progress({
+                    percent: (data.Value * 100)
+                });
+                */
+                
+            }).then(function() {
+                
+                $('#bully-indicator').removeClass("success warning error hidden");
+                $('#bully-sidebar').sidebar('toggle');
+                
+                if(data.Value <= 1 && data.Value > 0.6) {
+                    $('#bully-indicator').addClass("error");
+                    $('#bully-sidebar span').text("Yes");
+                }
+                if(data.Value <= 0.6 && data.Value > 0.3) {
+                    $('#bully-indicator').addClass("warning");
+                    $('#bully-sidebar span').text("Maybe");
+                }
+                if(data.Value <= 0.3) {
+                    $('#bully-indicator').addClass("success");
+                    $('#bully-sidebar span').text("No");
+                }
+                
+            });
+            
+            
+        });
+    });
+    
+</script>
 
 <jsp:include page="footer.jsp" />

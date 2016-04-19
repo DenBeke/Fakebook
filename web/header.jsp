@@ -11,6 +11,7 @@
         <link rel="stylesheet" type="text/css" class="ui" href="style.css">
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="jquery.rest.min.js"></script>
         <script src="semantic/semantic.min.js"></script>
         
     </head>
@@ -23,6 +24,18 @@
             </div>
 
         </div>
+
+        
+        <div id="bully-sidebar" class="ui bottom sidebar">
+            
+            <div id="bully-indicator" class="hidden">
+                <h3>Is this post offensive?</h3>
+                <h2><span></span></h2>
+            </div>
+            
+        </div>
+        
+        <div class="">
         
         <div class="ui left demo vertical inverted sidebar labeled icon menu visible">
             <a class="item" href="./">
