@@ -54,11 +54,7 @@
         
         <div class="ui container">
             
-            <h2></h2>
-            
             <h2 class="ui dividing header">Login</h2>
-            
-            <h2></h2>
 
             <c:if test="${not empty error}"><p style="background: red; color: white;"><b>${error}</b></p></c:if>
 

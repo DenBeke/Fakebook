@@ -3,7 +3,7 @@
         
         <div class="ui container">
         
-        <h1>Register</h1>
+        <h2 class="ui dividing header">Register</h2>
 
         <c:if test="${not empty error}">
             <!--<p style="background: red; color: white;"><b>${error}</b></p>-->

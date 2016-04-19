@@ -2,15 +2,14 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         
         <div class="ui container">
-
-            User: <c:out value="${currentUser.getName()}" escapeXml="true"/>
             
             <c:if test="${user == -1}">
                 <h1>Wall of user</h1>
                 <p>Error: The user you tried to access does not exist!</p>
             </c:if>
             <c:if test="${user != -1}">
-                <h1>Wall of user ${user}</h1>
+                
+                <h2 class="ui dividing header">Wall of user ${user}</h2>
 
 
                 <form action="?uid=${user}" id="wall_form" method="POST" class="ui form">
