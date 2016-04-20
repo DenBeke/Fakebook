@@ -18,6 +18,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import static javax.persistence.TemporalType.DATE;
 
 /**
  *
@@ -42,6 +44,7 @@ public class Post {
     @OneToMany
     private List<Post> comments;  // Comments on this post
     
+    @Temporal(DATE)
     private Date timestamp; // The time the post was posted
     
     private String text;    // The actual post Text
