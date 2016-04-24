@@ -23,15 +23,15 @@
 
                     <form action="register" method="POST" class="ui form">
                         <div class="field">
-                            <label>Email</label>
+                            <label>Email *</label>
                             <input name="email" type="email" placeholder="john@doe.com" value="${email}">
                     </div>
                     <div class="field">
-                        <label>Password</label>
+                        <label>Password *</label>
                         <input name="password" type="password" placeholder="*******" value="${password}">
                     </div>
                     <div class="field">
-                        <label>First Name</label>
+                        <label>First Name *</label>
                         <input name="firstName" type="text" placeholder="John" value="${firtName}">
                     </div>
                     <div class="field">
@@ -57,22 +57,5 @@
 
             </div>
         </div>
-        
-        
-        
-        <!--<form action="register" method="POST">
-            <table>
-                <tr><td>Email</td><td><input type="text" name="email" value="${email}" />*</td></tr>
-                <tr><td>Password</td><td><input type="password" name="password" value="${password}" />*</td></tr>
-                <tr><td>First Name</td><td><input type="text" name="firstName" value="${firstName}" /></td></tr>
-                <tr><td>Last Name</td><td><input type="text" name="lastName" value="${lastName}" /></td></tr>
-                <tr><td>Gender</td><td><input type="text" name="gender" value="${gender}" /></td></tr>
-                <tr><td>Birthday</td><td><input type="text" name="birthday" value="${birthday}" /></td></tr>
-            </table>
-            <input type="submit" name="action" class="btn btn-default" value="Register" />
-        </form>
-        <p>Already have an account? Go to <a href="login">login page</a>.</p>
-        
-        </div>-->
-        
+
 <jsp:include page="footer.jsp" />

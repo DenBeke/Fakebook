@@ -57,8 +57,8 @@ public class RegisterServlet extends HttpServlet {
             request.setAttribute("birthday", birthday);
             
             // The email and password values have to be provided
-            if (password == null || email.isEmpty() || password.isEmpty()) {
-                request.setAttribute("error", "Email and password have to be provided");
+            if (email.isEmpty() || password == null || password.isEmpty() || firstName == null || firstName.isEmpty()) {
+                request.setAttribute("error", "Email, password and first name have to be provided");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             }
             
