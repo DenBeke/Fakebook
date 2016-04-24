@@ -49,6 +49,11 @@ public class Post {
     
     private String text;    // The actual post Text
     
+    private String type;    // type of the post ("picture", "link", "video" or not specified)
+    private String picture; // URL of the attached photo if there is one
+    private String video;   // URL of the attached video if there is one
+    private String link;    // URL of the link if there is one
+    
     // TODO , depending on assignment allow for images/video/...
 
     /**
@@ -131,7 +136,37 @@ public class Post {
         this.text = text;
     }
     
+    public String getPicture() {
+        return picture;
+    }
+    
+    public void setPicture(String picture) {
+        this.type = "picture";
+        this.picture = picture;
+    }
+    
+    public String getVideo() {
+        return video;
+    }
+    
+    public void setVideo(String video) {
+        this.type = "video";
+        this.video = video;
+    }
+    
+    public String getLink() {
+        return link;
+    }
+    
+    public void setLink(String link) {
+        this.type = "link";
+        this.link = link;
+    }
 
+    public String getType() {
+        return type;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

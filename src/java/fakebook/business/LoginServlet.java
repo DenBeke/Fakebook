@@ -174,15 +174,15 @@ public class LoginServlet extends HttpServlet {
     
     private void syncFacebook(FacebookClient facebookClient, User user)
     {
-        List<com.restfb.types.Post> fbposts = facebookClient.fetchConnection("me/feed", com.restfb.types.Post.class, Parameter.with("fields","message,from,to,comments,created_time")).getData();
+        List<com.restfb.types.Post> fbposts = facebookClient.fetchConnection("me/feed", com.restfb.types.Post.class, Parameter.with("fields","message,from,to,comments,created_time,type,full_picture,link,source")).getData();
         for (com.restfb.types.Post fbpost : fbposts) {
-            if (fbpost.getCreatedTime() == null || fbpost.getMessage() == null || fbpost.getMessage().isEmpty()) {
+            if (fbpost.getCreatedTime() == null || fbpost.getType() == null || fbpost.getType().isEmpty()) {
                 continue;
             }
 
             User poster = userService.getUserByFacebookId(fbpost.getFrom().getId());
             if (poster != null) {
-                
+
                 // Check if we already have the post (there could still be new comments even if we do)
                 Post existingPost = null;
                 List<Post> comments = new ArrayList<>();
@@ -193,7 +193,7 @@ public class LoginServlet extends HttpServlet {
                         break;
                     }
                 }
-                
+
                 // Gather the comments
                 Comments fbcomments = fbpost.getComments();
                 if (fbcomments != null) {
@@ -261,7 +261,7 @@ public class LoginServlet extends HttpServlet {
                     postService.updatePost(existingPost);
                     continue;
                 }
-                
+
                 // Gather the mentions in the post
                 List<User> mentions = new ArrayList<>();
                 for (NamedFacebookType fbmention : fbpost.getTo()) {
@@ -270,8 +270,16 @@ public class LoginServlet extends HttpServlet {
                         mentions.add(existingUser);
                     }
                 }
-                
+
                 Post post = new Post(poster, user, mentions, comments, fbpost.getCreatedTime(), fbpost.getMessage());
+
+                if (fbpost.getType().equals("photo") && fbpost.getFullPicture() != null && !fbpost.getFullPicture().isEmpty())
+                    post.setPicture(fbpost.getFullPicture());
+                if (fbpost.getType().equals("video") && fbpost.getSource() != null && !fbpost.getSource().isEmpty())
+                    post.setVideo(fbpost.getSource());
+                if (fbpost.getType().equals("link") && fbpost.getLink() != null && !fbpost.getLink().isEmpty())
+                    post.setLink(fbpost.getLink());
+
                 postService.newPost(post);
             }
         }

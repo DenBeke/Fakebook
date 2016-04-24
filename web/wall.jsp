@@ -3,11 +3,12 @@
         
         <div class="ui container">
             
-            <c:if test="${user == -1}">
+            <c:choose>
+            <c:when test="${user == -1}">
                 <h1>Wall of user</h1>
                 <p>Error: The user you tried to access does not exist!</p>
-            </c:if>
-            <c:if test="${user != -1}">
+            </c:when>
+            <c:otherwise>
                 
                 <h2 class="ui dividing header">Wall of user ${user}</h2>
 
@@ -38,6 +39,23 @@
                                 </div>
                                 <div class="text">
                                     <c:out value="${post.getText()}" escapeXml="true"/>
+
+                                    <c:if test="${not empty post.getText() && not empty post.getType()}">
+                                        <br>
+                                    </c:if>
+
+                                    <c:if test="${post.getType() eq 'link' && not empty post.getLink()}">
+                                        <a href="<c:out value="${post.getLink()}" escapeXml="true"/>"><c:out value="${post.getLink()}" escapeXml="true"/></a>
+                                    </c:if>
+                                    <c:if test="${post.getType() eq 'picture' && not empty post.getPicture()}">
+                                        <a href="<c:out value="${post.getPicture()}" escapeXml="true"/>"><img src="<c:out value="${post.getPicture()}" escapeXml="true"/>" /></a>
+                                    </c:if>
+                                    <c:if test="${post.getType() eq 'video' && not empty post.getVideo()}">
+                                         <video controls>
+                                            <source src="<c:out value="${post.getVideo()}" escapeXml="true"/>">
+                                            <a href="<c:out value="${post.getVideo()}" escapeXml="true"/>"><c:out value="${post.getVideo()}" escapeXml="true"/></a>
+                                          </video>
+                                    </c:if>
                                 </div>
                                 <div class="actions">
                                     <a class="reply">Reply</a>
@@ -106,7 +124,8 @@
                     </c:forEach>
 
                 </div>
-            </c:if>
+            </c:otherwise>
+            </c:choose>
                 
         </div>
 
