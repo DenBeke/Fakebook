@@ -83,9 +83,7 @@
                        
 
                 <div class="eight wide column">
-
-                    <fb:login-button class="" scope="public_profile,user_birthday,email,user_posts,user_friends" onlogin="checkLoginState();"></fb:login-button>
-
+                    <button class="facebookButton" onclick="FB.login(); checkLoginState();">Facebook Login</button>
                 </div>
             
         </div>
