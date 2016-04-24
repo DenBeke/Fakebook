@@ -55,6 +55,11 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        if (request.getSession().getAttribute("currentUser") != null) {
+            response.sendRedirect(request.getContextPath() + "/wall");
+            return;
+        }
+
         String fbToken = request.getParameter("fbToken");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -135,7 +140,7 @@ public class LoginServlet extends HttpServlet {
                     }
 
                     request.getSession().setAttribute("currentUser", user);
-                    response.sendRedirect(request.getContextPath() + "/wall?uid=" + user.getId());
+                    response.sendRedirect(request.getContextPath() + "/wall");
                 }
                 else {
                     request.setAttribute("error", "Facebook did not provide an email address");
@@ -157,7 +162,7 @@ public class LoginServlet extends HttpServlet {
                     if (password != null && !password.isEmpty() && password.equals(user.getPassword())) {
                         
                         request.getSession().setAttribute("currentUser", user);
-                        response.sendRedirect(request.getContextPath() + "/wall?uid=" + user.getId());
+                        response.sendRedirect(request.getContextPath() + "/wall");
                     }
                     else {
                         request.setAttribute("error", "Incorrect email or password");

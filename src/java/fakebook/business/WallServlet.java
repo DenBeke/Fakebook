@@ -37,9 +37,7 @@ public class WallServlet extends HttpServlet {
     
     @EJB
     private PostServiceFacadeLocal postService;
-    
-    public User currentUser;
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -66,19 +64,17 @@ public class WallServlet extends HttpServlet {
             }
         }
 
-        this.currentUser = (User)(request.getSession().getAttribute("currentUser"));
-        /*
-        if(this.currentUser == null) {
-            System.out.println("No current user found");
-            this.currentUser = new User();
-        } else {
-            System.out.println("Current user found: " + currentUser.getName());
+        User currentUser = (User)(request.getSession().getAttribute("currentUser"));
+
+        if (userId == -1) {
+            if(currentUser != null) {
+                userId = currentUser.getId();
+            }
         }
-        */
-        
+
         request.setAttribute("user", userId);
         if (userId != -1) {
-            
+
             // Check for new wall post form
             if(request.getMethod().equals("POST")) {
                 if(request.getParameter("new_wall_post") != null) {
@@ -99,15 +95,7 @@ public class WallServlet extends HttpServlet {
             
             request.setAttribute("posts", posts);
         }
-        else {
-            if(currentUser == null) {
-                request.setAttribute("user", -1);
-            }
-            else {
-                request.setAttribute("user", currentUser.getId());
-            }
-            
-        }
+
         request.getRequestDispatcher("wall.jsp").forward(request, response);
     }
 
