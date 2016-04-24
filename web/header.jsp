@@ -43,26 +43,30 @@
                 Home
             </a>
             
-            <c:if test="${empty currentUser}">
-                <a class="item" href="login">
-                    <i class="user icon"></i>
-                    Login
-                </a>
-                <a class="item" href="register">
-                    <i class="add user icon"></i>
-                    Register
-                </a>
-            </c:if>
-            
-            <c:if test="${!empty currentUser}">
-                <a class="item" href="wall">
-                    <i class="smile icon"></i>
-                    Wall
-                </a>
-                <a class="item" href="friends">
-                    <i class="users icon"></i>
-                    Friends
-                </a>
-            </c:if>
-            
+            <c:choose>
+                <c:when test="${empty currentUser}">
+                    <a class="item" href="login">
+                        <i class="user icon"></i>
+                        Login
+                    </a>
+                    <a class="item" href="register">
+                        <i class="add user icon"></i>
+                        Register
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <a class="item" href="wall">
+                        <i class="smile icon"></i>
+                        Wall
+                    </a>
+                    <a class="item" href="friends">
+                        <i class="users icon"></i>
+                        Friends
+                    </a>
+                    <a class="item" href="logout">
+                        <i class="power icon"></i>
+                        Logout
+                    </a>
+                </c:otherwise>
+            </c:choose>
         </div>
