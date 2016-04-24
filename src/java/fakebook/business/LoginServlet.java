@@ -118,7 +118,6 @@ public class LoginServlet extends HttpServlet {
                     }
 
                     syncFacebook(facebookClient, user);
-                    request.setAttribute("currentUser", user);
 
                     // If this is the first login then sync the friends
                     if (firstFacebookLogin) {
@@ -135,6 +134,7 @@ public class LoginServlet extends HttpServlet {
                         }
                     }
 
+                    request.getSession().setAttribute("currentUser", user);
                     response.sendRedirect(request.getContextPath() + "/wall?uid=" + user.getId());
                 }
                 else {
