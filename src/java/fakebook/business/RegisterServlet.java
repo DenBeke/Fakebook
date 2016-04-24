@@ -37,6 +37,11 @@ public class RegisterServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        if (request.getSession().getAttribute("currentUser") != null) {
+            response.sendRedirect(request.getContextPath() + "/wall");
+            return;
+        }
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 

@@ -49,6 +49,11 @@ public class WallServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        if (request.getSession().getAttribute("currentUser") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
         response.addHeader("Access-Control-Allow-Origin", "*");
         
         long userId = -1;
