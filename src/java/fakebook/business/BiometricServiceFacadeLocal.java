@@ -26,11 +26,12 @@ public interface BiometricServiceFacadeLocal {
     public void pushHeartrate(User user, Double heartrate, Calendar timestamp);
 
     /**
-     * Gets the heartrate data for user from 10 seconds before timestamp to 30 seconds after timestamp
+     * get Heartrate data for a user in the interval bounded by min and max time.
      * @param userId
-     * @param timestamp
+     * @param minTime
+     * @param maxTime
      * @return 
      */
-    public List<BiometricData> getHeartrateData(long userId, Calendar timestamp);
+    public List<BiometricData> getHeartrateData(long userId, Calendar minTime, Calendar maxTime);
     
 }

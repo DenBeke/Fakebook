@@ -39,20 +39,16 @@ public class BiometricServiceFacade implements BiometricServiceFacadeLocal {
     }
     
     /**
-     * get Heartrate data for a user round the timestamp.
+     * get Heartrate data for a user in the interval bounded by min and max time.
      * @param userId
-     * @param timestamp
+     * @param minTime
+     * @param maxTime
      * @return 
      */
     @Override
-    public List<BiometricData> getHeartrateData(long userId, Calendar timestamp) {
+    public List<BiometricData> getHeartrateData(long userId, Calendar minTime, Calendar maxTime) {
         List<BiometricData> list = em.createNamedQuery("BiometricData.getByUser").setParameter("uid", userId).getResultList();
         List<BiometricData> retList = new ArrayList<>();
-        
-        Calendar minTime = timestamp;
-        Calendar maxTime = timestamp;
-        minTime.add(Calendar.SECOND, -10);
-        maxTime.add(Calendar.SECOND, 30);
         
         for (BiometricData bData : list) {
             if (bData.getTimestamp().after(minTime) && bData.getTimestamp().before(maxTime)) {
