@@ -85,7 +85,10 @@
                        
 
                 <div class="eight wide column">
-                    <button class="facebookButton" onclick="tryFbLogin()">Facebook Login</button>
+                    <button class="ui facebook button facebookButton" onclick="tryFbLogin()">
+                        <i class="facebook icon"></i>
+                        Facebook login
+                    </button>
                 </div>
             
         </div>
