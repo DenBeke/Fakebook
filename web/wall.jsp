@@ -48,7 +48,8 @@
                                         <a href="<c:out value="${post.getLink()}" escapeXml="true"/>"><c:out value="${post.getLink()}" escapeXml="true"/></a>
                                     </c:if>
                                     <c:if test="${post.getType() eq 'picture' && not empty post.getPicture()}">
-                                        <a href="<c:out value="${post.getPicture()}" escapeXml="true"/>"><img src="<c:out value="${post.getPicture()}" escapeXml="true"/>" /></a>
+                                        
+                                        <a href="<c:out value="${post.getPicture()}" escapeXml="true"/>" data-lightbox="image-1" data-title="<c:out value="${post.getText()}" escapeXml="true"/>"><img class="ui rounded image" src="<c:out value="${post.getPicture()}" escapeXml="true"/>" /></a>
                                     </c:if>
                                     <c:if test="${post.getType() eq 'video' && not empty post.getVideo()}">
                                          <video controls>

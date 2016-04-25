@@ -1,4 +1,5 @@
 *.class
+.DS_Store
 
 # Ignore the files from intellij
 Fakebook.iml
