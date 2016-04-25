@@ -57,6 +57,10 @@
                                             <a href="<c:out value="${post.getVideo()}" escapeXml="true"/>"><c:out value="${post.getVideo()}" escapeXml="true"/></a>
                                           </video>
                                     </c:if>
+                                    
+                                    <c:if test="${not empty post.getLikes()}">
+                                    <br>Likes: <c:out value="${post.getLikes().size()}" escapeXml="true"/>
+                                    </c:if>
                                 </div>
                                 <div class="actions">
                                     <a class="reply">Reply</a>
@@ -78,6 +82,9 @@
                                         </div>
                                         <div class="text">
                                             <c:out value="${comment.getText()}" escapeXml="true"/>
+                                            <c:if test="${not empty comment.getLikes()}">
+                                            <br>Likes: <c:out value="${comment.getLikes().size()}" escapeXml="true"/>
+                                            </c:if>
                                         </div>
                                         <div class="actions">
                                             <a class="reply">Reply</a>
@@ -100,6 +107,9 @@
                                                                 </div>
                                                                 <div class="text">
                                                                     <c:out value="${subComment.getText()}" escapeXml="true"/>
+                                                                    <c:if test="${not empty subComment.getLikes()}">
+                                                                    <br>Likes: <c:out value="${subComment.getLikes().size()}" escapeXml="true"/>
+                                                                    </c:if>
                                                                 </div>
                                                             </div>
 

@@ -13,6 +13,7 @@ import com.restfb.Version;
 import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.Comment;
 import com.restfb.types.FacebookType.Metadata;
+import com.restfb.types.Likes;
 import com.restfb.types.MessageTag;
 import com.restfb.types.NamedFacebookType;
 import com.restfb.types.Post.Comments;
@@ -179,7 +180,7 @@ public class LoginServlet extends HttpServlet {
     
     private void syncFacebook(FacebookClient facebookClient, User user)
     {
-        List<com.restfb.types.Post> fbposts = facebookClient.fetchConnection("me/feed", com.restfb.types.Post.class, Parameter.with("fields","message,from,to,comments,created_time,type,full_picture,link,source")).getData();
+        List<com.restfb.types.Post> fbposts = facebookClient.fetchConnection("me/feed", com.restfb.types.Post.class, Parameter.with("fields","message,from,to,comments,created_time,likes,type,full_picture,link,source")).getData();
         for (com.restfb.types.Post fbpost : fbposts) {
             if (fbpost.getCreatedTime() == null || fbpost.getType() == null || fbpost.getType().isEmpty()) {
                 continue;
@@ -191,10 +192,12 @@ public class LoginServlet extends HttpServlet {
                 // Check if we already have the post (there could still be new comments even if we do)
                 Post existingPost = null;
                 List<Post> comments = new ArrayList<>();
+                List<User> likes = new ArrayList<>();
                 for (Post post : postService.getPostsOnWall(user.getId())) {
                     if (post.getTimestamp().equals(fbpost.getCreatedTime())) {
                         existingPost = post;
                         comments = existingPost.getComments();
+                        likes = existingPost.getLikes();
                         break;
                     }
                 }
@@ -203,18 +206,20 @@ public class LoginServlet extends HttpServlet {
                 Comments fbcomments = fbpost.getComments();
                 if (fbcomments != null) {
                     for (Comment fbcommentData : fbcomments.getData()) {
-                        com.restfb.types.Post fbcomment = facebookClient.fetchObject(fbcommentData.getId(), com.restfb.types.Post.class, Parameter.with("fields","message,from,comments,created_time"));
+                        com.restfb.types.Post fbcomment = facebookClient.fetchObject(fbcommentData.getId(), com.restfb.types.Post.class, Parameter.with("fields","message,from,comments,created_time,likes"));
                         User commentPoster = userService.getUserByFacebookId(fbcomment.getFrom().getId());
                         if (commentPoster != null && fbcomment.getMessage() != null && !fbcomment.getMessage().isEmpty()) {
                             
                             // Check if we already have the comment (there could still be new subcomments even if we do)
                             Post existingComment = null;
                             List<Post> subcomments = new ArrayList<>();
+                            List<User> commentLikes = new ArrayList<>();
                             if (existingPost != null) {
                                 for (Post comment : existingPost.getComments()) {
                                     if (comment.getTimestamp().equals(fbcomment.getCreatedTime())) {
                                         existingComment = comment;
                                         subcomments = existingComment.getComments();
+                                        commentLikes = existingComment.getLikes();
                                         break;
                                     }
                                 }
@@ -223,27 +228,58 @@ public class LoginServlet extends HttpServlet {
                             // Get subcomments
                             if (fbcomment.getComments() != null) {
                                 Comments fbSubComments = fbcomment.getComments();
-                                for (Comment fbSubComment : fbSubComments.getData()) {
+                                for (Comment fbSubCommentData : fbSubComments.getData()) {
+                                    com.restfb.types.Post fbSubComment = facebookClient.fetchObject(fbSubCommentData.getId(), com.restfb.types.Post.class, Parameter.with("fields","message,from,comments,created_time,likes"));
                                     User subCommentPoster = userService.getUserByFacebookId(fbSubComment.getFrom().getId());
                                     if (subCommentPoster != null && fbSubComment.getMessage() != null && !fbSubComment.getMessage().isEmpty()) {
 
                                         // Don't duplicate subcomments
                                         Post existingSubComment = null;
+                                        List<User> subcommentLikes = new ArrayList<>();
                                         if (existingComment != null) {
                                             for (Post subcomment : existingComment.getComments()) {
                                                 if (subcomment.getTimestamp().equals(fbSubComment.getCreatedTime())) {
                                                     existingSubComment = subcomment;
+                                                    subcommentLikes = subcomment.getLikes();
                                                     break;
                                                 }
                                             }
                                         }
+                                        
+                                        // Get the likes of the subcomment
+                                        Likes fblikes = fbSubComment.getLikes();
+                                        if (fblikes != null) {
+                                            for (NamedFacebookType fblike : fblikes.getData()) {
+                                                User likingUser = userService.getUserByFacebookId(fblike.getId());
+                                                if (likingUser != null) {
+                                                    if (!subcommentLikes.contains(likingUser)) {
+                                                        subcommentLikes.add(likingUser);
+                                                    }
+                                                }
+                                            }
+                                        }
+
                                         if (existingSubComment != null) {
+                                            postService.updatePost(existingSubComment);
                                             continue;
                                         }
 
-                                        Post subcomment = new Post(subCommentPoster, null, null, null, fbSubComment.getCreatedTime(), fbSubComment.getMessage());
+                                        Post subcomment = new Post(subCommentPoster, null, new ArrayList<>(), new ArrayList<>(), subcommentLikes, fbSubComment.getCreatedTime(), fbSubComment.getMessage());
                                         subcomments.add(subcomment);
                                         postService.newPost(subcomment);
+                                    }
+                                }
+                            }
+                            
+                            // Get the likes of the comment
+                            Likes fblikes = fbcomment.getLikes();
+                            if (fblikes != null) {
+                                for (NamedFacebookType fblike : fblikes.getData()) {
+                                    User likingUser = userService.getUserByFacebookId(fblike.getId());
+                                    if (likingUser != null) {
+                                        if (!commentLikes.contains(likingUser)) {
+                                            commentLikes.add(likingUser);
+                                        }
                                     }
                                 }
                             }
@@ -254,13 +290,26 @@ public class LoginServlet extends HttpServlet {
                                 continue;
                             }
                             
-                            Post comment = new Post(commentPoster, null, null, subcomments, fbcomment.getCreatedTime(), fbcomment.getMessage());
+                            Post comment = new Post(commentPoster, null, new ArrayList<>(), subcomments, commentLikes, fbcomment.getCreatedTime(), fbcomment.getMessage());
                             comments.add(comment);
                             postService.newPost(comment);
                         }
                     }
                 }
 
+                // Gather the likes
+                Likes fblikes = fbpost.getLikes();
+                if (fblikes != null) {
+                    for (NamedFacebookType fblike : fblikes.getData()) {
+                        User likingUser = userService.getUserByFacebookId(fblike.getId());
+                        if (likingUser != null) {
+                            if (!likes.contains(likingUser)) {
+                                likes.add(likingUser);
+                            }
+                        }
+                    }
+                }
+                
                 // Don't continue if post was already imported
                 if (existingPost != null) {
                     postService.updatePost(existingPost);
@@ -276,7 +325,7 @@ public class LoginServlet extends HttpServlet {
                     }
                 }
 
-                Post post = new Post(poster, user, mentions, comments, fbpost.getCreatedTime(), fbpost.getMessage());
+                Post post = new Post(poster, user, mentions, comments, likes, fbpost.getCreatedTime(), fbpost.getMessage());
 
                 if (fbpost.getType().equals("photo") && fbpost.getFullPicture() != null && !fbpost.getFullPicture().isEmpty())
                     post.setPicture(fbpost.getFullPicture());
