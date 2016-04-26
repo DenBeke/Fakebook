@@ -37,9 +37,7 @@ public class WallServlet extends HttpServlet {
     
     @EJB
     private PostServiceFacadeLocal postService;
-    
-    public User currentUser;
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -51,6 +49,11 @@ public class WallServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        if (request.getSession().getAttribute("currentUser") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
         response.addHeader("Access-Control-Allow-Origin", "*");
         
         long userId = -1;
@@ -66,24 +69,22 @@ public class WallServlet extends HttpServlet {
             }
         }
 
-        this.currentUser = (User)(request.getSession().getAttribute("currentUser"));
-        /*
-        if(this.currentUser == null) {
-            System.out.println("No current user found");
-            this.currentUser = new User();
-        } else {
-            System.out.println("Current user found: " + currentUser.getName());
+        User currentUser = (User)(request.getSession().getAttribute("currentUser"));
+
+        if (userId == -1) {
+            if(currentUser != null) {
+                userId = currentUser.getId();
+            }
         }
-        */
-        
+
         request.setAttribute("user", userId);
         if (userId != -1) {
-            
+
             // Check for new wall post form
             if(request.getMethod().equals("POST")) {
                 if(request.getParameter("new_wall_post") != null) {
                     String newPost = request.getParameter("new_wall_post");
-                    postService.newPost(new Post(userService.getUser(userId), userService.getUser(userId), null, null, new Date(), newPost));
+                    postService.newPost(new Post(userService.getUser(userId), userService.getUser(userId), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), newPost));
                 }
             }
             
@@ -99,15 +100,7 @@ public class WallServlet extends HttpServlet {
             
             request.setAttribute("posts", posts);
         }
-        else {
-            if(currentUser == null) {
-                request.setAttribute("user", -1);
-            }
-            else {
-                request.setAttribute("user", currentUser.getId());
-            }
-            
-        }
+
         request.getRequestDispatcher("wall.jsp").forward(request, response);
     }
 

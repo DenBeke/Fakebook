@@ -19,11 +19,13 @@
               js.src = "//connect.facebook.net/en_US/sdk.js";
               fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
-            
-            function checkLoginState() {
-              FB.getLoginStatus(function(response) {
-                fblogin(response);
-              });
+
+            function tryFbLogin() {
+                FB.login(
+                    function(response) {
+                        fblogin(response);
+                    }
+                );
             }
 
             function fblogin(response) {
@@ -83,9 +85,10 @@
                        
 
                 <div class="eight wide column">
-
-                    <fb:login-button class="" scope="public_profile,user_birthday,email,user_posts,user_friends" onlogin="checkLoginState();"></fb:login-button>
-
+                    <button class="ui facebook button facebookButton" onclick="tryFbLogin()">
+                        <i class="facebook icon"></i>
+                        Facebook login
+                    </button>
                 </div>
             
         </div>

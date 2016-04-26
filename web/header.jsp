@@ -9,10 +9,12 @@
         <link href='https://fonts.googleapis.com/css?family=Exo+2' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" class="ui" href="semantic/semantic.min.css">
         <link rel="stylesheet" type="text/css" class="ui" href="style.css">
+        <link rel="stylesheet" type="text/css" class="ui" href="lightbox2/dist/css/lightbox.min.css">
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="jquery.rest.min.js"></script>
         <script src="semantic/semantic.min.js"></script>
+       
         
     </head>
     <body>
@@ -43,26 +45,30 @@
                 Home
             </a>
             
-            <c:if test="${empty currentUser}">
-                <a class="item" href="login">
-                    <i class="user icon"></i>
-                    Login
-                </a>
-                <a class="item" href="register">
-                    <i class="add user icon"></i>
-                    Register
-                </a>
-            </c:if>
-            
-            <c:if test="${!empty currentUser}">
-                <a class="item" href="wall">
-                    <i class="smile icon"></i>
-                    Wall
-                </a>
-                <a class="item" href="friends">
-                    <i class="users icon"></i>
-                    Friends
-                </a>
-            </c:if>
-            
+            <c:choose>
+                <c:when test="${empty currentUser}">
+                    <a class="item" href="login">
+                        <i class="user icon"></i>
+                        Login
+                    </a>
+                    <a class="item" href="register">
+                        <i class="add user icon"></i>
+                        Register
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <a class="item" href="wall">
+                        <i class="smile icon"></i>
+                        Wall
+                    </a>
+                    <a class="item" href="friends">
+                        <i class="users icon"></i>
+                        Friends
+                    </a>
+                    <a class="item" href="logout">
+                        <i class="power icon"></i>
+                        Logout
+                    </a>
+                </c:otherwise>
+            </c:choose>
         </div>

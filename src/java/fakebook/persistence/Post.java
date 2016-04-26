@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -39,8 +41,19 @@ public class Post {
     private User poster;  // The poster who posted the post
     @ManyToOne
     private User wall;    // The user on whose wall it will be posted, not necessarily the same as poster.
+    
     @ManyToMany
+    @JoinTable(name="POST_MENTIONS",
+               joinColumns=@JoinColumn(name="POST_ID"),
+               inverseJoinColumns=@JoinColumn(name="USER_ID"))
     private List<User> mentioned; // All users who are mentioned in the post, so on
+    
+    @ManyToMany
+    @JoinTable(name="POST_LIKES",
+               joinColumns=@JoinColumn(name="POST_ID"),
+               inverseJoinColumns=@JoinColumn(name="USER_ID"))
+    private List<User> likes; // All users that like this post
+
     @OneToMany
     private List<Post> comments;  // Comments on this post
     
@@ -48,6 +61,11 @@ public class Post {
     private Date timestamp; // The time the post was posted
     
     private String text;    // The actual post Text
+    
+    private String type;    // type of the post ("picture", "link", "video" or not specified)
+    private String picture; // URL of the attached photo if there is one
+    private String video;   // URL of the attached video if there is one
+    private String link;    // URL of the link if there is one
     
     // TODO , depending on assignment allow for images/video/...
 
@@ -62,15 +80,17 @@ public class Post {
      * @param poster
      * @param wall
      * @param mentioned
-     * @param post
+     * @param comments
+     * @param likes
      * @param timestamp
      * @param text
      */
-    public Post(User poster, User wall, List<User> mentioned, List<Post> comments, Date timestamp, String text) {
+    public Post(User poster, User wall, List<User> mentioned, List<Post> comments, List<User> likes, Date timestamp, String text) {
         this.poster = poster;
         this.wall = wall;
         this.mentioned = mentioned;
         this.comments = comments;
+        this.likes = likes;
         this.timestamp = timestamp;
         this.text = text;
     }        
@@ -106,6 +126,14 @@ public class Post {
     public void setMentioned(List<User> mentioned) {
         this.mentioned = mentioned;
     }
+    
+    public List<User> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<User> likes) {
+        this.likes = likes;
+    }
 
     public List<Post> getComments() {
         return comments;
@@ -131,7 +159,37 @@ public class Post {
         this.text = text;
     }
     
+    public String getPicture() {
+        return picture;
+    }
+    
+    public void setPicture(String picture) {
+        this.type = "picture";
+        this.picture = picture;
+    }
+    
+    public String getVideo() {
+        return video;
+    }
+    
+    public void setVideo(String video) {
+        this.type = "video";
+        this.video = video;
+    }
+    
+    public String getLink() {
+        return link;
+    }
+    
+    public void setLink(String link) {
+        this.type = "link";
+        this.link = link;
+    }
 
+    public String getType() {
+        return type;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
