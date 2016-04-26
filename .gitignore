@@ -1,7 +1,9 @@
 *.class
-
-# Ignore the files from intellij
-Fakebook.iml
+# Ignore the data map
+data/
+# Ignore project properties
+nbproject/project.properties
+# Fakebook.iml
 src/META-INF/
 .idea/
 
