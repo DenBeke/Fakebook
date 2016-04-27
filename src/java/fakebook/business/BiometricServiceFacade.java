@@ -7,11 +7,18 @@ package fakebook.business;
 
 import fakebook.persistence.BiometricData;
 import fakebook.persistence.User;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -24,7 +31,9 @@ public class BiometricServiceFacade implements BiometricServiceFacadeLocal {
 
     @PersistenceContext
     private EntityManager em;
-
+    
+    @EJB
+    private UserServiceFacadeLocal userService;
     
     /**
      * Push new heartrate data.
@@ -35,6 +44,40 @@ public class BiometricServiceFacade implements BiometricServiceFacadeLocal {
     @Override
     public void pushHeartrate(User user, Double heartrate, Calendar timestamp) {
         BiometricData data =  new BiometricData(user, heartrate, timestamp);
+        em.persist(data);
+    }
+    
+    /**
+     * Pushes data from a json file to the database. 
+     * Requires checking if format is correct, a user check.
+     * @param json
+     */
+    @Override
+    public void pushHeartrateJson(JsonObject json) {
+        // get data from json object, and create a BiometricData object, persist it.
+        JsonObject header = json.getJsonObject("header");
+        JsonObject body = json.getJsonObject("body");
+        
+        // Parse the time, and date.
+        String date = body.getJsonObject("effective_time_frame").getString("date_time");
+        SimpleDateFormat timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        Calendar time = Calendar.getInstance();
+        try {
+            Date t = timestamp.parse(date);
+            time.setTime(t);
+        } catch (ParseException ex) {
+            Logger.getLogger(BiometricServiceFacade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+        // parse the heart rate value:
+        double heart_rate = ((Number)body.getJsonObject("heart_rate").get("value")).doubleValue();
+        
+        // parse the user ID
+        long user_id = (long)header.getInt("user_id");     // TODO: In Json data the user ID is "joe" which is a string -> adapt in biometric data sender.
+        
+        User user = userService.getUser(user_id);
+        
+        BiometricData data = new BiometricData(user, heart_rate, time);
         em.persist(data);
     }
     

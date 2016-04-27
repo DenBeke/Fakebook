@@ -10,6 +10,8 @@ import fakebook.persistence.User;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.json.Json;
+import javax.json.JsonObject;
 
 /**
  *
@@ -33,5 +35,7 @@ public interface BiometricServiceFacadeLocal {
      * @return 
      */
     public List<BiometricData> getHeartrateData(long userId, Calendar minTime, Calendar maxTime);
+
+    public void pushHeartrateJson(JsonObject json);
     
 }
