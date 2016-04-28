@@ -32,7 +32,7 @@
                     </div>
                     <div class="field">
                         <label>First Name *</label>
-                        <input name="firstName" type="text" placeholder="John" value="${firtName}">
+                        <input name="firstName" type="text" placeholder="John" value="${firstName}">
                     </div>
                     <div class="field">
                         <label>Last Name</label>
