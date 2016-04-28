@@ -30,36 +30,34 @@
 
                         <div class="comment">
                             <a class="avatar">
-                                <img src="<c:out value="${post.getPoster().getProfilePic()}" escapeXml="true"/>">
+                                <img src="<c:out value="${post.getPoster().getProfilePic()}"/>">
                             </a>
                             <div class="content">
-                                <a class="author" href="wall?uid=${post.getPoster().getId()}"><c:out value="${post.getPoster().getFirstName()} ${post.getPoster().getLastName()}" escapeXml="true"/></a>
+                                <a class="author" href="wall?uid=${post.getPoster().getId()}"><c:out value="${post.getPoster().getFirstName()} ${post.getPoster().getLastName()}"/></a>
                                 <div class="metadata">
-                                    <span class="date"><c:out value="${post.getTimestamp()}" escapeXml="true"/></span>
+                                    <span class="date"><c:out value="${post.getTimestamp()}"/></span>
                                 </div>
                                 <div class="text">
-                                    <c:out value="${post.getText()}" escapeXml="true"/>
-
-                                    <c:if test="${not empty post.getText() && not empty post.getType()}">
-                                        <br>
+                                    <c:if test="${not empty post.getText()}">
+                                        <pre><c:out value="${post.getText()}"/></pre>
                                     </c:if>
 
                                     <c:if test="${post.getType() eq 'link' && not empty post.getLink()}">
-                                        <a href="<c:out value="${post.getLink()}" escapeXml="true"/>"><c:out value="${post.getLink()}" escapeXml="true"/></a>
+                                        <a href="<c:out value="${post.getLink()}"/>"><c:out value="${post.getLink()}"/></a>
                                     </c:if>
                                     <c:if test="${post.getType() eq 'picture' && not empty post.getPicture()}">
                                         
-                                        <a href="<c:out value="${post.getPicture()}" escapeXml="true"/>" data-lightbox="image-1" data-title="<c:out value="${post.getText()}" escapeXml="true"/>"><img class="ui rounded image" src="<c:out value="${post.getPicture()}" escapeXml="true"/>" /></a>
+                                        <a href="<c:out value="${post.getPicture()}"/>" data-lightbox="image-1" data-title="<c:out value="${post.getText()}"/>"><img class="ui rounded image" src="<c:out value="${post.getPicture()}"/>" /></a>
                                     </c:if>
                                     <c:if test="${post.getType() eq 'video' && not empty post.getVideo()}">
                                          <video controls>
-                                            <source src="<c:out value="${post.getVideo()}" escapeXml="true"/>">
-                                            <a href="<c:out value="${post.getVideo()}" escapeXml="true"/>"><c:out value="${post.getVideo()}" escapeXml="true"/></a>
+                                            <source src="<c:out value="${post.getVideo()}"/>">
+                                            <a href="<c:out value="${post.getVideo()}"/>"><c:out value="${post.getVideo()}"/></a>
                                           </video>
                                     </c:if>
                                     
                                     <c:if test="${not empty post.getLikes()}">
-                                    <br>Likes: <c:out value="${post.getLikes().size()}" escapeXml="true"/>
+                                    <br>Likes: <c:out value="${post.getLikes().size()}"/>
                                     </c:if>
                                 </div>
                                 <div class="actions">
@@ -76,14 +74,14 @@
                                         <img src="${comment.getPoster().getProfilePic()}">
                                     </a>
                                     <div class="content">
-                                        <a class="author" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getFirstName()} ${comment.getPoster().getLastName()}" escapeXml="true"/></a>
+                                        <a class="author" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getFirstName()} ${comment.getPoster().getLastName()}"/></a>
                                         <div class="metadata">
-                                            <span class="date"><c:out value="${comment.getTimestamp()}" escapeXml="true"/></span>
+                                            <span class="date"><c:out value="${comment.getTimestamp()}"/></span>
                                         </div>
                                         <div class="text">
-                                            <c:out value="${comment.getText()}" escapeXml="true"/>
+                                            <pre><c:out value="${comment.getText()}"/></pre>
                                             <c:if test="${not empty comment.getLikes()}">
-                                            <br>Likes: <c:out value="${comment.getLikes().size()}" escapeXml="true"/>
+                                            <br>Likes: <c:out value="${comment.getLikes().size()}"/>
                                             </c:if>
                                         </div>
                                         <div class="actions">
@@ -91,36 +89,34 @@
                                         </div>
                                     </div>
 
-                                        
-                                            <c:if test="${not empty comment.getComments()}">
-                                                <div class="comments">
-                                                    <c:forEach items="${comment.getComments()}" var="subComment">
+                                    <c:if test="${not empty comment.getComments()}">
+                                        <div class="comments">
+                                            <c:forEach items="${comment.getComments()}" var="subComment">
 
-                                                        <div class="comment">
-                                                            <a class="avatar">
-                                                                <img src="${subComment.getPoster().getProfilePic()}">
-                                                            </a>
-                                                            <div class="content">
-                                                                <a class="author" href="wall?uid=${subComment.getPoster().getId()}"><c:out value="${subComment.getPoster().getFirstName()} ${subComment.getPoster().getLastName()}" escapeXml="true"/></a>
-                                                                <div class="metadata">
-                                                                    <span class="date"><c:out value="${subComment.getTimestamp()}" escapeXml="true"/></span>
-                                                                </div>
-                                                                <div class="text">
-                                                                    <c:out value="${subComment.getText()}" escapeXml="true"/>
-                                                                    <c:if test="${not empty subComment.getLikes()}">
-                                                                    <br>Likes: <c:out value="${subComment.getLikes().size()}" escapeXml="true"/>
-                                                                    </c:if>
-                                                                </div>
-                                                            </div>
-
+                                                <div class="comment">
+                                                    <a class="avatar">
+                                                        <img src="${subComment.getPoster().getProfilePic()}">
+                                                    </a>
+                                                    <div class="content">
+                                                        <a class="author" href="wall?uid=${subComment.getPoster().getId()}"><c:out value="${subComment.getPoster().getFirstName()} ${subComment.getPoster().getLastName()}"/></a>
+                                                        <div class="metadata">
+                                                            <span class="date"><c:out value="${subComment.getTimestamp()}"/></span>
                                                         </div>
-
-                                                    </c:forEach>
+                                                        <div class="text">
+                                                            <pre><c:out value="${subComment.getText()}"/></pre>
+                                                            <c:if test="${not empty subComment.getLikes()}">
+                                                            <br>Likes: <c:out value="${subComment.getLikes().size()}"/>
+                                                            </c:if>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
 
+                                            </c:forEach>
 
-                                            </c:if>
+                                        </div>
+
+                                    </c:if>
                                         
                                 </div>
                                 
