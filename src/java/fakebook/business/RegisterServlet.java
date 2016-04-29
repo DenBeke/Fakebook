@@ -65,6 +65,7 @@ public class RegisterServlet extends HttpServlet {
             if (email.isEmpty() || password == null || password.isEmpty() || firstName == null || firstName.isEmpty()) {
                 request.setAttribute("error", "Email, password and first name have to be provided");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
+                return;
             }
             
             // Check if user already exists

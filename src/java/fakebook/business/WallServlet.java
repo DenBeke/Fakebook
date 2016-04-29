@@ -84,7 +84,8 @@ public class WallServlet extends HttpServlet {
             if(request.getMethod().equals("POST")) {
                 if(request.getParameter("new_wall_post") != null) {
                     String newPost = request.getParameter("new_wall_post");
-                    postService.newPost(new Post(userService.getUser(userId), userService.getUser(userId), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), newPost));
+                    if (!newPost.trim().isEmpty())
+                        postService.newPost(new Post(userService.getUser(userId), userService.getUser(userId), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), newPost));
                 }
             }
             
