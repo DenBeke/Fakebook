@@ -17,7 +17,7 @@ import javax.websocket.server.ServerEndpoint;
  *
  * @author robin
  */
-@ServerEndpoint("/endpoint")
+@ServerEndpoint("/BiometricDataEndpoint")
 public class BiometricDataSocket {
 
     @EJB
