@@ -64,16 +64,24 @@
                                           </video>
                                     </c:if>
                                     
-                                    <c:if test="${not empty post.getLikes()}">
-                                    Likes: <c:out value="${post.getLikes().size()}"/>
-                                    </c:if>
+                                    
+                                    
                                 </div>
                                 <div class="actions">
-                                    <a class="reply">Reply</a>
-                                    <!-- TODO: Don't redirect + make visually appealing -->
+                                    <!--<a class="reply">Reply</a>-->
+                                    
+                                    <!-- TODO: Don't redirect -->
                                     <form action="?uid=${user}" id="wall_like_post" method="POST" class="ui form">
                                         <input type="hidden" name="liked_post_id" value="${post.getId()}">
-                                        <input type="submit" value="Like" class="ui button">
+                                        <!--<input type="submit" value="" class="like icon">-->
+                                        
+                                        <a class="like">
+                                            <i class="like icon" onclick="$(this).closest('form').submit();"></i>
+                                            <c:if test="${not empty post.getLikes()}">
+                                                <c:out value="${post.getLikes().size()}"/> likes
+                                            </c:if>
+                                        </a>
+                                        
                                     </form>
                                 </div>
                             </div>

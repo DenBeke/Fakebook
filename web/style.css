@@ -23,6 +23,9 @@ body {
 .avatar img {
   border-radius: 50% !important; }
 
+.like:hover {
+  color: #ff2733; }
+
 #bully-indicator {
   width: 100%;
   padding: 20px;

@@ -32,6 +32,14 @@ body {
     }
 }
 
+.like {
+    
+    &:hover {
+        color: #ff2733;
+    }
+    
+}
+
 #bully-indicator {
     
     width: 100%;
