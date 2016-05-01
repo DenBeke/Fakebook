@@ -9,7 +9,7 @@
                     <p style="background: red; color: white;"><b><c:out value="${error}"/></b></p>
                 </c:when>
                 <c:otherwise>
-                    <h1>Friend request with <c:out value="${userName}"/></h1>
+                    <h1>Requesting to be friends with <c:out value="${userName}"/></h1>
                     <p>Your friend request has been successfully send to <a href="wall?uid=${userId}"><c:out value="${userName}"/></a></p>
                 </c:otherwise>
             </c:choose>

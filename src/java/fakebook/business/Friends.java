@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author texus
  */
-@WebServlet(name = "FriendRequest", urlPatterns = {"/friend-request"})
-public class FriendRequest extends HttpServlet {
+@WebServlet(name = "Friends", urlPatterns = {"/friends"})
+public class Friends extends HttpServlet {
 
     @EJB
     private UserServiceFacadeLocal userService;
@@ -42,34 +42,33 @@ public class FriendRequest extends HttpServlet {
             return;
         }
         
-        if (request.getParameter("friend_user_id") != null) {
-            Long userId = Long.decode(request.getParameter("friend_user_id"));
-            
-            if (!userId.equals(currentUser.getId())) {
-                User user = userService.getUser(userId);
+        // Check if we are accepting a friendship request
+        if (request.getParameter("accepted_friend_id") != null) {
+            Long friendId = Long.decode(request.getParameter("accepted_friend_id"));
+            User friend = userService.getUser(friendId);
 
-                if (user != null) {
-                    List<User> friendRequests = user.getFriendshipRequests();
-                    friendRequests.add(currentUser);
-                    user.setFriendshipRequests(friendRequests);
-                    userService.updateUser(user);
-
-                    request.setAttribute("userId", userId);
-                    request.setAttribute("userName", user.getName());
+            if (friend != null) {
+                if (currentUser.getFriendshipRequests().contains(friend)) {
+                    currentUser.getFriendshipRequests().remove(friend);
+                    
+                    if (friend.getFriendshipRequests().contains(currentUser)) {
+                        friend.getFriendshipRequests().remove(currentUser);
+                    }
+                    
+                    if (!currentUser.getFriends().contains(friend)) {
+                        currentUser.getFriends().add(friend);
+                    }
+                    if (!friend.getFriends().contains(currentUser)) {
+                        friend.getFriends().add(currentUser);
+                    }
+                    
+                    userService.updateUser(currentUser);
+                    userService.updateUser(friend);
                 }
-                else {
-                    request.setAttribute("error", "The user you are trying to become friends with does not exist!");
-                }
-            }
-            else {
-                request.setAttribute("error", "You can't send a friend request to yourself!");
             }
         }
-        else {
-                request.setAttribute("error", "Something is wrong with the friend request!");
-            }
         
-        request.getRequestDispatcher("friend-request.jsp").forward(request, response);
+        request.getRequestDispatcher("friends.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -108,7 +107,7 @@ public class FriendRequest extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Friend Request Servlet";
+        return "Friends Servlet";
     }// </editor-fold>
 
 }
