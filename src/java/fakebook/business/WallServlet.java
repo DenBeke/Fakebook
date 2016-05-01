@@ -89,6 +89,23 @@ public class WallServlet extends HttpServlet {
                 }
             }
             
+            // Check for new likes
+            if (request.getMethod().equals("POST")) {
+                if (request.getParameter("liked_post_id") != null) {
+                    String postId = request.getParameter("liked_post_id");
+                    if (!postId.trim().isEmpty()) {
+                        Post post = postService.getPost(Long.decode(postId));
+                        if (post != null) {
+                            List<User> likes = post.getLikes();
+                            if (!likes.contains(currentUser)) {
+                                likes.add(currentUser);
+                                postService.updatePost(post);
+                            }
+                        }
+                    }
+                }
+            }
+            
             
             List<Post> posts = postService.getPostsOnWall(userId);
             

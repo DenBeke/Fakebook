@@ -43,10 +43,9 @@
                                     </c:if>
 
                                     <c:if test="${post.getType() eq 'link' && not empty post.getLink()}">
-                                        <a href="<c:out value="${post.getLink()}"/>"><c:out value="${post.getLink()}"/></a>
+                                        <p><a href="<c:out value="${post.getLink()}"/>"><c:out value="${post.getLink()}"/></a></p>
                                     </c:if>
                                     <c:if test="${post.getType() eq 'picture' && not empty post.getPicture()}">
-                                        
                                         <a href="<c:out value="${post.getPicture()}"/>" data-lightbox="image-1" data-title="<c:out value="${post.getText()}"/>"><img class="ui rounded image" src="<c:out value="${post.getPicture()}"/>" /></a>
                                     </c:if>
                                     <c:if test="${post.getType() eq 'video' && not empty post.getVideo()}">
@@ -57,11 +56,16 @@
                                     </c:if>
                                     
                                     <c:if test="${not empty post.getLikes()}">
-                                    <br>Likes: <c:out value="${post.getLikes().size()}"/>
+                                    Likes: <c:out value="${post.getLikes().size()}"/>
                                     </c:if>
                                 </div>
                                 <div class="actions">
                                     <a class="reply">Reply</a>
+                                    <!-- TODO: Don't redirect + make visually appealing -->
+                                    <form action="?uid=${user}" id="wall_like_post" method="POST" class="ui form">
+                                        <input type="hidden" name="liked_post_id" value="${post.getId()}">
+                                        <input type="submit" value="Like" class="ui button">
+                                    </form>
                                 </div>
                             </div>
                                 
@@ -81,11 +85,16 @@
                                         <div class="text">
                                             <pre><c:out value="${comment.getText()}"/></pre>
                                             <c:if test="${not empty comment.getLikes()}">
-                                            <br>Likes: <c:out value="${comment.getLikes().size()}"/>
+                                            Likes: <c:out value="${comment.getLikes().size()}"/>
                                             </c:if>
                                         </div>
                                         <div class="actions">
                                             <a class="reply">Reply</a>
+                                            <!-- TODO: Don't redirect + make visually appealing -->
+                                            <form action="?uid=${user}" id="wall_like_post" method="POST" class="ui form">
+                                                <input type="hidden" name="liked_post_id" value="${comment.getId()}">
+                                                <input type="submit" value="Like" class="ui button">
+                                            </form>
                                         </div>
                                     </div>
 
@@ -105,8 +114,17 @@
                                                         <div class="text">
                                                             <pre><c:out value="${subComment.getText()}"/></pre>
                                                             <c:if test="${not empty subComment.getLikes()}">
-                                                            <br>Likes: <c:out value="${subComment.getLikes().size()}"/>
+                                                            Likes: <c:out value="${subComment.getLikes().size()}"/>
                                                             </c:if>
+                                                        </div>
+                                                            
+                                                        <div class="actions">
+                                                            <a class="reply">Reply</a>
+                                                            <!-- TODO: Don't redirect + make visually appealing -->
+                                                            <form action="?uid=${user}" id="wall_like_post" method="POST" class="ui form">
+                                                                <input type="hidden" name="liked_post_id" value="${subComment.getId()}">
+                                                                <input type="submit" value="Like" class="ui button">
+                                                            </form>
                                                         </div>
                                                     </div>
 
