@@ -5,13 +5,22 @@
             
             <c:choose>
             <c:when test="${user == -1}">
-                <h1>Wall of user</h1>
+                <h1>User wall</h1>
                 <p>Error: The user you tried to access does not exist!</p>
+            </c:when>
+            <c:when test="${not friends}">
+                <h1>Wall of ${userName}</h1>
+                <p>You do not have permission to view this wall!</p>
+                <p>You need to be friends with ${userName} to access the wall.</p>
+
+                <form action="friend-request" id="friend_request_form" method="POST" class="ui form">
+                    <input type="hidden" name="friend_user_id" value="${user}">
+                    <input type="submit" value="Send friend request" class="ui teal button">
+                </form>
             </c:when>
             <c:otherwise>
                 
-                <h2 class="ui dividing header">Wall of user ${user}</h2>
-
+                <h2 class="ui dividing header">Wall of ${userName}</h2>
 
                 <form action="?uid=${user}" id="wall_form" method="POST" class="ui form">
                     <div class="field">
@@ -25,7 +34,7 @@
                 <c:if test="${empty posts}"><p>This user has no posts on his wall yet.</p></c:if>
 
                 
-                    <div class="ui comments">
+                <div class="ui comments">
                     <c:forEach items="${posts}" var="post">
 
                         <div class="comment">
@@ -33,7 +42,7 @@
                                 <img src="<c:out value="${post.getPoster().getProfilePic()}"/>">
                             </a>
                             <div class="content">
-                                <a class="author" href="wall?uid=${post.getPoster().getId()}"><c:out value="${post.getPoster().getFirstName()} ${post.getPoster().getLastName()}"/></a>
+                                <a class="author" href="wall?uid=${post.getPoster().getId()}"><c:out value="${post.getPoster().getName()}"/></a>
                                 <div class="metadata">
                                     <span class="date"><c:out value="${post.getTimestamp()}"/></span>
                                 </div>
@@ -78,7 +87,7 @@
                                         <img src="${comment.getPoster().getProfilePic()}">
                                     </a>
                                     <div class="content">
-                                        <a class="author" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getFirstName()} ${comment.getPoster().getLastName()}"/></a>
+                                        <a class="author" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getName()}"/></a>
                                         <div class="metadata">
                                             <span class="date"><c:out value="${comment.getTimestamp()}"/></span>
                                         </div>
@@ -107,7 +116,7 @@
                                                         <img src="${subComment.getPoster().getProfilePic()}">
                                                     </a>
                                                     <div class="content">
-                                                        <a class="author" href="wall?uid=${subComment.getPoster().getId()}"><c:out value="${subComment.getPoster().getFirstName()} ${subComment.getPoster().getLastName()}"/></a>
+                                                        <a class="author" href="wall?uid=${subComment.getPoster().getId()}"><c:out value="${subComment.getPoster().getName()}"/></a>
                                                         <div class="metadata">
                                                             <span class="date"><c:out value="${subComment.getTimestamp()}"/></span>
                                                         </div>

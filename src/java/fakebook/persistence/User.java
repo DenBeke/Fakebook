@@ -62,7 +62,7 @@ public class User {
     @JoinTable(name="USER_FRIEND_REQUESTS",
                joinColumns=@JoinColumn(name="USER_ID"),
                inverseJoinColumns=@JoinColumn(name="FRIEND_ID"))
-    private List<User> friendshipRequests; // The users to which this user has send a friendship request, not symetric
+    private List<User> friendshipRequests; // The users which have send this user a friendship request, not symetric
     
     /**
      * Creates a new User object, the Id is auto generated.

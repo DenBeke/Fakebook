@@ -49,7 +49,8 @@ public class WallServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        if (request.getSession().getAttribute("currentUser") == null) {
+        User currentUser = (User)(request.getSession().getAttribute("currentUser"));
+        if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
@@ -68,55 +69,57 @@ public class WallServlet extends HttpServlet {
             catch (NumberFormatException e) {
             }
         }
-
-        User currentUser = (User)(request.getSession().getAttribute("currentUser"));
-
-        if (userId == -1) {
-            if(currentUser != null) {
-                userId = currentUser.getId();
-            }
+        else if (userId == -1) {
+            userId = currentUser.getId();
         }
 
+        request.setAttribute("friends", false);
         request.setAttribute("user", userId);
-        if (userId != -1) {
 
-            // Check for new wall post form
-            if(request.getMethod().equals("POST")) {
-                if(request.getParameter("new_wall_post") != null) {
-                    String newPost = request.getParameter("new_wall_post");
-                    if (!newPost.trim().isEmpty())
-                        postService.newPost(new Post(userService.getUser(userId), userService.getUser(userId), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), newPost));
+        if (userId != -1) {
+            User user = userService.getUser(userId);
+
+            // Check if the user is allowed to watch this wall
+            if (currentUser.getId().equals(user.getId()) || currentUser.getFriends().contains(user)) {
+                request.setAttribute("friends", true);
+                
+                // Check for new wall post form
+                if(request.getMethod().equals("POST")) {
+                    if(request.getParameter("new_wall_post") != null) {
+                        String newPost = request.getParameter("new_wall_post");
+                        if (!newPost.trim().isEmpty())
+                            postService.newPost(new Post(userService.getUser(userId), userService.getUser(userId), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), newPost));
+                    }
                 }
-            }
-            
-            // Check for new likes
-            if (request.getMethod().equals("POST")) {
-                if (request.getParameter("liked_post_id") != null) {
-                    String postId = request.getParameter("liked_post_id");
-                    if (!postId.trim().isEmpty()) {
-                        Post post = postService.getPost(Long.decode(postId));
-                        if (post != null) {
-                            List<User> likes = post.getLikes();
-                            if (!likes.contains(currentUser)) {
-                                likes.add(currentUser);
-                                postService.updatePost(post);
+
+                // Check for new likes
+                if (request.getMethod().equals("POST")) {
+                    if (request.getParameter("liked_post_id") != null) {
+                        String postId = request.getParameter("liked_post_id");
+                        if (!postId.trim().isEmpty()) {
+                            Post post = postService.getPost(Long.decode(postId));
+                            if (post != null) {
+                                List<User> likes = post.getLikes();
+                                if (!likes.contains(currentUser)) {
+                                    likes.add(currentUser);
+                                    postService.updatePost(post);
+                                }
                             }
                         }
                     }
                 }
+
+                // Sort the posts based on their creation time (newest first)
+                List<Post> posts = postService.getPostsOnWall(userId);
+                Collections.sort(posts, new Comparator<Post>() {
+                    public int compare(Post post1, Post post2) {
+                        return post2.getTimestamp().compareTo(post1.getTimestamp());
+                    }
+                });
+                request.setAttribute("posts", posts);
             }
-            
-            
-            List<Post> posts = postService.getPostsOnWall(userId);
-            
-            // Sort the posts based on their creation time (newest first)
-            Collections.sort(posts, new Comparator<Post>() {
-                public int compare(Post post1, Post post2) {
-                    return post2.getTimestamp().compareTo(post1.getTimestamp());
-                }
-            });
-            
-            request.setAttribute("posts", posts);
+
+            request.setAttribute("userName", user.getName());
         }
 
         request.getRequestDispatcher("wall.jsp").forward(request, response);
