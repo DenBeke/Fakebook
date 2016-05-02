@@ -49,13 +49,16 @@ public class FriendRequest extends HttpServlet {
                 User user = userService.getUser(userId);
 
                 if (user != null) {
-                    List<User> friendRequests = user.getFriendshipRequests();
-                    friendRequests.add(currentUser);
-                    user.setFriendshipRequests(friendRequests);
-                    userService.updateUser(user);
+                    if (!user.getFriends().contains(currentUser)) {
+                        if (!user.getFriendshipRequests().contains(currentUser)) {
+                            user.getFriendshipRequests().add(currentUser);
+                            userService.updateUser(user);
+                        }
 
-                    request.setAttribute("userId", userId);
-                    request.setAttribute("userName", user.getName());
+                        request.setAttribute("userId", userId);
+                        request.setAttribute("userName", user.getName());
+                    }
+                    request.setAttribute("error", "You are already friends!");
                 }
                 else {
                     request.setAttribute("error", "The user you are trying to become friends with does not exist!");
