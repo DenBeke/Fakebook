@@ -7,7 +7,9 @@ package fakebook.business;
 
 import fakebook.persistence.User;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,6 +42,22 @@ public class Friends extends HttpServlet {
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
+        }
+        
+        // Check if we are searching for someone
+        if (request.getParameter("searched_friend") != null) {
+            String searchedFriend = request.getParameter("searched_friend");
+            
+            List<User> friends = new ArrayList<>();
+            List<User> users = userService.getAllUsers();
+            for (User user : users) {
+                if (Pattern.compile(Pattern.quote(searchedFriend), Pattern.CASE_INSENSITIVE).matcher(user.getName()).find()) {
+                    friends.add(user);
+                }
+            }
+            
+            request.setAttribute("searchedFriend", searchedFriend);
+            request.setAttribute("searchResult", friends);
         }
         
         // Check if we are accepting a friendship request
