@@ -78,10 +78,9 @@
                                         <a class="like">
                                             <i class="like icon" onclick="$(this).closest('form').submit();"></i>
                                             <c:if test="${not empty post.getLikes()}">
-                                                <c:out value="${post.getLikes().size()}"/> likes
+                                                <c:out value="${post.getLikes().size()}"/> like<c:if test="${post.getLikes().size() != 1}">s</c:if>
                                             </c:if>
                                         </a>
-                                        
                                     </form>
                                 </div>
                             </div>
@@ -101,16 +100,19 @@
                                         </div>
                                         <div class="text">
                                             <pre><c:out value="${comment.getText()}"/></pre>
-                                            <c:if test="${not empty comment.getLikes()}">
-                                            Likes: <c:out value="${comment.getLikes().size()}"/>
-                                            </c:if>
                                         </div>
                                         <div class="actions">
-                                            <a class="reply">Reply</a>
-                                            <!-- TODO: Don't redirect + make visually appealing -->
-                                            <form action="?uid=${user}" id="wall_like_post" method="POST" class="ui form">
+                                            <!--<a class="reply">Reply</a>-->
+
+                                            <!-- TODO: Don't redirect -->
+                                            <form action="?uid=${user}" id="wall_like_comment" method="POST" class="ui form">
                                                 <input type="hidden" name="liked_post_id" value="${comment.getId()}">
-                                                <input type="submit" value="Like" class="ui button">
+                                                <a class="like">
+                                                    <i class="like icon" onclick="$(this).closest('form').submit();"></i>
+                                                    <c:if test="${not empty comment.getLikes()}">
+                                                        <c:out value="${comment.getLikes().size()}"/> like<c:if test="${comment.getLikes().size() != 1}">s</c:if>
+                                                    </c:if>
+                                                </a>
                                             </form>
                                         </div>
                                     </div>
@@ -130,17 +132,20 @@
                                                         </div>
                                                         <div class="text">
                                                             <pre><c:out value="${subComment.getText()}"/></pre>
-                                                            <c:if test="${not empty subComment.getLikes()}">
-                                                            Likes: <c:out value="${subComment.getLikes().size()}"/>
-                                                            </c:if>
                                                         </div>
                                                             
                                                         <div class="actions">
-                                                            <a class="reply">Reply</a>
-                                                            <!-- TODO: Don't redirect + make visually appealing -->
-                                                            <form action="?uid=${user}" id="wall_like_post" method="POST" class="ui form">
+                                                            <!--<a class="reply">Reply</a>-->
+
+                                                            <!-- TODO: Don't redirect -->
+                                                            <form action="?uid=${user}" id="wall_like_subcomment" method="POST" class="ui form">
                                                                 <input type="hidden" name="liked_post_id" value="${subComment.getId()}">
-                                                                <input type="submit" value="Like" class="ui button">
+                                                                <a class="like">
+                                                                    <i class="like icon" onclick="$(this).closest('form').submit();"></i>
+                                                                    <c:if test="${not empty subComment.getLikes()}">
+                                                                        <c:out value="${subComment.getLikes().size()}"/> like<c:if test="${subComment.getLikes().size() != 1}">s</c:if>
+                                                                    </c:if>
+                                                                </a>
                                                             </form>
                                                         </div>
                                                     </div>
