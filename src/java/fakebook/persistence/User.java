@@ -29,7 +29,7 @@ import javax.persistence.Table;
 @NamedQueries({@NamedQuery(name="User.getAll",query="SELECT e FROM FBUser e"),
                @NamedQuery(name="User.getByEmail", query="SELECT e FROM FBUser e WHERE e.email = :email"),
                @NamedQuery(name="User.getByFbId", query="SELECT e FROM FBUser e WHERE e.fbId = :fbId")})
-public class User {
+public class User implements Serializable {
 
     public User() {
     }

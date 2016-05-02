@@ -31,7 +31,7 @@ import static javax.persistence.TemporalType.DATE;
 @NamedQueries({@NamedQuery(name="Posts.getAll",query="SELECT p FROM Post p"),
                @NamedQuery(name="Posts.getOnWall", query="SELECT p FROM Post p WHERE p.wall.id = :uId"),
                @NamedQuery(name="Posts.getByPoster", query="SELECT p FROM Post p WHERE p.poster.id = :uId")})
-public class Post {
+public class Post implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

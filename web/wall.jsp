@@ -68,8 +68,6 @@
                                     
                                 </div>
                                 <div class="actions">
-                                    <!--<a class="reply">Reply</a>-->
-                                    
                                     <!-- TODO: Don't redirect -->
                                     <form action="?uid=${user}" id="wall_like_post" method="POST" class="ui form">
                                         <input type="hidden" name="liked_post_id" value="${post.getId()}">
@@ -81,6 +79,15 @@
                                                 <c:out value="${post.getLikes().size()}"/> like<c:if test="${post.getLikes().size() != 1}">s</c:if>
                                             </c:if>
                                         </a>
+                                    </form>
+
+                                    <a class="reply" onclick="if ($(this).next('form').is(':hidden')) { $(this).next('form').show() } else { $(this).next('form').hide(); }">Reply</a>
+                                    <form action="?uid=${user}" method="POST" class="ui form" hidden>
+                                        <div class="field">
+                                            <textarea name="new_comment"></textarea>
+                                        </div>
+                                        <input type="hidden" name="parent_post_id" value="${post.getId()}">
+                                        <input type="submit" value="Post comment" class="ui teal button">
                                     </form>
                                 </div>
                             </div>
@@ -102,8 +109,6 @@
                                             <pre><c:out value="${comment.getText()}"/></pre>
                                         </div>
                                         <div class="actions">
-                                            <!--<a class="reply">Reply</a>-->
-
                                             <!-- TODO: Don't redirect -->
                                             <form action="?uid=${user}" id="wall_like_comment" method="POST" class="ui form">
                                                 <input type="hidden" name="liked_post_id" value="${comment.getId()}">
@@ -113,6 +118,15 @@
                                                         <c:out value="${comment.getLikes().size()}"/> like<c:if test="${comment.getLikes().size() != 1}">s</c:if>
                                                     </c:if>
                                                 </a>
+                                            </form>
+                                                
+                                            <a class="reply" onclick="if ($(this).next('form').is(':hidden')) { $(this).next('form').show() } else { $(this).next('form').hide(); }">Reply</a>
+                                            <form action="?uid=${user}" method="POST" class="ui form" hidden>
+                                                <div class="field">
+                                                    <textarea name="new_comment"></textarea>
+                                                </div>
+                                                <input type="hidden" name="parent_post_id" value="${comment.getId()}">
+                                                <input type="submit" value="Post comment" class="ui teal button">
                                             </form>
                                         </div>
                                     </div>
@@ -135,8 +149,6 @@
                                                         </div>
                                                             
                                                         <div class="actions">
-                                                            <!--<a class="reply">Reply</a>-->
-
                                                             <!-- TODO: Don't redirect -->
                                                             <form action="?uid=${user}" id="wall_like_subcomment" method="POST" class="ui form">
                                                                 <input type="hidden" name="liked_post_id" value="${subComment.getId()}">
@@ -146,6 +158,15 @@
                                                                         <c:out value="${subComment.getLikes().size()}"/> like<c:if test="${subComment.getLikes().size() != 1}">s</c:if>
                                                                     </c:if>
                                                                 </a>
+                                                            </form>
+                                                                
+                                                            <a class="reply" onclick="if ($(this).next('form').is(':hidden')) { $(this).next('form').show() } else { $(this).next('form').hide(); }">Reply</a>
+                                                            <form action="?uid=${user}" method="POST" class="ui form" hidden>
+                                                                <div class="field">
+                                                                    <textarea name="new_comment"></textarea>
+                                                                </div>
+                                                                <input type="hidden" name="parent_post_id" value="${comment.getId()}"> <!-- "comment" instead of "subComment" because you can't comment on the subcomment itself -->
+                                                                <input type="submit" value="Post comment" class="ui teal button">
                                                             </form>
                                                         </div>
                                                     </div>

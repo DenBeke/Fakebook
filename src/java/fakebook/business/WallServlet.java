@@ -92,6 +92,21 @@ public class WallServlet extends HttpServlet {
                     }
                 }
 
+                // Check for new comments
+                if(request.getMethod().equals("POST")) {
+                    if ((request.getParameter("new_comment") != null) && (request.getParameter("parent_post_id") != null)) {
+                        String newComment = request.getParameter("new_comment");
+                        String parentPostId = request.getParameter("parent_post_id");
+                        
+                        Post parentPost = postService.getPost(Long.decode(parentPostId));
+                        if (parentPost != null && !newComment.trim().isEmpty()) {
+                            Post comment = new Post(currentUser, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), newComment);
+                            parentPost.getComments().add(comment);
+                            postService.updatePost(parentPost);
+                        }
+                    }
+                }
+
                 // Check for new likes
                 if (request.getMethod().equals("POST")) {
                     if (request.getParameter("liked_post_id") != null) {
