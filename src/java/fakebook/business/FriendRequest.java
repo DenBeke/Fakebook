@@ -58,7 +58,9 @@ public class FriendRequest extends HttpServlet {
                         request.setAttribute("userId", userId);
                         request.setAttribute("userName", user.getName());
                     }
-                    request.setAttribute("error", "You are already friends!");
+                    else {
+                        request.setAttribute("error", "You are already friends!");
+                    }
                 }
                 else {
                     request.setAttribute("error", "The user you are trying to become friends with does not exist!");
