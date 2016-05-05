@@ -5,24 +5,18 @@
  */
 package fakebook.business;
 
-import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.Version;
-import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.Comment;
-import com.restfb.types.FacebookType.Metadata;
 import com.restfb.types.Likes;
-import com.restfb.types.MessageTag;
 import com.restfb.types.NamedFacebookType;
 import com.restfb.types.Post.Comments;
 import fakebook.persistence.Post;
 import fakebook.persistence.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -155,12 +149,13 @@ public class LoginServlet extends HttpServlet {
                 if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
                     request.setAttribute("error", "Please provide both an email and a password");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
                 }
 
                 // Check if user exists
                 User user = userService.getUserByEmail(email);
                 if (user != null) {
-                    if (password != null && !password.isEmpty() && password.equals(user.getPassword())) {
+                    if (password.equals(user.getPassword())) {
                         
                         request.getSession().setAttribute("currentUser", user);
                         response.sendRedirect(request.getContextPath() + "/wall");
