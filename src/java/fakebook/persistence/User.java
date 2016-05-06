@@ -74,6 +74,7 @@ public class User implements Serializable {
      * @param gender
      * @param birthday
      * @param Admin
+     * @param profilePic
      */
     public User(String email, String fbId, String password, String firstName, String lastName, String gender, String birthday, Boolean Admin, String profilePic) {
         this.firstName = firstName;
