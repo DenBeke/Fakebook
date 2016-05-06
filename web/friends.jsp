@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         
         <div class="ui container">
-            <h1>Friends</h1>
+            <h2>Friends</h2>
             <h3>Search users</h3>
             <!-- TODO: Make visually appealing + don't redirect? -->
             <form action="" method="POST" class="ui form">

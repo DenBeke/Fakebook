@@ -5,11 +5,11 @@
             
             <c:choose>
             <c:when test="${user == -1}">
-                <h1>User wall</h1>
+                <h2>User wall</h2>
                 <p>Error: The user you tried to access does not exist!</p>
             </c:when>
             <c:when test="${not friends}">
-                <h1>Wall of ${userName}</h1>
+                <h2>Wall of ${userName}</h2>
                 <p>You do not have permission to view this wall!</p>
                 <p>You need to be friends with ${userName} to access the wall.</p>
 
@@ -22,14 +22,14 @@
                 
                 <h2 class="ui dividing header">Wall of ${userName}</h2>
 
-                <form action="?uid=${user}" id="wall_form" method="POST" class="ui form">
+                <form enctype="multipart/form-data" action="?uid=${user}" id="wall_form" method="POST" class="ui form">
                     <div class="field">
                         <textarea name="new_wall_post"></textarea>
                     </div>
+                    <input type="file" name="attachment" accept="image/bmp, image/png, image/mjpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
                     <input type="hidden" name="wall_user_id" value="${user}">
                     <input type="submit" value="Write on wall" class="ui teal button">
                 </form>
-
 
                 <c:if test="${empty posts}"><p>This user has no posts on his wall yet.</p></c:if>
 

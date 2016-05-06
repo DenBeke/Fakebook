@@ -5,7 +5,7 @@
             
             <h2 class="ui dividing header">Admin page</h2>
             <p>Placeholder for admin page</p>
-            
+            <a href="admin-users">View users</a>
         </div>
 
 <jsp:include page="footer.jsp" />

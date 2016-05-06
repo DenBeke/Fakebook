@@ -5,9 +5,12 @@
  */
 package fakebook.web;
 
+import fakebook.business.AdminDataLocal;
 import fakebook.business.UserServiceFacadeLocal;
 import fakebook.persistence.User;
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,12 +22,14 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author texus
  */
-@WebServlet(name = "Admin", urlPatterns = {"/admin"})
-public class AdminServlet extends HttpServlet {
+@WebServlet(name = "AdminUsers", urlPatterns = {"/admin-users"})
+public class AdminUsersServlet extends HttpServlet {
 
     @EJB
+    private AdminDataLocal adminData;
+    
+    @EJB
     private UserServiceFacadeLocal userService;
-
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,19 +41,7 @@ public class AdminServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        // Login if requested
-        if (request.getParameter("adminLoginEmail") != null && request.getParameter("adminLoginPassword") != null) {
-            User user = userService.getUserByEmail(request.getParameter("adminLoginEmail"));
-            if (user == null || !user.getPassword().equals(request.getParameter("adminLoginPassword"))) {
-                request.setAttribute("error", "Incorrect username or password!");
-                request.getRequestDispatcher("admin-login.jsp").forward(request, response);
-                return;
-            }
 
-            request.getSession().setAttribute("currentUser", user);
-        }
-        
         // Redirect user to admin login page when not logged in or not an admin
         User currentUser = (User)request.getSession().getAttribute("currentUser");
         if (currentUser == null) {
@@ -61,7 +54,12 @@ public class AdminServlet extends HttpServlet {
             return;
         }
         
-        request.getRequestDispatcher("admin.jsp").forward(request, response);
+        List<User> users = userService.getAllUsers();
+        Set<User> onlineUsers = adminData.getOnlineUsers();
+
+        request.setAttribute("onlineUsers", onlineUsers);
+        request.setAttribute("allUsers", users);
+        request.getRequestDispatcher("admin-users.jsp").forward(request, response);
     }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -100,7 +98,7 @@ public class AdminServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Admin Servlet";
+        return "Admin Users Servlet";
     }// </editor-fold>
 
 }
