@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fakebook.business;
+package fakebook.web;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.Version;
+import fakebook.business.PostServiceFacadeLocal;
+import fakebook.business.UserServiceFacadeLocal;
 import fakebook.persistence.Post;
 import fakebook.persistence.User;
 import java.io.IOException;

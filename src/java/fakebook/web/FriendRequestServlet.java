@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fakebook.business;
+package fakebook.web;
 
-import fakebook.persistence.Post;
+import fakebook.business.UserServiceFacadeLocal;
 import fakebook.persistence.User;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -21,16 +20,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author texus
  */
-@WebServlet(name = "Admin", urlPatterns = {"/admin"})
-public class AdminServlet extends HttpServlet {
+@WebServlet(name = "FriendRequest", urlPatterns = {"/friend-request"})
+public class FriendRequestServlet extends HttpServlet {
 
     @EJB
     private UserServiceFacadeLocal userService;
-    
-    @EJB
-    private PostServiceFacadeLocal postService;
-    
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,34 +36,48 @@ public class AdminServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        // Login if requested
-        if (request.getParameter("adminLoginEmail") != null && request.getParameter("adminLoginPassword") != null) {
-            User user = userService.getUserByEmail(request.getParameter("adminLoginEmail"));
-            if (user == null || !user.getPassword().equals(request.getParameter("adminLoginPassword"))) {
-                request.setAttribute("error", "Incorrect username or password!");
-                request.getRequestDispatcher("admin-login.jsp").forward(request, response);
-                return;
-            }
 
-            request.getSession().setAttribute("currentUser", user);
-        }
-        
-        // Redirect user to admin login page when he is not logged in
-        User currentUser = (User)request.getSession().getAttribute("currentUser");
+        User currentUser = (User)(request.getSession().getAttribute("currentUser"));
         if (currentUser == null) {
-            request.getRequestDispatcher("admin-login.jsp").forward(request, response);
-            return;
-        }
-        else if (!currentUser.getIsAdmin()) {
-            request.setAttribute("error", "Your account is not an admin!");
-            request.getRequestDispatcher("admin-login.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         
-        request.getRequestDispatcher("admin.jsp").forward(request, response);
+        if (request.getParameter("friend_user_id") != null) {
+            Long userId = Long.decode(request.getParameter("friend_user_id"));
+            
+            if (!userId.equals(currentUser.getId())) {
+                User user = userService.getUser(userId);
+
+                if (user != null) {
+                    if (!user.getFriends().contains(currentUser)) {
+                        if (!user.getFriendshipRequests().contains(currentUser)) {
+                            user.getFriendshipRequests().add(currentUser);
+                            userService.updateUser(user);
+                        }
+
+                        request.setAttribute("userId", userId);
+                        request.setAttribute("userName", user.getName());
+                    }
+                    else {
+                        request.setAttribute("error", "You are already friends!");
+                    }
+                }
+                else {
+                    request.setAttribute("error", "The user you are trying to become friends with does not exist!");
+                }
+            }
+            else {
+                request.setAttribute("error", "You can't send a friend request to yourself!");
+            }
+        }
+        else {
+            request.setAttribute("error", "Something is wrong with the friend request!");
+        }
+        
+        request.getRequestDispatcher("friend-request.jsp").forward(request, response);
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -105,7 +114,7 @@ public class AdminServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Admin Login Servlet";
+        return "Friend Request Servlet";
     }// </editor-fold>
 
 }

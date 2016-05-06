@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fakebook.business;
+package fakebook.web;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
@@ -13,6 +13,8 @@ import com.restfb.types.Comment;
 import com.restfb.types.Likes;
 import com.restfb.types.NamedFacebookType;
 import com.restfb.types.Post.Comments;
+import fakebook.business.PostServiceFacadeLocal;
+import fakebook.business.UserServiceFacadeLocal;
 import fakebook.persistence.Post;
 import fakebook.persistence.User;
 import java.io.IOException;
@@ -49,7 +51,6 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
         if (request.getSession().getAttribute("currentUser") != null) {
             response.sendRedirect(request.getContextPath() + "/wall");
             return;

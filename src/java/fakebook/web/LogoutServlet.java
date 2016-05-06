@@ -1,4 +1,4 @@
-package fakebook.business;
+package fakebook.web;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

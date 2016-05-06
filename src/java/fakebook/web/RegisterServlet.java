@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fakebook.business;
+package fakebook.web;
 
+import fakebook.business.UserServiceFacadeLocal;
 import fakebook.persistence.User;
 import java.io.IOException;
 import java.io.PrintWriter;
