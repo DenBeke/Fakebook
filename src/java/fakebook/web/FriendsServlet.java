@@ -87,6 +87,24 @@ public class FriendsServlet extends HttpServlet {
             }
         }
         
+        // Check if we are removing a friend
+        if (request.getParameter("removed_friend_id") != null) {
+            Long friendId = Long.decode(request.getParameter("removed_friend_id"));
+            User friend = userService.getUser(friendId);
+
+            if (friend != null) {
+                if (currentUser.getFriends().contains(friend)) {
+                    currentUser.getFriends().remove(friend);
+                }
+                if (!friend.getFriends().contains(currentUser)) {
+                    friend.getFriends().remove(currentUser);
+                }
+                
+                userService.updateUser(currentUser);
+                userService.updateUser(friend);
+            }
+        }
+        
         request.getRequestDispatcher("friends.jsp").forward(request, response);
     }
 
