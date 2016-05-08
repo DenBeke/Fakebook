@@ -69,28 +69,5 @@ public interface UserServiceFacadeLocal {
      * @return 
      */
     List<User> getAllUsers();
-
-    /**
-     * Returns the list of friends for a user.
-     * @param userId
-     * @return 
-     */
-    List<User> getFriends(long userId);
-
-    /**
-     * initializes a friendship -> adds the other user to each others friends list.
-     * @param userId1
-     * @param userId2
-     * @return 
-     */
-    Boolean beginFriendship(long userId1, long userId2);
-
-    /**
-     * ends the friendship -> removes other user from each others friends list
-     * @param userId1
-     * @param userId2
-     * @return 
-     */
-    Boolean endFriendship(long userId1, long userId2);
 }
 
