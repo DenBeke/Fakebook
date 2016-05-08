@@ -13,7 +13,12 @@ import fakebook.business.PostServiceFacadeLocal;
 import fakebook.business.UserServiceFacadeLocal;
 import fakebook.persistence.Post;
 import fakebook.persistence.User;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,12 +31,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.Part;
+import static jdk.nashorn.internal.objects.NativeError.getFileName;
 
 /**
  *
  * @author texus
  */
 @WebServlet(name = "Wall", urlPatterns = {"/wall"})
+@MultipartConfig
 public class WallServlet extends HttpServlet {
 
     @EJB
@@ -40,6 +51,9 @@ public class WallServlet extends HttpServlet {
     @EJB
     private PostServiceFacadeLocal postService;
 
+    private final static Logger LOGGER =
+            Logger.getLogger(WallServlet.class.getCanonicalName());
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -56,8 +70,6 @@ public class WallServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-
-        response.addHeader("Access-Control-Allow-Origin", "*");
         
         long userId = -1;
         if (request.getParameter("uid") != null) {
@@ -92,6 +104,52 @@ public class WallServlet extends HttpServlet {
                         if (!newPost.trim().isEmpty())
                             postService.newPost(new Post(currentUser, userService.getUser(userId), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), newPost));
                     }
+                    
+                    
+                    //final String path = request.getParameter("destination");
+                    String path = "./";
+                    final Part filePart = request.getPart("attachment");
+                    final String fileName = filePart.getSubmittedFileName();
+
+                    OutputStream out = null;
+                    InputStream filecontent = null;
+                    final PrintWriter writer = response.getWriter();
+
+                    try {
+                        out = new FileOutputStream(new File(path + File.separator
+                                + fileName));
+                        filecontent = filePart.getInputStream();
+
+                        int read = 0;
+                        final byte[] bytes = new byte[1024];
+
+                        while ((read = filecontent.read(bytes)) != -1) {
+                            out.write(bytes, 0, read);
+                        }
+                        //writer.println("New file " + fileName + " created at " + path);
+                        LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
+                                new Object[]{fileName, path});
+                    } catch (FileNotFoundException fne) {
+                        //writer.println("You either did not specify a file to upload or are "
+                        //        + "trying to upload a file to a protected or nonexistent "
+                        //        + "location.");
+                        //writer.println("<br/> ERROR: " + fne.getMessage());
+
+                        LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
+                                new Object[]{fne.getMessage()});
+                    } finally {
+                        if (out != null) {
+                            out.close();
+                        }
+                        if (filecontent != null) {
+                            filecontent.close();
+                        }
+                        if (writer != null) {
+                            //writer.close();
+                        }
+                    }
+                    
+                    
                 }
 
                 // Check for new comments
