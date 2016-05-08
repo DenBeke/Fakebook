@@ -47,19 +47,54 @@
             <c:if test="${empty onlineUsers}">
                 <p>No users are currently online.</p>
             </c:if>
-            <c:forEach items="${onlineUsers}" var="user">
-                <p><a href="wall?uid=${user.getId()}"><c:out value="${user.getName()}"/></a></p>
-            </c:forEach>
+            <table class="ui very basic collapsing celled table">
+            <tbody>
+                <c:forEach items="${onlineUsers}" var="user">
+                    <tr>
+                        <td>
+                            <a class="avatar">
+                                <img class="ui mini image" src="<c:out value="${user.getProfilePic()}"/>">
+                            </a>
+                        </td>
+
+                        <td><a href="wall?uid=${user.getId()}"><c:out value="${user.getName()}"/></a></td>
+                        <td>
+                            <c:if test="${currentUser.getId() != user.getId()}">
+                                <form action="" method="POST" class="ui form">
+                                    <input type="hidden" name="deleted_user_id" value="${user.getId()}">
+                                    <input type="submit" value="Delete" class="ui teal button">
+                                </form>
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+            </table>
+
             <h3>All users</h3>
-            <c:forEach items="${allUsers}" var="user">
-                <p><a href="wall?uid=${user.getId()}"><c:out value="${user.getName()}"/></a></p>
-                <c:if test="${currentUser.getId() != user.getId()}">
-                    <form action="" method="POST" class="ui form">
-                        <input type="hidden" name="deleted_user_id" value="${user.getId()}">
-                        <input type="submit" value="Delete" class="ui teal button">
-                    </form>
-                </c:if>
-            </c:forEach>
+            <table class="ui very basic collapsing celled table">
+            <tbody>
+                <c:forEach items="${allUsers}" var="user">
+                    <tr>
+                        <td>
+                            <a class="avatar">
+                                <img class="ui mini image" src="<c:out value="${user.getProfilePic()}"/>">
+                            </a>
+                        </td>
+
+                        <td><a href="wall?uid=${user.getId()}"><c:out value="${user.getName()}"/></a></td>
+                        <td>
+                            <c:if test="${currentUser.getId() != user.getId()}">
+                                <form action="" method="POST" class="ui form">
+                                    <input type="hidden" name="deleted_user_id" value="${user.getId()}">
+                                    <input type="submit" value="Delete" class="ui teal button">
+                                </form>
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+            </table>
 
         </div>
 
