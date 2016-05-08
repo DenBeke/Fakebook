@@ -18,7 +18,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;
 
 /**
  *
@@ -26,14 +25,14 @@ import javax.persistence.Table;
  * User Entity to store users in database
  */
 @Entity(name="FBUser")
-@NamedQueries({@NamedQuery(name="User.getAll",query="SELECT e FROM FBUser e"),
-               @NamedQuery(name="User.getByEmail", query="SELECT e FROM FBUser e WHERE e.email = :email"),
-               @NamedQuery(name="User.getByFbId", query="SELECT e FROM FBUser e WHERE e.fbId = :fbId")})
+@NamedQueries({@NamedQuery(name="User.getAll",query="SELECT u FROM FBUser u WHERE u.isDeleted = false"),
+               @NamedQuery(name="User.getByEmail", query="SELECT u FROM FBUser u WHERE u.email = :email"), // deleted accounts are not hidden by email check
+               @NamedQuery(name="User.getByFbId", query="SELECT u FROM FBUser u WHERE u.fbId = :fbId AND u.isDeleted = false")})
 public class User implements Serializable {
 
     public User() {
     }
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,6 +48,7 @@ public class User implements Serializable {
     private String fbId; // Facebook id of the user.
     private String password; // TODO: We should store a hash instead
     private Boolean isAdmin;  // A boolean which indicates whether the user is an admin or not, TODO set default to false, so no problems can arrise.
+    private Boolean isDeleted; // Users are never really deleted, just hidden
     
     private String profilePic; // Url to profile pic
     
@@ -85,6 +85,7 @@ public class User implements Serializable {
         this.gender = gender;
         this.birthday = birthday;
         this.profilePic = profilePic;
+        this.isDeleted = false;
 
         // Make sure that admin is not null.
         if (Admin != null) {
@@ -204,6 +205,14 @@ public class User implements Serializable {
     
     public void setProfilePic(String p) {
         this.profilePic = p;
+    }
+    
+    public boolean getIsDeleted() {
+        return isDeleted;
+    }
+    
+    public void setIsDeleted(boolean deleted) {
+        this.isDeleted = deleted;
     }
     
 

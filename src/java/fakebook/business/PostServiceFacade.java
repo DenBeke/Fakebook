@@ -29,6 +29,16 @@ public class PostServiceFacade implements PostServiceFacadeLocal {
     public void updatePost(Post post) {
         em.merge(post);
     }
+    
+    @Override
+    public Boolean deletePost(Post post) {
+        if (post == null) {
+            return false;
+        } else {
+            em.remove(em.merge(post));
+            return true;
+        }
+    }
 
     @Override
     public Post getPost(long pId) {

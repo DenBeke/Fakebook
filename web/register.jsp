@@ -22,9 +22,9 @@
 
 
                     <form action="register" method="POST" class="ui form">
-                        <div class="field">
-                            <label>Email *</label>
-                            <input name="email" type="email" placeholder="john@doe.com" value="${email}">
+                    <div class="field">
+                        <label>Email *</label>
+                        <input name="email" type="email" placeholder="john@doe.com" value="${email}">
                     </div>
                     <div class="field">
                         <label>Password *</label>

@@ -30,6 +30,13 @@ public interface PostServiceFacadeLocal {
     public void updatePost(Post post);
     
     /**
+     * Deletes a post
+     * @param postId
+     * @return 
+     */
+    public Boolean deletePost(Post post);
+    
+    /**
      * Get post corresponding to pId
      * @param pId
      * @return 
