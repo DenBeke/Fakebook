@@ -53,12 +53,21 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
     }
 
     @Override
-    public Boolean deleteAccount(long userId) {
-        if (this.getUser(userId) == null) {
+    public Boolean deleteAccount(User user) {
+        if (user == null) {
             return false;
         } else {
-            em.remove(getUser(userId));
-            return true;
+            // There always has to be an admin
+            List<User> users = getAllUsers();
+            for (User u : users) {
+                if (!u.getId().equals(user.getId()) && u.getIsAdmin()) {
+                    user.setIsDeleted(true);
+                    em.merge(user);
+                    return true;
+                }
+            }
+            
+            return false;
         }
     }
     

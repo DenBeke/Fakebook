@@ -19,6 +19,7 @@ import fakebook.persistence.Post;
 import fakebook.persistence.User;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -79,6 +80,11 @@ public class LoginServlet extends HttpServlet {
                     boolean firstFacebookLogin;
                     User user = userService.getUserByEmail(email);
                     if (user != null) {
+                        if (user.getIsDeleted()) {
+                            request.setAttribute("error", "Failed to login, the email belongs to a deleted user");
+                            request.getRequestDispatcher("login.jsp").forward(request, response);
+                            return;
+                        }
                         
                         if (user.getFbId() != null) {
                             firstFacebookLogin = false;
@@ -115,7 +121,11 @@ public class LoginServlet extends HttpServlet {
                                         false,
                                         profilePic);
 
-                        userService.newUser(user);
+                        if (userService.newUser(user) != 0) {
+                            request.setAttribute("error", "Failed to register user");
+                            request.getRequestDispatcher("login.jsp").forward(request, response);
+                            return;
+                        }
                     }
 
                     syncFacebook(facebookClient, user);
@@ -156,6 +166,11 @@ public class LoginServlet extends HttpServlet {
                 // Check if user exists
                 User user = userService.getUserByEmail(email);
                 if (user != null) {
+                    if (user.getIsDeleted()) {
+                        request.setAttribute("error", "Failed to login, the email belongs to a deleted user");
+                        request.getRequestDispatcher("login.jsp").forward(request, response);
+                        return;
+                    }
                     if (password.equals(user.getPassword())) {
                         
                         request.getSession().setAttribute("currentUser", user);

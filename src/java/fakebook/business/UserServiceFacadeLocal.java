@@ -36,12 +36,12 @@ public interface UserServiceFacadeLocal {
     
     
     /**
-     * Deletes an account from the database
-     * Also in waterfall fashion deletes all posts and friendships.
-     * @param userId
+     * Deletes an account
+     * The account will remain in the database and will only be hidden
+     * @param user
      * @return true if successful, false otherwise
      */
-    public Boolean deleteAccount(long userId);
+    public Boolean deleteAccount(User user);
     
     /**
      * returns the user corresponding to the email

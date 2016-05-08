@@ -40,7 +40,7 @@ public class AdminServlet extends HttpServlet {
         // Login if requested
         if (request.getParameter("adminLoginEmail") != null && request.getParameter("adminLoginPassword") != null) {
             User user = userService.getUserByEmail(request.getParameter("adminLoginEmail"));
-            if (user == null || !user.getPassword().equals(request.getParameter("adminLoginPassword"))) {
+            if (user == null || !user.getPassword().equals(request.getParameter("adminLoginPassword")) && !user.getIsDeleted()) {
                 request.setAttribute("error", "Incorrect username or password!");
                 request.getRequestDispatcher("admin-login.jsp").forward(request, response);
                 return;

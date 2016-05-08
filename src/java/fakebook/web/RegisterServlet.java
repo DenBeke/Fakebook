@@ -75,6 +75,12 @@ public class RegisterServlet extends HttpServlet {
                 
                 // Check if existing user was a facebook account
                 if (user.getPassword() == null) {
+                    if (user.getIsDeleted()) {
+                        request.setAttribute("error", "Failed to register account, the email belongs to a deleted user");
+                        request.getRequestDispatcher("register.jsp").forward(request, response);
+                        return;
+                    }
+                    
                     // TODO: Merge acount
                     //       Security issue: shouldn't the user be asked to login to facebook at this point?
 
@@ -90,9 +96,13 @@ public class RegisterServlet extends HttpServlet {
             }
             else { // Account did not exist yet
                 user = new User(email, null, password, firstName, lastName, gender, birthday, false, "");
-                userService.newUser(user);
-
-                request.getRequestDispatcher("login").forward(request, response);
+                if (userService.newUser(user) != 0) {
+                    request.setAttribute("error", "Failed to register user");
+                    request.getRequestDispatcher("register.jsp").forward(request, response);
+                }
+                else {
+                    request.getRequestDispatcher("login").forward(request, response);
+                }
             }
         }
     }
