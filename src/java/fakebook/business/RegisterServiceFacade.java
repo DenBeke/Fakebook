@@ -20,7 +20,7 @@ public class RegisterServiceFacade implements RegisterServiceFacadeLocal {
     private UserServiceFacadeLocal userService;
 
     @Override
-    public String register(String email, String password, String firstName, String lastName, String gender, String birthday, boolean b) {
+    public String register(String email, String password, String firstName, String lastName, String gender, String birthday, boolean admin) {
         // Check if user already exists
         User user = userService.getUserByEmail(email);
         if (user != null) {
@@ -44,7 +44,7 @@ public class RegisterServiceFacade implements RegisterServiceFacadeLocal {
             }
         }
         else { // Account did not exist yet
-            user = new User(email, null, password, firstName, lastName, gender, birthday, false, "");
+            user = new User(email, null, password, firstName, lastName, gender, birthday, admin, "");
             if (userService.newUser(user) != 0) {
                 return "Failed to register user";
             }

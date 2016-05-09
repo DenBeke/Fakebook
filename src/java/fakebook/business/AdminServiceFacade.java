@@ -6,7 +6,6 @@
 package fakebook.business;
 
 import fakebook.persistence.User;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +27,9 @@ public class AdminServiceFacade implements AdminServiceFacadeLocal, HttpSessionL
 
     @EJB
     private UserServiceFacadeLocal userService;
+    
+    @EJB
+    private RegisterServiceFacadeLocal registerService;
 
     private static final Map<String, HttpSession> sessions = new HashMap<String, HttpSession>();
     
@@ -79,19 +81,15 @@ public class AdminServiceFacade implements AdminServiceFacadeLocal, HttpSessionL
                 user.setIsAdmin(admin);
                 user.setPassword(password);
                 userService.updateUser(user);
+                return "";
             }
             else { // Account was already registered
                 return "Failed to register user: an account has already been created with the email address";
             }
         }
         else { // Account did not exist yet
-            user = new User(email, null, password, firstName, lastName, gender, birthday, admin, "");
-            if (userService.newUser(user) != 0) {
-                return "Failed to register user";
-            }
+            return registerService.register(email, password, firstName, lastName, gender, birthday, admin);
         }
-        
-        return "";
     }
     
     @Override
