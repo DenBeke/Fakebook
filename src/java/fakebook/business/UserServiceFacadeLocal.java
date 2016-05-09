@@ -10,10 +10,6 @@ import javax.ejb.Stateless;
 import fakebook.persistence.User;
 import javax.ejb.Local;
 
-/**
- *
- * @author robin
- */
 @Local
 public interface UserServiceFacadeLocal {
 
@@ -69,5 +65,12 @@ public interface UserServiceFacadeLocal {
      * @return 
      */
     List<User> getAllUsers();
+
+    /**
+     * Search for users given a part of their name
+     * @param partOfName
+     * @return 
+     */
+    public List<User> searchUser(String partOfName);
 }
 

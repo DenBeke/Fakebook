@@ -46,16 +46,16 @@ public class AdminServlet extends HttpServlet {
                 return;
             }
 
-            request.getSession().setAttribute("currentUser", user);
+            request.getSession().setAttribute("currentUser", user.getId());
         }
         
         // Redirect user to admin login page when not logged in or not an admin
-        User currentUser = (User)request.getSession().getAttribute("currentUser");
-        if (currentUser == null) {
+        Long currentUserId = (Long)request.getSession().getAttribute("currentUser");
+        if (currentUserId == null || userService.getUser(currentUserId) == null) {
             request.getRequestDispatcher("admin-login.jsp").forward(request, response);
             return;
         }
-        else if (!currentUser.getIsAdmin()) {
+        else if (!userService.getUser(currentUserId).getIsAdmin()) {
             request.setAttribute("error", "Your account is not an admin!");
             request.getRequestDispatcher("admin-login.jsp").forward(request, response);
             return;

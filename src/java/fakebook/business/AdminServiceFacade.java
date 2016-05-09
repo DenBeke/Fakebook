@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSessionListener;
 @Startup
 @Singleton
 @WebListener
-public class AdminData implements AdminDataLocal, HttpSessionListener {
+public class AdminServiceFacade implements AdminServiceFacadeLocal, HttpSessionListener {
 
     @EJB
     private UserServiceFacadeLocal userService;
@@ -56,12 +56,54 @@ public class AdminData implements AdminDataLocal, HttpSessionListener {
         Set<User> users = new HashSet<>();
         
         for (HttpSession session : sessions.values()) {
-            User user = (User)session.getAttribute("currentUser");
-            if (user != null) {
-                users.add(user);
+            Long userId = (Long)session.getAttribute("currentUser");
+            if (userId != null) {
+                User user = userService.getUser(userId);
+                if (user != null) {
+                    users.add(user);
+                }
             }
         }
         
         return users;
+    }
+    
+    @Override
+    public String createUser(String email, String password, String firstName, String lastName, String gender, String birthday, Boolean admin) {
+        // Check if user already exists
+        User user = userService.getUserByEmail(email);
+        if (user != null) {
+
+            // Check if existing user was a facebook account
+            if (user.getPassword() == null && !user.getIsDeleted()) {
+                user.setIsAdmin(admin);
+                user.setPassword(password);
+                userService.updateUser(user);
+            }
+            else { // Account was already registered
+                return "Failed to register user: an account has already been created with the email address";
+            }
+        }
+        else { // Account did not exist yet
+            user = new User(email, null, password, firstName, lastName, gender, birthday, admin, "");
+            if (userService.newUser(user) != 0) {
+                return "Failed to register user";
+            }
+        }
+        
+        return "";
+    }
+    
+    @Override
+    public void deleteUser(long userId) {
+        User user = userService.getUser(userId);
+        if (user != null) {
+            userService.deleteAccount(user);
+        }
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 }

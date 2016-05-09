@@ -5,15 +5,14 @@
  */
 package fakebook.business;
 
-import fakebook.persistence.User;
-import java.util.Set;
+import java.util.Map;
+import javax.ejb.Local;
 
-/**
- *
- * @author texus
- */
-public interface AdminDataLocal {
 
-    public Set<User> getOnlineUsers();
-    
+@Local
+public interface LoginServiceFacadeLocal {
+
+    public Map<String, Object> login(String fbToken, String email, String password);
+
 }
+

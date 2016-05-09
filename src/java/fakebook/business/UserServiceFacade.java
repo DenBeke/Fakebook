@@ -11,11 +11,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import fakebook.persistence.User;
+import java.util.regex.Pattern;
 
-/**
- *
- * @author robin
- */
+
 @Stateless
 public class UserServiceFacade implements UserServiceFacadeLocal{
     
@@ -109,11 +107,20 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
         return em.find(User.class, userId);
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-
     @Override
     public List<User> getAllUsers() {
         return em.createNamedQuery("User.getAll").getResultList();
+    }
+
+    @Override
+    public List<User> searchUser(String partOfName) {
+        List<User> matchedUsers = new ArrayList<>();
+        List<User> allUsers = getAllUsers();
+        for (User user : allUsers) {
+            if (Pattern.compile(Pattern.quote(partOfName), Pattern.CASE_INSENSITIVE).matcher(user.getName()).find()) {
+                matchedUsers.add(user);
+            }
+        }
+        return matchedUsers;
     }
 }

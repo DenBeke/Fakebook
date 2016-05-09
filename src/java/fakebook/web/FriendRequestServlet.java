@@ -5,10 +5,10 @@
  */
 package fakebook.web;
 
+import fakebook.business.FriendServiceFacadeLocal;
 import fakebook.business.UserServiceFacadeLocal;
 import fakebook.persistence.User;
 import java.io.IOException;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,9 +22,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "FriendRequest", urlPatterns = {"/friend-request"})
 public class FriendRequestServlet extends HttpServlet {
-
+    
     @EJB
     private UserServiceFacadeLocal userService;
+
+    @EJB
+    private FriendServiceFacadeLocal friendService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,7 +40,7 @@ public class FriendRequestServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        User currentUser = (User)(request.getSession().getAttribute("currentUser"));
+        Long currentUser = (Long)(request.getSession().getAttribute("currentUser"));
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
@@ -45,31 +48,14 @@ public class FriendRequestServlet extends HttpServlet {
         
         if (request.getParameter("friend_user_id") != null) {
             Long userId = Long.decode(request.getParameter("friend_user_id"));
-            
-            if (!userId.equals(currentUser.getId())) {
-                User user = userService.getUser(userId);
 
-                if (user != null) {
-                    if (!user.getFriends().contains(currentUser)) {
-                        if (!user.getFriendshipRequests().contains(currentUser)) {
-                            user.getFriendshipRequests().add(currentUser);
-                            userService.updateUser(user);
-                        }
+            request.setAttribute("error", friendService.sendFriendshipRequest(currentUser, userId));
 
-                        request.setAttribute("userId", userId);
-                        request.setAttribute("userName", user.getName());
-                    }
-                    else {
-                        request.setAttribute("error", "You are already friends!");
-                    }
-                }
-                else {
-                    request.setAttribute("error", "The user you are trying to become friends with does not exist!");
-                }
-            }
-            else {
-                request.setAttribute("error", "You can't send a friend request to yourself!");
-            }
+            request.setAttribute("userId", userId);
+
+            User user = userService.getUser(userId);
+            if (user != null)
+                request.setAttribute("userName", user.getName());
         }
         else {
             request.setAttribute("error", "Something is wrong with the friend request!");

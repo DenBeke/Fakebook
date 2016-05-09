@@ -23,10 +23,10 @@
                             </td>
                             <td><a href="wall?uid=${friend.getId()}"><c:out value="${friend.getName()}"/></a></td>
                             <td>
-                                <c:if test="${not currentUser.getId().equals(friend.getId())
-                                  and not currentUser.getFriends().contains(friend)
-                                  and not currentUser.getFriendshipRequests().contains(friend)
-                                  and not friend.getFriendshipRequests().contains(currentUser)}">
+                                <c:if test="${not user.getId().equals(friend.getId())
+                                  and not user.getFriends().contains(friend)
+                                  and not user.getFriendshipRequests().contains(friend)
+                                  and not friend.getFriendshipRequests().contains(user)}">
                                     <form action="friend-request" id="send_friendship_form" method="POST" class="ui form">
                                         <input type="hidden" name="friend_user_id" value="${friend.getId()}">
                                         <input type="submit" value="Send friend request" class="ui button">
@@ -38,11 +38,11 @@
                 </tbody>
             </table>
             
-            <c:if test="${not empty currentUser.getFriendshipRequests()}">
+            <c:if test="${not empty user.getFriendshipRequests()}">
                 <h3>Friend requests</h3>
                 <table class="ui very basic collapsing celled table">
                     <tbody>
-                        <c:forEach items="${currentUser.getFriendshipRequests()}" var="friend">
+                        <c:forEach items="${user.getFriendshipRequests()}" var="friend">
                             <tr>
                                 <td>
                                     <a class="avatar">
@@ -63,12 +63,12 @@
                 </table>
             </c:if>
             <h3>Current friends</h3>
-            <c:if test="${empty currentUser.getFriends()}">
+            <c:if test="${empty user.getFriends()}">
                 <p>You don't have any friends yet :(</p>
             </c:if>
             <table class="ui very basic collapsing celled table">
                 <tbody>
-                    <c:forEach items="${currentUser.getFriends()}" var="friend">
+                    <c:forEach items="${user.getFriends()}" var="friend">
                         <tr>
                             <td>
                                 <a class="avatar">

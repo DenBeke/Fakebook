@@ -5,11 +5,8 @@
  */
 package fakebook.web;
 
-import fakebook.business.UserServiceFacadeLocal;
-import fakebook.persistence.User;
+import fakebook.business.RegisterServiceFacadeLocal;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 public class RegisterServlet extends HttpServlet {
 
     @EJB
-    private UserServiceFacadeLocal userService;
+    private RegisterServiceFacadeLocal registerService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -68,41 +65,14 @@ public class RegisterServlet extends HttpServlet {
                 request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
-            
-            // Check if user already exists
-            User user = userService.getUserByEmail(email);
-            if (user != null) {
-                
-                // Check if existing user was a facebook account
-                if (user.getPassword() == null) {
-                    if (user.getIsDeleted()) {
-                        request.setAttribute("error", "Failed to register account, the email belongs to a deleted user");
-                        request.getRequestDispatcher("register.jsp").forward(request, response);
-                        return;
-                    }
-                    
-                    // TODO: Merge acount
-                    //       Security issue: shouldn't the user be asked to login to facebook at this point?
 
-                    user.setPassword(password);
-                    userService.updateUser(user);
-                    
-                    request.getRequestDispatcher("login").forward(request, response);
-                }
-                else { // Account was already registered
-                    request.setAttribute("error", "An account has already been created with the email address");
-                    request.getRequestDispatcher("register.jsp").forward(request, response);
-                }
+            String error = registerService.register(email, password, firstName, lastName, gender, birthday, false);
+            if (error.isEmpty()) {
+                request.getRequestDispatcher("login").forward(request, response);
             }
-            else { // Account did not exist yet
-                user = new User(email, null, password, firstName, lastName, gender, birthday, false, "");
-                if (userService.newUser(user) != 0) {
-                    request.setAttribute("error", "Failed to register user");
-                    request.getRequestDispatcher("register.jsp").forward(request, response);
-                }
-                else {
-                    request.getRequestDispatcher("login").forward(request, response);
-                }
+            else {
+                request.setAttribute("error", error);
+                request.getRequestDispatcher("register.jsp").forward(request, response);
             }
         }
     }
