@@ -7,6 +7,7 @@ package fakebook.business;
 
 import fakebook.persistence.BiometricData;
 import fakebook.persistence.User;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,17 +61,19 @@ public class BiometricServiceFacade implements BiometricServiceFacadeLocal {
         
         // Parse the time, and date.
         String date = body.getJsonObject("effective_time_frame").getString("date_time");
-        SimpleDateFormat timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        SimpleDateFormat timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         Calendar time = Calendar.getInstance();
         try {
             Date t = timestamp.parse(date);
             time.setTime(t);
+            System.out.println(t.toString());
         } catch (ParseException ex) {
             Logger.getLogger(BiometricServiceFacade.class.getName()).log(Level.SEVERE, null, ex);
         }
                 
         // parse the heart rate value:
-        double heart_rate = ((Number)body.getJsonObject("heart_rate").get("value")).doubleValue();
+        double heart_rate;
+        heart_rate = body.getJsonObject("heart_rate").getJsonNumber("value").doubleValue();
         
         // parse the user ID
         long user_id = (long)header.getInt("user_id");     // TODO: In Json data the user ID is "joe" which is a string -> adapt in biometric data sender.

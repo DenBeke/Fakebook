@@ -29,7 +29,9 @@ public class BiometricDataSocket {
         // Exctract json message, and push to database.
         System.out.println("got Data: " + message);
         JsonObject json = Json.createReader(new StringReader(message)).readObject();
+        System.out.println("Created Json object");
         biometricService.pushHeartrateJson(json);
+        System.out.println("Persisted object");
     }
     
     // Currently no session management, could add it for security reasons, but should work without.
