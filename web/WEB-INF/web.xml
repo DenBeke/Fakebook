@@ -4,9 +4,17 @@
         <servlet-name>PostSeen</servlet-name>
         <servlet-class>fakebook.web.PostSeen</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PostLike</servlet-name>
+        <servlet-class>fakebook.web.PostLike</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>PostSeen</servlet-name>
         <url-pattern>/postseen</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PostLike</servlet-name>
+        <url-pattern>/postlike</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

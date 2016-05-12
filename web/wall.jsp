@@ -78,14 +78,14 @@
                                 </div>
                                 <div class="actions">
                                     <!-- TODO: Don't redirect -->
-                                    <form action="?uid=${user}" id="wall_like_post" method="POST" class="ui form">
+                                    <form action="?uid=${user}" class="wall_like_post" method="POST" class="ui form">
                                         <input type="hidden" name="liked_post_id" value="${post.getId()}">
                                         <!--<input type="submit" value="" class="like icon">-->
                                         
                                         <a class="like">
                                             <i class="like icon" onclick="$(this).closest('form').submit();"></i>
                                             <c:if test="${not empty post.getLikes()}">
-                                                <c:out value="${post.getLikes().size()}"/> like<c:if test="${post.getLikes().size() != 1}">s</c:if>
+                                                <span class="fb-likes"><c:out value="${post.getLikes().size()}"/></span> like<c:if test="${post.getLikes().size() != 1}">s</c:if>
                                             </c:if>
                                         </a>
                                     </form>
@@ -123,7 +123,7 @@
                                                 <a class="like">
                                                     <i class="like icon" onclick="$(this).closest('form').submit();"></i>
                                                     <c:if test="${not empty comment.getLikes()}">
-                                                        <c:out value="${comment.getLikes().size()}"/> like<c:if test="${comment.getLikes().size() != 1}">s</c:if>
+                                                        <span class="fb-likes"><c:out value="${comment.getLikes().size()}"/></span> like<c:if test="${comment.getLikes().size() != 1}">s</c:if>
                                                     </c:if>
                                                 </a>
                                             </form>
@@ -163,7 +163,7 @@
                                                                 <a class="like">
                                                                     <i class="like icon" onclick="$(this).closest('form').submit();"></i>
                                                                     <c:if test="${not empty subComment.getLikes()}">
-                                                                        <c:out value="${subComment.getLikes().size()}"/> like<c:if test="${subComment.getLikes().size() != 1}">s</c:if>
+                                                                        <span class="fb-likes"><c:out value="${subComment.getLikes().size()}"/></span> like<c:if test="${subComment.getLikes().size() != 1}">s</c:if>
                                                                     </c:if>
                                                                 </a>
                                                             </form>
@@ -208,9 +208,24 @@
 
 <script>
     
-    var client = new $.RestClient("http://localhost:5000/");
-
-    post = client.add("post");
+    $("form.wall_like_post").submit(function(e){
+    var form = $(this);
+    var request = "http://localhost:8080/Fakebook/postlike?liked_post_id=" + form.find("[name='liked_post_id']").val();
+                //console.log(id);
+                //console.log(request);
+                //console.log(request)
+                $.get( request, function( data ) {
+                    //$( ".result" ).html( data );
+                    //alert( "Load was performed." );
+                    //console.log("Data:" + data);
+                    //<span class="fb-likes">
+                    var current = parseInt(form.find('.fb-likes').text());
+                    //console.log("Current likes: " + current);
+                    form.find('.fb-likes').text(current + 1);
+                });
+    return false;
+ });
+    
     
     $(window).scroll(function(){
         $('.fb-post:in-viewport').each(function(){
@@ -231,6 +246,10 @@
             
         });
     });
+    
+    var client = new $.RestClient("http://localhost:5000/");
+
+    post = client.add("post");
     
     $('.text').click(function() {
         var postContent = $(this).text().trim().replace(" ", "%20");
