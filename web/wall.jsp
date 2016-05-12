@@ -84,9 +84,9 @@
                                         
                                         <a class="like">
                                             <i class="like icon" onclick="$(this).closest('form').submit();"></i>
-                                            <c:if test="${not empty post.getLikes()}">
-                                                <span class="fb-likes"><c:out value="${post.getLikes().size()}"/></span> like<c:if test="${post.getLikes().size() != 1}">s</c:if>
-                                            </c:if>
+                                            
+                                                <span class="fb-likes"><c:out value="${post.getLikes().size()}"/> like<c:if test="${post.getLikes().size() != 1}">s</c:if></span>
+                                            
                                         </a>
                                     </form>
 
@@ -123,7 +123,7 @@
                                                 <a class="like">
                                                     <i class="like icon" onclick="$(this).closest('form').submit();"></i>
                                                     <c:if test="${not empty comment.getLikes()}">
-                                                        <span class="fb-likes"><c:out value="${comment.getLikes().size()}"/></span> like<c:if test="${comment.getLikes().size() != 1}">s</c:if>
+                                                        <span class="fb-likes"><c:out value="${comment.getLikes().size()}"/> like<c:if test="${comment.getLikes().size() != 1}">s</c:if></span>
                                                     </c:if>
                                                 </a>
                                             </form>
@@ -163,7 +163,7 @@
                                                                 <a class="like">
                                                                     <i class="like icon" onclick="$(this).closest('form').submit();"></i>
                                                                     <c:if test="${not empty subComment.getLikes()}">
-                                                                        <span class="fb-likes"><c:out value="${subComment.getLikes().size()}"/></span> like<c:if test="${subComment.getLikes().size() != 1}">s</c:if>
+                                                                        <span class="fb-likes"><c:out value="${subComment.getLikes().size()}"/> like<c:if test="${subComment.getLikes().size() != 1}">s</c:if></span>
                                                                     </c:if>
                                                                 </a>
                                                             </form>
@@ -215,13 +215,11 @@
                 //console.log(request);
                 //console.log(request)
                 $.get( request, function( data ) {
-                    //$( ".result" ).html( data );
-                    //alert( "Load was performed." );
-                    //console.log("Data:" + data);
-                    //<span class="fb-likes">
-                    var current = parseInt(form.find('.fb-likes').text());
-                    //console.log("Current likes: " + current);
-                    form.find('.fb-likes').text(current + 1);
+                    text = ' like';
+                    if(parseInt(data) !== 1) {
+                        text = text + 's';
+                    }
+                    form.find('.fb-likes').text(data + text);
                 });
     return false;
  });

@@ -60,7 +60,7 @@ public class PostLike extends HttpServlet {
 
             wallService.addLike(currentUser, postId);
             
-            out.println("Added like to post " + postId);
+            out.println(postService.getPost(Long.parseLong(postId)).getLikes().size());
         }
         catch(Exception e){
             PrintWriter out = response.getWriter();
