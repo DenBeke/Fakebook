@@ -67,6 +67,8 @@ public class Post implements Serializable {
     private String video;   // URL of the attached video if there is one
     private String link;    // URL of the link if there is one
     
+    private Date seen; // The time the post was seen by the "wall owner".
+    
     // TODO , depending on assignment allow for images/video/...
 
     /**
@@ -188,6 +190,14 @@ public class Post implements Serializable {
 
     public String getType() {
         return type;
+    }
+    
+    public Date getSeen() {
+        return this.seen;
+    }
+    
+    public void setSeen(Date date) {
+        this.seen = date;
     }
     
     @Override

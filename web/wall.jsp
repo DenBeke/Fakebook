@@ -36,8 +36,8 @@
                 
                 <div class="ui comments">
                     <c:forEach items="${posts}" var="post">
-
-                        <div class="comment">
+                        
+                        <div class="comment fb-post" data-id="<c:out value="${post.getId()}"/>" data-seen="<c:out value="${post.getSeen()}"/>">
                             <a class="avatar">
                                 <img src="<c:out value="${post.getPoster().getProfilePic()}"/>">
                             </a>
@@ -96,12 +96,11 @@
                             <div class="comments">
                             <c:forEach items="${post.getComments()}" var="comment">
                                 
-                                <div class="comment">
+                                <div class="comment fb-comment" data-id="<c:out value="${comment.getId()}"/> data-seen="<c:out value="${post.getSeen()}"/>">
                                     <a class="avatar">
                                         <img src="${comment.getPoster().getProfilePic()}">
                                     </a>
-                                    <div class="content">
-                                        <a class="author" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getName()}"/></a>
+                                    <div class="content" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getName()}"/></a>
                                         <div class="metadata">
                                             <span class="date"><c:out value="${comment.getTimestamp()}"/></span>
                                         </div>
@@ -135,7 +134,7 @@
                                         <div class="comments">
                                             <c:forEach items="${comment.getComments()}" var="subComment">
 
-                                                <div class="comment">
+                                                <div class="comment fb-subcomment" data-id="<c:out value="${subComment.getId()}"/> data-seen="<c:out value="${post.getSeen()}"/>">
                                                     <a class="avatar">
                                                         <img src="${subComment.getPoster().getProfilePic()}">
                                                     </a>
@@ -202,7 +201,27 @@
     
     var client = new $.RestClient("http://localhost:5000/");
 
-    post = client.add("post")
+    post = client.add("post");
+    
+    $(window).scroll(function(){
+        $('.fb-post:in-viewport').each(function(){
+            if( $(this).data('seen').length === 0) {
+                var id = $(this).data('id');
+                var date = Math.floor(Date.now() / 1000);
+                $(this).data('seen', date);
+                
+                var request = "http://localhost:8080/Fakebook/postseen?post=" + id + "&date=" + date;
+                //console.log(id);
+                //console.log(request);
+                $.get( request, function( data ) {
+                    //$( ".result" ).html( data );
+                    //alert( "Load was performed." );
+                    //console.log(data);
+                });
+            }
+            
+        });
+    });
     
     $('.text').click(function() {
         var postContent = $(this).text().trim().replace(" ", "%20");
