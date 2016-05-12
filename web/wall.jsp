@@ -21,12 +21,21 @@
             <c:otherwise>
                 
                 <h2 class="ui dividing header">Wall of ${userName}</h2>
+                
+                <c:if test="${not empty error}">
+                    <div class="ui negative message">
+                        <div class="header">
+                            Oops, something went wrong
+                        </div>
+                        <p>${error}</p>
+                    </div>
+                </c:if>
 
                 <form enctype="multipart/form-data" action="?uid=${user}" id="wall_form" method="POST" class="ui form">
                     <div class="field">
                         <textarea name="new_wall_post"></textarea>
                     </div>
-                    <input type="file" name="attachment" accept="image/bmp, image/png, image/mjpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
+                    Attach picture/video: <input type="file" name="attachment" accept="image/bmp, image/png, image/jpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
                     <input type="hidden" name="wall_user_id" value="${user}">
                     <input type="submit" value="Write on wall" class="ui teal button">
                 </form>

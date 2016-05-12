@@ -10,6 +10,7 @@ import fakebook.persistence.User;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.Local;
 import javax.json.Json;
 import javax.json.JsonObject;
 
@@ -17,6 +18,7 @@ import javax.json.JsonObject;
  *
  * @author robin
  */
+@Local
 public interface BiometricServiceFacadeLocal {
 
     /**

@@ -5,10 +5,7 @@
  */
 package fakebook.web;
 
-import fakebook.business.AdminDataLocal;
-import fakebook.business.PostServiceFacadeLocal;
 import fakebook.business.UserServiceFacadeLocal;
-import fakebook.persistence.Post;
 import fakebook.persistence.User;
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import fakebook.business.AdminServiceFacadeLocal;
 
 /**
  *
@@ -28,14 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminUsersServlet extends HttpServlet {
 
     @EJB
-    private AdminDataLocal adminData;
-    
-    @EJB
     private UserServiceFacadeLocal userService;
     
     @EJB
-    private PostServiceFacadeLocal postService;
-    
+    private AdminServiceFacadeLocal adminService;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,12 +43,12 @@ public class AdminUsersServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // Redirect user to admin login page when not logged in or not an admin
-        User currentUser = (User)request.getSession().getAttribute("currentUser");
-        if (currentUser == null) {
+        Long currentUserId = (Long)request.getSession().getAttribute("currentUser");
+        if (currentUserId == null || userService.getUser(currentUserId) == null) {
             request.getRequestDispatcher("admin-login.jsp").forward(request, response);
             return;
         }
-        else if (!currentUser.getIsAdmin()) {
+        else if (!userService.getUser(currentUserId).getIsAdmin()) {
             request.setAttribute("error", "Your account is not an admin!");
             request.getRequestDispatcher("admin-login.jsp").forward(request, response);
             return;
@@ -86,41 +81,19 @@ public class AdminUsersServlet extends HttpServlet {
                 if (admin != null && !admin.isEmpty()) {
                     createAdmin = true;
                 }
-                
-                // Check if user already exists
-                User user = userService.getUserByEmail(email);
-                if (user != null) {
-
-                    // Check if existing user was a facebook account
-                    if (user.getPassword() == null && !user.getIsDeleted()) {
-                        user.setIsAdmin(createAdmin);
-                        user.setPassword(password);
-                        userService.updateUser(user);
-                    }
-                    else { // Account was already registered
-                        request.setAttribute("error", "Failed to register user: an account has already been created with the email address");
-                    }
-                }
-                else { // Account did not exist yet
-                    user = new User(email, null, password, firstName, lastName, gender, birthday, createAdmin, "");
-                    if (userService.newUser(user) != 0) {
-                        request.setAttribute("error", "Failed to register user");
-                    }
-                }
+        
+                request.setAttribute("error", adminService.createUser(email, password, firstName, lastName, gender, birthday, createAdmin));
             }
         }
         
         // Check if deleting a user
         if (request.getParameter("deleted_user_id") != null) {
             long userId = Long.decode(request.getParameter("deleted_user_id"));
-            User user = userService.getUser(userId);
-            if (user != null) {
-                userService.deleteAccount(user);
-            }
+            adminService.deleteUser(userId);
         }
         
-        List<User> users = userService.getAllUsers();
-        Set<User> onlineUsers = adminData.getOnlineUsers();
+        List<User> users = adminService.getAllUsers();
+        Set<User> onlineUsers = adminService.getOnlineUsers();
 
         request.setAttribute("onlineUsers", onlineUsers);
         request.setAttribute("allUsers", users);

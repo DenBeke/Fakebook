@@ -76,7 +76,7 @@ public class User implements Serializable {
      * @param Admin
      * @param profilePic
      */
-    public User(String email, String fbId, String password, String firstName, String lastName, String gender, String birthday, Boolean Admin, String profilePic) {
+    public User(String email, String fbId, String password, String firstName, String lastName, String gender, String birthday, Boolean admin, String profilePic) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -88,8 +88,8 @@ public class User implements Serializable {
         this.isDeleted = false;
 
         // Make sure that admin is not null.
-        if (Admin != null) {
-            this.isAdmin = Admin;
+        if (admin != null) {
+            this.isAdmin = admin;
         } else {
             this.isAdmin = false;   // Default to false, making sure that no-one gets admin rights by accident.
         }

@@ -6,11 +6,10 @@
 package fakebook.web;
 
 import fakebook.business.UserServiceFacadeLocal;
+import fakebook.business.FriendServiceFacadeLocal;
 import fakebook.persistence.User;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +26,9 @@ public class FriendsServlet extends HttpServlet {
 
     @EJB
     private UserServiceFacadeLocal userService;
+    
+    @EJB
+    private FriendServiceFacadeLocal friendService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,7 +41,7 @@ public class FriendsServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        User currentUser = (User)(request.getSession().getAttribute("currentUser"));
+        Long currentUser = (Long)(request.getSession().getAttribute("currentUser"));
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
@@ -49,14 +51,8 @@ public class FriendsServlet extends HttpServlet {
         if (request.getParameter("searched_friend") != null) {
             String searchedFriend = request.getParameter("searched_friend");
             
-            List<User> friends = new ArrayList<>();
-            List<User> users = userService.getAllUsers();
-            for (User user : users) {
-                if (Pattern.compile(Pattern.quote(searchedFriend), Pattern.CASE_INSENSITIVE).matcher(user.getName()).find()) {
-                    friends.add(user);
-                }
-            }
-            
+            List<User> friends = userService.searchUser(searchedFriend);
+
             request.setAttribute("searchedFriend", searchedFriend);
             request.setAttribute("searchResult", friends);
         }
@@ -64,29 +60,16 @@ public class FriendsServlet extends HttpServlet {
         // Check if we are accepting a friendship request
         if (request.getParameter("accepted_friend_id") != null) {
             Long friendId = Long.decode(request.getParameter("accepted_friend_id"));
-            User friend = userService.getUser(friendId);
-
-            if (friend != null) {
-                if (currentUser.getFriendshipRequests().contains(friend)) {
-                    currentUser.getFriendshipRequests().remove(friend);
-                    
-                    if (friend.getFriendshipRequests().contains(currentUser)) {
-                        friend.getFriendshipRequests().remove(currentUser);
-                    }
-                    
-                    if (!currentUser.getFriends().contains(friend)) {
-                        currentUser.getFriends().add(friend);
-                    }
-                    if (!friend.getFriends().contains(currentUser)) {
-                        friend.getFriends().add(currentUser);
-                    }
-                    
-                    userService.updateUser(currentUser);
-                    userService.updateUser(friend);
-                }
-            }
+            friendService.acceptFriendshipReques(currentUser, friendId);
         }
         
+        // Check if we are removing a friend
+        if (request.getParameter("removed_friend_id") != null) {
+            Long friendId = Long.decode(request.getParameter("removed_friend_id"));
+            friendService.removeFriend(currentUser, friendId);
+        }
+        
+        request.setAttribute("user", userService.getUser(currentUser));
         request.getRequestDispatcher("friends.jsp").forward(request, response);
     }
 

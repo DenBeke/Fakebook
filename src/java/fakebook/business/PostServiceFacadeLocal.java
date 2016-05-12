@@ -7,12 +7,13 @@ package fakebook.business;
 
 import fakebook.persistence.Post;
 import java.util.List;
-import javax.ejb.Stateless;
+import javax.ejb.Local;
 
 /**
  *
  * @author robin
  */
+@Local
 public interface PostServiceFacadeLocal {
 
     /**

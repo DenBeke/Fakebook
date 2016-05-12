@@ -6,14 +6,16 @@
 package fakebook.business;
 
 import fakebook.persistence.User;
-import java.util.Set;
+import javax.ejb.Local;
+import javax.servlet.http.Part;
 
-/**
- *
- * @author texus
- */
-public interface AdminDataLocal {
 
-    public Set<User> getOnlineUsers();
+@Local
+public interface AttachmentServiceFacadeLocal {
+    
+    public Long upload(User owner, Part attachment);
+
+    public byte[] getAttachment(Long id);
     
 }
+

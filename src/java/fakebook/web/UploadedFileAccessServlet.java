@@ -5,12 +5,16 @@
  */
 package fakebook.web;
 
-import fakebook.business.FriendServiceFacadeLocal;
-import fakebook.business.UserServiceFacadeLocal;
-import fakebook.persistence.User;
+import fakebook.business.AttachmentServiceFacadeLocal;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,14 +24,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author texus
  */
-@WebServlet(name = "FriendRequest", urlPatterns = {"/friend-request"})
-public class FriendRequestServlet extends HttpServlet {
-    
-    @EJB
-    private UserServiceFacadeLocal userService;
+@WebServlet(name = "UploadedFileAccessServlet", urlPatterns = {"/uploads"})
+public class UploadedFileAccessServlet extends HttpServlet {
 
     @EJB
-    private FriendServiceFacadeLocal friendService;
+    private AttachmentServiceFacadeLocal attachmentService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,30 +39,32 @@ public class FriendRequestServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
+        // You have to be logged in to view the file
         Long currentUser = (Long)(request.getSession().getAttribute("currentUser"));
         if (currentUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.setStatus(403);
+            return;
+        }
+
+        // The "id" parameter has to be present
+        String id = (String)request.getParameter("id");
+        if (id == null) {
+            response.setStatus(404);
             return;
         }
         
-        if (request.getParameter("friend_user_id") != null) {
-            Long userId = Long.decode(request.getParameter("friend_user_id"));
-
-            request.setAttribute("error", friendService.sendFriendshipRequest(currentUser, userId));
-
-            request.setAttribute("userId", userId);
-
-            User user = userService.getUser(userId);
-            if (user != null)
-                request.setAttribute("userName", user.getName());
+        // Search for the requested image
+        byte[] resource = attachmentService.getAttachment(Long.decode(id));
+        if (resource == null) {
+            response.setStatus(404);
+            return;
         }
-        else {
-            request.setAttribute("error", "Something is wrong with the friend request!");
-        }
-        
-        request.getRequestDispatcher("friend-request.jsp").forward(request, response);
+
+        ServletOutputStream out = response.getOutputStream();
+        out.write(resource);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -100,7 +103,7 @@ public class FriendRequestServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Friend Request Servlet";
+        return "Uploaded File Access Servlet";
     }// </editor-fold>
 
 }
