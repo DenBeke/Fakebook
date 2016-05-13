@@ -6,13 +6,11 @@
 package fakebook.business;
 
 import fakebook.persistence.Post;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
-/**
- *
- * @author robin
- */
+
 @Local
 public interface PostServiceFacadeLocal {
 
@@ -63,12 +61,21 @@ public interface PostServiceFacadeLocal {
      * @return 
      */
     public List<Post> getPostsByPoster(long userId);
-    
-    
-    /**
-     * Return all posts the user is mentioned in
-     * @param userId
-     * @return 
-     */
-    public List<Post> getPostsByMention(long userId);
+
+    public int getWallPostCountInPeriod(Date periodStart, Date periodEnd);
+
+    public int getCommentCountInPeriod(Date periodStart, Date periodEnd);
+
+    public int getPicturePostCountInPeriod(Date periodStart, Date periodEnd);
+
+    public int getVideoPostCountInPeriod(Date periodStart, Date periodEnd);
+
+    public int getPicturePostCount();
+
+    public int getVideoPostCount();
+
+    public int getPostCount();
+
+    public int getCommentCount();
+
 }

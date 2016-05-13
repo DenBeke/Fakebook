@@ -123,4 +123,9 @@ public class UserServiceFacade implements UserServiceFacadeLocal{
         }
         return matchedUsers;
     }
+
+    @Override
+    public int getUserCount() {
+        return em.createNamedQuery("User.getAll").getResultList().size();
+    }
 }

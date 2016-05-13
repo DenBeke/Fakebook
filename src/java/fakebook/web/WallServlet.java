@@ -87,10 +87,11 @@ public class WallServlet extends HttpServlet {
                 if(request.getMethod().equals("POST")) {
                     // Check for new wall post form
                     if(request.getParameter("new_wall_post") != null) {
-                        Post post = new Post(currentUser, user, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), request.getParameter("new_wall_post").trim());
+                        String postContents = request.getParameter("new_wall_post").trim();
+                        Post post = new Post(currentUser, user, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), postContents);
                         
                         final Part attachment = request.getPart("attachment");
-                        if (attachment != null) {
+                        if (attachment != null && !attachment.getSubmittedFileName().isEmpty()) {
                             final String attachmentFileName = attachment.getSubmittedFileName();
                             
                             // Only accept specific file types
@@ -125,7 +126,9 @@ public class WallServlet extends HttpServlet {
                             }
                         }
 
-                        wallService.addPost(post);
+                        // The post can't be empty unless it contained an attachment
+                        if (!postContents.isEmpty() || post.getType() != null)
+                            wallService.addPost(post);
                     }
 
                     // Check for new comments
