@@ -1,6 +1,6 @@
 *.class
 # Ignore the data map
-data/
+
 
 .DS_Store
 
