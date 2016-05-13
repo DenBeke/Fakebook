@@ -6,7 +6,6 @@
 package fakebook.business;
 
 import java.util.List;
-import javax.ejb.Stateless;
 import fakebook.persistence.User;
 import javax.ejb.Local;
 
@@ -72,5 +71,7 @@ public interface UserServiceFacadeLocal {
      * @return 
      */
     public List<User> searchUser(String partOfName);
+
+    public int getUserCount();
 }
 
