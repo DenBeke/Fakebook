@@ -5,11 +5,16 @@
  */
 package fakebook.web;
 
-import fakebook.business.LoginServiceFacadeLocal;
+import fakebook.business.AttachmentServiceFacadeLocal;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Map;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +24,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author texus
  */
-@WebServlet(name = "Login", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "UploadedFileAccessServlet", urlPatterns = {"/uploads"})
+public class UploadedFileAccessServlet extends HttpServlet {
 
     @EJB
-    private LoginServiceFacadeLocal loginService;
-    
+    private AttachmentServiceFacadeLocal attachmentService;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,34 +39,32 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getSession().getAttribute("currentUser") != null) {
-            response.sendRedirect(request.getContextPath() + "/wall");
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // You have to be logged in to view the file
+        Long currentUser = (Long)(request.getSession().getAttribute("currentUser"));
+        if (currentUser == null) {
+            response.setStatus(403);
             return;
         }
 
-        String fbToken = request.getParameter("fbToken");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        // The "id" parameter has to be present
+        String id = (String)request.getParameter("id");
+        if (id == null) {
+            response.setStatus(404);
+            return;
+        }
+        
+        // Search for the requested image
+        byte[] resource = attachmentService.getAttachment(Long.decode(id));
+        if (resource == null) {
+            response.setStatus(404);
+            return;
+        }
 
-        if (email == null && fbToken == null) { // Accessing page directly
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
-        else {
-            request.setAttribute("email", email);
-            request.setAttribute("password", password);
-            
-            Map<String, Object> result = loginService.login(fbToken, email, password);
-            String error = (String)result.get("error");
-            if (error.isEmpty()) {
-                request.getSession().setAttribute("currentUser", result.get("user"));
-                response.sendRedirect(request.getContextPath() + "/wall");
-            }
-            else {
-                request.setAttribute("error", error);
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            }
-        }
+        ServletOutputStream out = response.getOutputStream();
+        out.write(resource);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -100,7 +103,7 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Login Servlet";
+        return "Uploaded File Access Servlet";
     }// </editor-fold>
 
 }

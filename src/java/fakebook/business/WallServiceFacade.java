@@ -18,15 +18,13 @@ import javax.ejb.EJB;
 
 @Stateless
 public class WallServiceFacade implements WallServiceFacadeLocal {
-    
+
     @EJB
     private PostServiceFacadeLocal postService;
 
     @Override
-    public void addPost(User author, User user, String newPost) {
-        if (!newPost.trim().isEmpty()) {
-            postService.newPost(new Post(author, user, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), newPost));
-        }
+    public void addPost(Post post) {
+        postService.newPost(post);
     }
 
     @Override

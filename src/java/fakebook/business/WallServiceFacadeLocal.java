@@ -14,7 +14,7 @@ import javax.ejb.Local;
 @Local
 public interface WallServiceFacadeLocal {
 
-    public void addPost(User author, User user, String newPost);
+    public void addPost(Post post);
 
     public void addComment(User author, String parentPostId, String newComment);
 

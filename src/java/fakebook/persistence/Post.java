@@ -19,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import static javax.persistence.TemporalType.DATE;
 
@@ -66,6 +65,8 @@ public class Post implements Serializable {
     private String picture; // URL of the attached photo if there is one
     private String video;   // URL of the attached video if there is one
     private String link;    // URL of the link if there is one
+    
+    private Date seen; // The time the post was seen by the "wall owner".
     
     // TODO , depending on assignment allow for images/video/...
 
@@ -188,6 +189,14 @@ public class Post implements Serializable {
 
     public String getType() {
         return type;
+    }
+    
+    public Date getSeen() {
+        return this.seen;
+    }
+    
+    public void setSeen(Date date) {
+        this.seen = date;
     }
     
     @Override

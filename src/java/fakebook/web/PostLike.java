@@ -5,25 +5,32 @@
  */
 package fakebook.web;
 
-import fakebook.business.LoginServiceFacadeLocal;
+import fakebook.business.PostServiceFacadeLocal;
+import fakebook.business.UserServiceFacadeLocal;
+import fakebook.business.WallServiceFacadeLocal;
+import fakebook.persistence.User;
 import java.io.IOException;
-import java.util.Map;
+import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author texus
+ * @author Mathias
  */
-@WebServlet(name = "Login", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
+public class PostLike extends HttpServlet {
 
     @EJB
-    private LoginServiceFacadeLocal loginService;
+    private UserServiceFacadeLocal userService;
+    
+    @EJB
+    private PostServiceFacadeLocal postService;
+    
+    @EJB
+    private WallServiceFacadeLocal wallService;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,34 +41,32 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getSession().getAttribute("currentUser") != null) {
-            response.sendRedirect(request.getContextPath() + "/wall");
-            return;
-        }
-
-        String fbToken = request.getParameter("fbToken");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        if (email == null && fbToken == null) { // Accessing page directly
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
-        else {
-            request.setAttribute("email", email);
-            request.setAttribute("password", password);
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
             
-            Map<String, Object> result = loginService.login(fbToken, email, password);
-            String error = (String)result.get("error");
-            if (error.isEmpty()) {
-                request.getSession().setAttribute("currentUser", result.get("user"));
-                response.sendRedirect(request.getContextPath() + "/wall");
+            Long currentUserId = (Long) (request.getSession().getAttribute("currentUser"));
+            if (currentUserId == null || userService.getUser(currentUserId) == null) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
             }
-            else {
-                request.setAttribute("error", error);
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            }
+
+            User currentUser = userService.getUser(currentUserId);
+
+            String postId = (request.getParameter("liked_post_id"));
+
+            wallService.addLike(currentUser, postId);
+            
+            out.println(postService.getPost(Long.parseLong(postId)).getLikes().size());
         }
+        catch(Exception e){
+            PrintWriter out = response.getWriter();
+            out.println("Couldn't process like");
+        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -100,7 +105,7 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Login Servlet";
+        return "Short description";
     }// </editor-fold>
 
 }

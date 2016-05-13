@@ -21,12 +21,21 @@
             <c:otherwise>
                 
                 <h2 class="ui dividing header">Wall of ${userName}</h2>
+                
+                <c:if test="${not empty error}">
+                    <div class="ui negative message">
+                        <div class="header">
+                            Oops, something went wrong
+                        </div>
+                        <p>${error}</p>
+                    </div>
+                </c:if>
 
                 <form enctype="multipart/form-data" action="?uid=${user}" id="wall_form" method="POST" class="ui form">
                     <div class="field">
                         <textarea name="new_wall_post"></textarea>
                     </div>
-                    <input type="file" name="attachment" accept="image/bmp, image/png, image/mjpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
+                    Attach picture/video: <input type="file" name="attachment" accept="image/bmp, image/png, image/jpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
                     <input type="hidden" name="wall_user_id" value="${user}">
                     <input type="submit" value="Write on wall" class="ui teal button">
                 </form>
@@ -36,8 +45,8 @@
                 
                 <div class="ui comments">
                     <c:forEach items="${posts}" var="post">
-
-                        <div class="comment">
+                        
+                        <div class="comment fb-post" data-id="<c:out value="${post.getId()}"/>" data-seen="<c:out value="${post.getSeen()}"/>">
                             <a class="avatar">
                                 <img src="<c:out value="${post.getPoster().getProfilePic()}"/>">
                             </a>
@@ -69,15 +78,15 @@
                                 </div>
                                 <div class="actions">
                                     <!-- TODO: Don't redirect -->
-                                    <form action="?uid=${user}" id="wall_like_post" method="POST" class="ui form">
+                                    <form action="?uid=${user}" class="wall_like_post" method="POST" class="ui form">
                                         <input type="hidden" name="liked_post_id" value="${post.getId()}">
                                         <!--<input type="submit" value="" class="like icon">-->
                                         
                                         <a class="like">
                                             <i class="like icon" onclick="$(this).closest('form').submit();"></i>
-                                            <c:if test="${not empty post.getLikes()}">
-                                                <c:out value="${post.getLikes().size()}"/> like<c:if test="${post.getLikes().size() != 1}">s</c:if>
-                                            </c:if>
+                                            
+                                                <span class="fb-likes"><c:out value="${post.getLikes().size()}"/> like<c:if test="${post.getLikes().size() != 1}">s</c:if></span>
+                                            
                                         </a>
                                     </form>
 
@@ -96,12 +105,11 @@
                             <div class="comments">
                             <c:forEach items="${post.getComments()}" var="comment">
                                 
-                                <div class="comment">
+                                <div class="comment fb-comment" data-id="<c:out value="${comment.getId()}"/> data-seen="<c:out value="${post.getSeen()}"/>">
                                     <a class="avatar">
                                         <img src="${comment.getPoster().getProfilePic()}">
                                     </a>
-                                    <div class="content">
-                                        <a class="author" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getName()}"/></a>
+                                    <div class="content" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getName()}"/></a>
                                         <div class="metadata">
                                             <span class="date"><c:out value="${comment.getTimestamp()}"/></span>
                                         </div>
@@ -115,7 +123,7 @@
                                                 <a class="like">
                                                     <i class="like icon" onclick="$(this).closest('form').submit();"></i>
                                                     <c:if test="${not empty comment.getLikes()}">
-                                                        <c:out value="${comment.getLikes().size()}"/> like<c:if test="${comment.getLikes().size() != 1}">s</c:if>
+                                                        <span class="fb-likes"><c:out value="${comment.getLikes().size()}"/> like<c:if test="${comment.getLikes().size() != 1}">s</c:if></span>
                                                     </c:if>
                                                 </a>
                                             </form>
@@ -135,7 +143,7 @@
                                         <div class="comments">
                                             <c:forEach items="${comment.getComments()}" var="subComment">
 
-                                                <div class="comment">
+                                                <div class="comment fb-subcomment" data-id="<c:out value="${subComment.getId()}"/> data-seen="<c:out value="${post.getSeen()}"/>">
                                                     <a class="avatar">
                                                         <img src="${subComment.getPoster().getProfilePic()}">
                                                     </a>
@@ -155,7 +163,7 @@
                                                                 <a class="like">
                                                                     <i class="like icon" onclick="$(this).closest('form').submit();"></i>
                                                                     <c:if test="${not empty subComment.getLikes()}">
-                                                                        <c:out value="${subComment.getLikes().size()}"/> like<c:if test="${subComment.getLikes().size() != 1}">s</c:if>
+                                                                        <span class="fb-likes"><c:out value="${subComment.getLikes().size()}"/> like<c:if test="${subComment.getLikes().size() != 1}">s</c:if></span>
                                                                     </c:if>
                                                                 </a>
                                                             </form>
@@ -200,9 +208,46 @@
 
 <script>
     
+    $("form.wall_like_post").submit(function(e){
+    var form = $(this);
+    var request = "http://localhost:8080/Fakebook/postlike?liked_post_id=" + form.find("[name='liked_post_id']").val();
+                //console.log(id);
+                //console.log(request);
+                //console.log(request)
+                $.get( request, function( data ) {
+                    text = ' like';
+                    if(parseInt(data) !== 1) {
+                        text = text + 's';
+                    }
+                    form.find('.fb-likes').text(data + text);
+                });
+    return false;
+ });
+    
+    
+    $(window).scroll(function(){
+        $('.fb-post:in-viewport').each(function(){
+            if( $(this).data('seen').length === 0) {
+                var id = $(this).data('id');
+                var date = Math.floor(Date.now() / 1000);
+                $(this).data('seen', date);
+                
+                var request = "http://localhost:8080/Fakebook/postseen?post=" + id + "&date=" + date;
+                //console.log(id);
+                //console.log(request);
+                $.get( request, function( data ) {
+                    //$( ".result" ).html( data );
+                    //alert( "Load was performed." );
+                    //console.log(data);
+                });
+            }
+            
+        });
+    });
+    
     var client = new $.RestClient("http://localhost:5000/");
 
-    post = client.add("post")
+    post = client.add("post");
     
     $('.text').click(function() {
         var postContent = $(this).text().trim().replace(" ", "%20");
