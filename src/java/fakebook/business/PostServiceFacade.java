@@ -70,4 +70,34 @@ public class PostServiceFacade implements PostServiceFacadeLocal {
     public int getCommentCountInPeriod(Date periodStart, Date periodEnd) {
         return em.createNamedQuery("Posts.getCommentsByPeriod").setParameter("startDate", periodStart).setParameter("endDate", periodEnd).getResultList().size();
     }
+
+    @Override
+    public int getPicturePostCountInPeriod(Date periodStart, Date periodEnd) {
+        return em.createNamedQuery("Posts.getPicturePostsByPeriod").setParameter("startDate", periodStart).setParameter("endDate", periodEnd).getResultList().size();
+    }
+    
+    @Override
+    public int getVideoPostCountInPeriod(Date periodStart, Date periodEnd) {
+        return em.createNamedQuery("Posts.getVideoPostsByPeriod").setParameter("startDate", periodStart).setParameter("endDate", periodEnd).getResultList().size();
+    }
+    
+    @Override
+    public int getPicturePostCount() {
+        return em.createNamedQuery("Posts.getPicturePosts").getResultList().size();
+    }
+    
+    @Override
+    public int getVideoPostCount() {
+        return em.createNamedQuery("Posts.getVideoPosts").getResultList().size();
+    }
+
+    @Override
+    public int getPostCount() {
+        return em.createNamedQuery("Posts.getWallPosts").getResultList().size();
+    }
+
+    @Override
+    public int getCommentCount() {
+        return em.createNamedQuery("Posts.getComments").getResultList().size();
+    }
 }

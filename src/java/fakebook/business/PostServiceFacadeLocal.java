@@ -66,4 +66,16 @@ public interface PostServiceFacadeLocal {
 
     public int getCommentCountInPeriod(Date periodStart, Date periodEnd);
 
+    public int getPicturePostCountInPeriod(Date periodStart, Date periodEnd);
+
+    public int getVideoPostCountInPeriod(Date periodStart, Date periodEnd);
+
+    public int getPicturePostCount();
+
+    public int getVideoPostCount();
+
+    public int getPostCount();
+
+    public int getCommentCount();
+
 }
