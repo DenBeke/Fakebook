@@ -105,11 +105,12 @@
                             <div class="comments">
                             <c:forEach items="${post.getComments()}" var="comment">
                                 
-                                <div class="comment fb-comment" data-id="<c:out value="${comment.getId()}"/> data-seen="<c:out value="${post.getSeen()}"/>">
+                                <div class="comment fb-comment" data-id="<c:out value="${comment.getId()}"/>" data-seen="<c:out value="${post.getSeen()}"/>">
                                     <a class="avatar">
                                         <img src="${comment.getPoster().getProfilePic()}">
                                     </a>
-                                    <div class="content" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getName()}"/></a>
+                                    <div class="content">
+                                        <a class="author" href="wall?uid=${comment.getPoster().getId()}"><c:out value="${comment.getPoster().getName()}"/></a>
                                         <div class="metadata">
                                             <span class="date"><c:out value="${comment.getTimestamp()}"/></span>
                                         </div>
@@ -143,7 +144,7 @@
                                         <div class="comments">
                                             <c:forEach items="${comment.getComments()}" var="subComment">
 
-                                                <div class="comment fb-subcomment" data-id="<c:out value="${subComment.getId()}"/> data-seen="<c:out value="${post.getSeen()}"/>">
+                                                <div class="comment fb-subcomment" data-id="<c:out value="${subComment.getId()}"/>" data-seen="<c:out value="${post.getSeen()}"/>">
                                                     <a class="avatar">
                                                         <img src="${subComment.getPoster().getProfilePic()}">
                                                     </a>
