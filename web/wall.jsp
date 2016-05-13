@@ -77,16 +77,11 @@
                                     
                                 </div>
                                 <div class="actions">
-                                    <!-- TODO: Don't redirect -->
-                                    <form action="?uid=${user}" class="wall_like_post" method="POST" class="ui form">
+                                    <form action="?uid=${user}" method="POST" class="ui form wall_like">
                                         <input type="hidden" name="liked_post_id" value="${post.getId()}">
-                                        <!--<input type="submit" value="" class="like icon">-->
-                                        
                                         <a class="like">
                                             <i class="like icon" onclick="$(this).closest('form').submit();"></i>
-                                            
-                                                <span class="fb-likes"><c:out value="${post.getLikes().size()}"/> like<c:if test="${post.getLikes().size() != 1}">s</c:if></span>
-                                            
+                                            <span class="fb-likes"><c:out value="${post.getLikes().size()}"/> like<c:if test="${post.getLikes().size() != 1}">s</c:if></span>
                                         </a>
                                     </form>
 
@@ -119,13 +114,11 @@
                                         </div>
                                         <div class="actions">
                                             <!-- TODO: Don't redirect -->
-                                            <form action="?uid=${user}" id="wall_like_comment" method="POST" class="ui form">
+                                            <form action="?uid=${user}" method="POST" class="ui form wall_like">
                                                 <input type="hidden" name="liked_post_id" value="${comment.getId()}">
                                                 <a class="like">
                                                     <i class="like icon" onclick="$(this).closest('form').submit();"></i>
-                                                    <c:if test="${not empty comment.getLikes()}">
-                                                        <span class="fb-likes"><c:out value="${comment.getLikes().size()}"/> like<c:if test="${comment.getLikes().size() != 1}">s</c:if></span>
-                                                    </c:if>
+                                                    <span class="fb-likes"><c:out value="${comment.getLikes().size()}"/> like<c:if test="${comment.getLikes().size() != 1}">s</c:if></span>
                                                 </a>
                                             </form>
                                                 
@@ -159,13 +152,11 @@
                                                             
                                                         <div class="actions">
                                                             <!-- TODO: Don't redirect -->
-                                                            <form action="?uid=${user}" id="wall_like_subcomment" method="POST" class="ui form">
+                                                            <form action="?uid=${user}" method="POST" class="ui form wall_like">
                                                                 <input type="hidden" name="liked_post_id" value="${subComment.getId()}">
                                                                 <a class="like">
                                                                     <i class="like icon" onclick="$(this).closest('form').submit();"></i>
-                                                                    <c:if test="${not empty subComment.getLikes()}">
-                                                                        <span class="fb-likes"><c:out value="${subComment.getLikes().size()}"/> like<c:if test="${subComment.getLikes().size() != 1}">s</c:if></span>
-                                                                    </c:if>
+                                                                    <span class="fb-likes"><c:out value="${subComment.getLikes().size()}"/> like<c:if test="${subComment.getLikes().size() != 1}">s</c:if></span>
                                                                 </a>
                                                             </form>
                                                                 
@@ -209,7 +200,7 @@
 
 <script>
     
-    $("form.wall_like_post").submit(function(e){
+    $("form.wall_like").submit(function(e){
     var form = $(this);
     var request = "http://localhost:8080/Fakebook/postlike?liked_post_id=" + form.find("[name='liked_post_id']").val();
                 //console.log(id);
