@@ -22,14 +22,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import static javax.persistence.TemporalType.DATE;
 
-/**
- *
- * @author robin
- */
+
 @Entity
 @NamedQueries({@NamedQuery(name="Posts.getAll",query="SELECT p FROM Post p"),
                @NamedQuery(name="Posts.getOnWall", query="SELECT p FROM Post p WHERE p.wall.id = :uId"),
-               @NamedQuery(name="Posts.getByPoster", query="SELECT p FROM Post p WHERE p.poster.id = :uId")})
+               @NamedQuery(name="Posts.getByPoster", query="SELECT p FROM Post p WHERE p.poster.id = :uId"),
+               @NamedQuery(name="Posts.getWallPostsByPeriod", query="SELECT p FROM Post p WHERE p.wall IS NOT NULL AND p.timestamp BETWEEN :startDate AND :endDate"),
+               @NamedQuery(name="Posts.getCommentsByPeriod", query="SELECT p FROM Post p WHERE p.wall IS NULL AND p.timestamp BETWEEN :startDate AND :endDate")})
 public class Post implements Serializable {
 
     @Id
@@ -66,6 +65,7 @@ public class Post implements Serializable {
     private String video;   // URL of the attached video if there is one
     private String link;    // URL of the link if there is one
     
+    @Temporal(DATE)
     private Date seen; // The time the post was seen by the "wall owner".
     
     // TODO , depending on assignment allow for images/video/...
