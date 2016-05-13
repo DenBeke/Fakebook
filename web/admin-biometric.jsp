@@ -16,7 +16,7 @@
                 
                     labels: [
                     <c:forEach items="${biometric_data}" var="item">
-                            '<c:out value="${item.getTimestamp()}"/>'
+                            '<c:out value="${item.getTimestamp()}"/>',
                     </c:forEach>
                     ],
                     
@@ -26,7 +26,7 @@
                         label: 'Heartrate',
                                 data: [
                                     <c:forEach items="${biometric_data}" var="item">
-                                        '<c:out value="${item.getHeartrate()}"/>'
+                                        <c:out value="${item.getHeartrate()}"/>,
                                     </c:forEach>
                                 ]
                             }]
