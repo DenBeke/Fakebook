@@ -84,7 +84,7 @@ public class AdminBiometric extends HttpServlet {
         List<BiometricData> data = biometricService.getHeartrateData(userId, minTime, maxTime);
         
 
-        //request.setAttribute("onlineUsers", onlineUsers);
+        request.setAttribute("biometric_data", data);
         //request.setAttribute("allUsers", users);
         request.getRequestDispatcher("admin-biometric.jsp").forward(request, response);
         

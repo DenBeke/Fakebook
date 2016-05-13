@@ -15,6 +15,7 @@
         <script src="semantic/semantic.min.js"></script>
         <script src="jquery.rest.min.js"></script>
         <script src="jquery.viewport.js"></script>
+        <script src="Chart.min.js"></script>
         
     </head>
     <body>
