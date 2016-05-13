@@ -5,8 +5,17 @@
             
             <h2 class="ui dividing header">Admin Login</h2>
 
-            <c:if test="${not empty error}"><p style="background: red; color: white;"><b>${error}</b></p></c:if>
-
+            <!--<c:if test="${not empty error}"><p style="background: red; color: white;"><b>${error}</b></p></c:if>-->
+            <c:if test="${not empty error}">
+                <div class="ui negative message">
+                    <div class="header">
+                        Oops, couldn't login
+                    </div>
+                    <p>${error}</p>
+                </div>
+            </c:if>
+            
+            
             <div class="ui three column very relaxed grid">
             
                 <div class="eight wide column">
