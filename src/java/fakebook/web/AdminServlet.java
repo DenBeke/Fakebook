@@ -5,6 +5,7 @@
  */
 package fakebook.web;
 
+import fakebook.business.PostServiceFacadeLocal;
 import fakebook.business.UserServiceFacadeLocal;
 import fakebook.persistence.User;
 import java.io.IOException;
@@ -24,6 +25,9 @@ public class AdminServlet extends HttpServlet {
 
     @EJB
     private UserServiceFacadeLocal userService;
+    
+    @EJB
+    private PostServiceFacadeLocal postService;
 
     
     /**
@@ -60,6 +64,17 @@ public class AdminServlet extends HttpServlet {
             request.getRequestDispatcher("admin-login.jsp").forward(request, response);
             return;
         }
+        
+        
+    
+    request.setAttribute("postCount", postService.getPostCount());
+    
+    request.setAttribute("pictureCount", postService.getPicturePostCount());
+    
+    request.setAttribute("videoCount", postService.getVideoPostCount());
+    
+    request.setAttribute("commentCount", postService.getCommentCount());
+        
         
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
