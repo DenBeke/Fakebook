@@ -16,7 +16,7 @@
                 
                     labels: [
                     <c:forEach items="${biometric_data}" var="item">
-                            '<c:out value="${item.getTimestamp()}"/>',
+                            '<c:out value="${item.getTimestampString()}"/>',
                     </c:forEach>
                     ],
                     

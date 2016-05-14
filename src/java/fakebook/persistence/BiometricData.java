@@ -17,6 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import static javax.persistence.TemporalType.DATE;
+import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
  *
@@ -38,7 +39,7 @@ public class BiometricData implements Serializable {
     
     private Double heartrate;   // The measured heart rate
     
-    @Temporal(DATE)
+    @Temporal(TIMESTAMP)
     private Calendar timestamp; // The time the measurement was taken. 
 
     public BiometricData() {    // Default constructor needed for JAVA EE
@@ -59,6 +60,7 @@ public class BiometricData implements Serializable {
     }
 
     public Double getHeartrate() {
+        System.out.println("HEARTRATE: " + heartrate);
         return heartrate;
     }
 
@@ -68,6 +70,14 @@ public class BiometricData implements Serializable {
 
     public Calendar getTimestamp() {
         return timestamp;
+    }
+    
+    /**
+     * A proper printable String of the timestamp, and not the massive nonsense of the Calendar object
+     * @return 
+     */
+    public String getTimestampString() {
+        return timestamp.get(Calendar.YEAR) + "/" + timestamp.get(Calendar.MONTH) + "/" + timestamp.get(Calendar.DAY_OF_MONTH) + " " + timestamp.get(Calendar.HOUR) + ":" +timestamp.get(Calendar.MINUTE) + ":" + timestamp.get(Calendar.SECOND);
     }
 
     public void setTimestamp(Calendar timestamp) {

@@ -93,6 +93,8 @@ public class BiometricServiceFacade implements BiometricServiceFacadeLocal {
      */
     @Override
     public List<BiometricData> getHeartrateData(long userId, Calendar minTime, Calendar maxTime) {
+        System.out.println("GETTING HEARTRATE DATA");
+        System.out.println(minTime.toString() + " - " + maxTime.toString());
         List<BiometricData> list = em.createNamedQuery("BiometricData.getByUser").setParameter("uid", userId).getResultList();
         List<BiometricData> retList = new ArrayList<>();
         
@@ -101,6 +103,7 @@ public class BiometricServiceFacade implements BiometricServiceFacadeLocal {
                 retList.add(bData);
             }
         }
+        System.out.println("NR OF Values: " + retList.size());
         return retList;
     }
     

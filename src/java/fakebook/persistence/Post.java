@@ -21,6 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import static javax.persistence.TemporalType.DATE;
+import static javax.persistence.TemporalType.TIMESTAMP;
 
 
 @Entity
@@ -61,7 +62,7 @@ public class Post implements Serializable {
     @OneToMany
     private List<Post> comments;  // Comments on this post
     
-    @Temporal(DATE)
+    @Temporal(TIMESTAMP)
     private Date timestamp; // The time the post was posted
     
     private String text;    // The actual post Text
@@ -71,7 +72,7 @@ public class Post implements Serializable {
     private String video;   // URL of the attached video if there is one
     private String link;    // URL of the link if there is one
     
-    @Temporal(DATE)
+    @Temporal(TIMESTAMP)
     private Date seen; // The time the post was seen by the "wall owner".
     
     // TODO , depending on assignment allow for images/video/...
