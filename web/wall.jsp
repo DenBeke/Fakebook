@@ -35,6 +35,10 @@
                     
                     <div class="field">
                         <div class="eyes"></div>
+                        <div class="progress">
+                            <div class="value">
+                            </div>
+                        </div>
                         <textarea name="new_wall_post"></textarea>
                     </div>
                     Attach picture/video: <input type="file" name="attachment" accept="image/bmp, image/png, image/jpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
@@ -244,7 +248,7 @@
     //post = client.add("post");
     
     
-    var cue = "eyes";
+    var cue = "degree";
     
     $( 'form#wall_form' ).keypress(function() {
         
@@ -277,7 +281,8 @@
                             });
                         }
                         else if(cue === "degree") {
-                            
+                            $( 'form#wall_form' ).find('.progress').fadeIn();
+                            $( 'form#wall_form' ).find('.progress .value').height(data.value * 100);
                         }
                         
                     }
