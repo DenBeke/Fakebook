@@ -23,6 +23,8 @@ Script pushes the data of a single day as fast as possible, where the date is se
 python biometricClient <UserId>
 ```
 
+### Requirements
+The project requires the [bullyAnalyzer](https://github.com/verachtertr/BullyAnalyzerJava) 
 
 Acknowledgements
 ----------------
