@@ -241,6 +241,36 @@
 
     //post = client.add("post");
     
+    
+    $( 'form#wall_form' ).keypress(function() {
+        
+        var postContent = $(this).find('textarea').val();
+        //console.log("CLICKED!")
+        //console.log(postContent)
+        $.ajax(
+                {
+                    type:"POST",
+                    contentType: 'text/plain',
+                    dataType: "json",
+                    url:"http://localhost:8080/BullyAnalyzerJava/webresources/analyzer",
+                    data: postContent,
+                    success:function (data){
+                        
+                        console.log(data);
+                        
+                        $( 'form#wall_form' ).find('textarea').highlightTextarea({
+                            //words: ['Lorem ipsum', 'vulputate', 'test']
+                            words: data.profanities
+                        });
+                        
+                    }
+                }
+        )
+        
+})  ;
+    
+    
+    
     $('.text').click(function() {
         var postContent = $(this).text().trim();
         //console.log("CLICKED!")

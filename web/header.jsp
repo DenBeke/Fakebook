@@ -10,12 +10,15 @@
         <link rel="stylesheet" type="text/css" class="ui" href="semantic/semantic.min.css">
         <link rel="stylesheet" type="text/css" class="ui" href="style.css">
         <link rel="stylesheet" type="text/css" class="ui" href="lightbox2/dist/css/lightbox.min.css">
+        <link rel="stylesheet" type="text/css" class="ui" href="jquery.highlighttextarea.min.css">
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="semantic/semantic.min.js"></script>
         <script src="jquery.rest.min.js"></script>
         <script src="jquery.viewport.js"></script>
         <script src="Chart.min.js"></script>
+        <script src="jquery.highlighttextarea.min.js"></script>
+        
         
     </head>
     <body>
