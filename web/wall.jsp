@@ -243,8 +243,8 @@
     
     $('.text').click(function() {
         var postContent = $(this).text().trim();
-        console.log("CLICKED!")
-        console.log(postContent)
+        //console.log("CLICKED!")
+        //console.log(postContent)
         $.ajax(
                 {
                     type:"POST",
@@ -252,17 +252,17 @@
                     dataType: "json",
                     url:"http://localhost:8080/BullyAnalyzerJava/webresources/analyzer",
                     data: postContent,
-                    success:function (response){
-            //alert('I have data: ' + data.Value);
+                    success:function (data){
+            //alert('I have data: ' + data.value);
             
-            console.log("response")
-            console.log(response)
-            console.log("done")
+            //console.log("response")
+            //console.log(data)
+            //console.log("done")
             $.when(function() {
                 
                 /*
                 $('#bully-indicator').progress({
-                    percent: (data.Value * 100)
+                    percent: (data.value * 100)
                 });
                 */
                 
@@ -271,15 +271,15 @@
                 $('#bully-indicator').removeClass("success warning error hidden");
                 $('#bully-sidebar').sidebar('toggle');
                 
-                if(data.Value <= 1 && data.Value > 0.6) {
+                if(data.value <= 1 && data.value > 0.6) {
                     $('#bully-indicator').addClass("error");
                     $('#bully-sidebar span').text("Yes");
                 }
-                if(data.Value <= 0.6 && data.Value > 0.3) {
+                if(data.value <= 0.6 && data.value > 0.3) {
                     $('#bully-indicator').addClass("warning");
                     $('#bully-sidebar span').text("Maybe");
                 }
-                if(data.Value <= 0.3) {
+                if(data.value <= 0.3) {
                     $('#bully-indicator').addClass("success");
                     $('#bully-sidebar span').text("No");
                 }
