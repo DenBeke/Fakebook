@@ -43,6 +43,17 @@ body {
     text-align: center;
     color: #fff; }
 
+.eyes {
+  background-image: url(spy-alarm-on-laptop.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 50px;
+  height: 50px;
+  display: none;
+  position: absolute;
+  left: -55px;
+  top: 0; }
+
 pre {
   font-family: inherit;
   font-size: inherit;

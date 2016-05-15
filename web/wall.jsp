@@ -32,7 +32,9 @@
                 </c:if>
 
                 <form enctype="multipart/form-data" action="?uid=${user}" id="wall_form" method="POST" class="ui form">
+                    
                     <div class="field">
+                        <div class="eyes"></div>
                         <textarea name="new_wall_post"></textarea>
                     </div>
                     Attach picture/video: <input type="file" name="attachment" accept="image/bmp, image/png, image/jpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
@@ -242,6 +244,8 @@
     //post = client.add("post");
     
     
+    var cue = "eyes";
+    
     $( 'form#wall_form' ).keypress(function() {
         
         var postContent = $(this).find('textarea').val();
@@ -258,10 +262,23 @@
                         
                         console.log(data);
                         
-                        $( 'form#wall_form' ).find('textarea').highlightTextarea({
-                            //words: ['Lorem ipsum', 'vulputate', 'test']
-                            words: data.profanities
-                        });
+                        
+                        if(cue === "eyes") {
+                            
+                            if(data.value >= 0.3) {
+                                $( 'form#wall_form .eyes' ).fadeIn();
+                            }
+                            
+                        }
+                        else if(cue === "highlight") {
+                            $( 'form#wall_form' ).find('textarea').highlightTextarea({
+                                //words: ['Lorem ipsum', 'vulputate', 'test']
+                                words: data.profanities
+                            });
+                        }
+                        else if(cue === "degree") {
+                            
+                        }
                         
                     }
                 }
