@@ -252,9 +252,9 @@
     
     $( 'form#wall_form' ).keypress(function() {
         
-        var postContent = $(this).find('textarea').val();
-        //console.log("CLICKED!")
-        //console.log(postContent)
+        var form = $(this);
+        var postContent = form.find('textarea').val();
+
         $.ajax(
                 {
                     type:"POST",
@@ -270,21 +270,21 @@
                         if(cue === "eyes") {
                             
                             if(data.value >= 0.3) {
-                                $( 'form#wall_form .eyes' ).fadeIn();
+                                form.find('.eyes' ).fadeIn();
                             }
                             
                         }
                         else if(cue === "highlight") {
-                            $( 'form#wall_form' ).find('textarea').highlightTextarea({
+                            form.find('textarea').highlightTextarea({
                                 //words: ['Lorem ipsum', 'vulputate', 'test']
                                 words: data.profanities
                             });
                         }
                         else if(cue === "degree") {
                             if(data.value >= 0.3) {
-                                $( 'form#wall_form' ).find('.progress').fadeIn();
+                                form.find('.progress').fadeIn();
                             }
-                            $( 'form#wall_form' ).find('.progress .value').height(data.value * 100);
+                            form.find('.progress .value').height(data.value * 100);
                         }
                         
                     }
