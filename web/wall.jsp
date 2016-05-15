@@ -43,6 +43,7 @@
                     </div>
                     Attach picture/video: <input type="file" name="attachment" accept="image/bmp, image/png, image/jpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
                     <input type="hidden" name="wall_user_id" value="${user}">
+                    <input type="hidden" name="cue" value="degree">
                     <input type="submit" value="Write on wall" class="ui teal button">
                 </form>
 
@@ -248,8 +249,6 @@
     //post = client.add("post");
     
     
-    var cue = "degree";
-    
     $( 'form#wall_form' ).keypress(function() {
         
         var form = $(this);
@@ -265,6 +264,10 @@
                     success:function (data){
                         
                         console.log(data);
+                        
+                        var cue = form.find("[name='cue']").val();
+                        
+                        console.log(cue);
                         
                         
                         if(cue === "eyes") {

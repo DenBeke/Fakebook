@@ -88,7 +88,8 @@ public class WallServlet extends HttpServlet {
                     // Check for new wall post form
                     if(request.getParameter("new_wall_post") != null) {
                         String postContents = request.getParameter("new_wall_post").trim();
-                        Post post = new Post(currentUser, user, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), postContents);
+                        String cue = request.getParameter("cue");
+                        Post post = new Post(currentUser, user, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), postContents, cue);
                         
                         final Part attachment = request.getPart("attachment");
                         if (attachment != null && !attachment.getSubmittedFileName().isEmpty()) {
@@ -136,7 +137,9 @@ public class WallServlet extends HttpServlet {
                         String newComment = request.getParameter("new_comment");
                         String parentPostId = request.getParameter("parent_post_id");
                         
-                        wallService.addComment(currentUser, parentPostId, newComment);
+                        
+                        String cue = request.getParameter("cue");
+                        wallService.addComment(currentUser, parentPostId, newComment, cue);
                     }
 
                     // Check for new likes

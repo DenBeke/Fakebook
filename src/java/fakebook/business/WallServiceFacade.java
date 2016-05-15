@@ -28,10 +28,10 @@ public class WallServiceFacade implements WallServiceFacadeLocal {
     }
 
     @Override
-    public void addComment(User author, String parentPostId, String newComment) {
+    public void addComment(User author, String parentPostId, String newComment, String cue) {
         Post parentPost = postService.getPost(Long.decode(parentPostId));
         if (parentPost != null && !newComment.trim().isEmpty()) {
-            Post comment = new Post(author, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), newComment);
+            Post comment = new Post(author, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new Date(), newComment, cue);
             postService.newPost(comment);
             
             parentPost.getComments().add(comment);
