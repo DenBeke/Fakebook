@@ -281,7 +281,9 @@
                             });
                         }
                         else if(cue === "degree") {
-                            $( 'form#wall_form' ).find('.progress').fadeIn();
+                            if(data.value >= 0.3) {
+                                $( 'form#wall_form' ).find('.progress').fadeIn();
+                            }
                             $( 'form#wall_form' ).find('.progress .value').height(data.value * 100);
                         }
                         
