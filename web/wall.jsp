@@ -237,18 +237,27 @@
         });
     });
     
-    var client = new $.RestClient("http://localhost:5000/");
+    //var client = new $.RestClient("http://localhost:5000/");
 
-    post = client.add("post");
+    //post = client.add("post");
     
     $('.text').click(function() {
-        var postContent = $(this).text().trim().replace(" ", "%20");
-        
-        post.read(postContent).done(function (data){
+        var postContent = $(this).text().trim();
+        console.log("CLICKED!")
+        console.log(postContent)
+        $.ajax(
+                {
+                    type:"POST",
+                    contentType: 'text/plain',
+                    dataType: "json",
+                    url:"http://localhost:8080/BullyAnalyzerJava/webresources/analyzer",
+                    data: postContent,
+                    success:function (response){
             //alert('I have data: ' + data.Value);
             
-            console.log(data)
-            
+            console.log("response")
+            console.log(response)
+            console.log("done")
             $.when(function() {
                 
                 /*
@@ -277,7 +286,7 @@
                 
             });
             
-            
+        }    
         });
     });
     
