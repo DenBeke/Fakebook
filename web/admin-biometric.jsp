@@ -2,6 +2,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         
         <div class="ui container">
+            
+            
+            <jsp:include page="admin-header.jsp" />
+            
+            
             <h2>Biometric</h2>
             
             

@@ -2,7 +2,8 @@ Fakebook
 ========
 
 Deployment
---
+----------
+
 ### Fakebook
 To run the application, import the project into netbeans and press run.
 
@@ -21,3 +22,20 @@ Script pushes the data of a single day as fast as possible, where the date is se
 ```
 python biometricClient <UserId>
 ```
+
+
+Acknowledgements
+----------------
+
+* SemanticUI
+* ChartJS
+* jQuery
+* jQuery Viewport selectors
+
+
+Authors
+-------
+
+* Mathias Beke
+* Robin Verachtert
+* Bruno Van de Velde

@@ -2,6 +2,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         
         <div class="ui container">
+            
+            
+            <jsp:include page="admin-header.jsp" />
+            
+            
             <h2>Users</h2>
             <h3>Create new users</h3>
             <c:if test="${not empty error}"><p style="background: red; color: white;"><b>${error}</b></p></c:if>

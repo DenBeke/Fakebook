@@ -8,6 +8,7 @@ package fakebook.web;
 import fakebook.business.PostServiceFacadeLocal;
 import fakebook.business.UserServiceFacadeLocal;
 import fakebook.persistence.Post;
+import fakebook.persistence.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -25,6 +26,9 @@ public class PostSeen extends HttpServlet {
     @EJB
     private PostServiceFacadeLocal postService;
     
+    @EJB
+    private UserServiceFacadeLocal userService;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,10 +43,18 @@ public class PostSeen extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            
+
             if(request.getParameter("post") == null) {
                 return;
             }
+            
+            Long currentUserId = (Long) (request.getSession().getAttribute("currentUser"));
+            if (currentUserId == null || userService.getUser(currentUserId) == null) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            User currentUser = userService.getUser(currentUserId);
             
             Long id = Long.parseLong(request.getParameter("post"));
             Long timestamp = Long.parseLong(request.getParameter("date"));
@@ -50,6 +62,11 @@ public class PostSeen extends HttpServlet {
             java.util.Date time = new java.util.Date(timestamp*1000);
             
             Post post = postService.getPost(id);
+            
+            if(!post.getWall().getId().equals(currentUser.getId())) {
+                return;
+            }
+            
             post.setSeen(time);
             postService.updatePost(post);
             
