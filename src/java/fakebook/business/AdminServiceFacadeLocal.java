@@ -5,6 +5,7 @@
  */
 package fakebook.business;
 
+import fakebook.persistence.Post;
 import fakebook.persistence.User;
 import java.util.List;
 import java.util.Set;
@@ -21,4 +22,6 @@ public interface AdminServiceFacadeLocal {
     public String createUser(String email, String password, String firstName, String lastName, String gender, String birthday, Boolean admin);
 
     public void deleteUser(long userId);
+    
+    public List<Post> getAllPosts();
 }

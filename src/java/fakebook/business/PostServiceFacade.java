@@ -52,6 +52,11 @@ public class PostServiceFacade implements PostServiceFacadeLocal {
     }
     
     @Override
+    public List<Post> getAllWallPosts() {
+        return em.createNamedQuery("Posts.getAllWallPosts").getResultList();
+    }
+    
+    @Override
     public List<Post> getPostsOnWall(long userId) {
         return em.createNamedQuery("Posts.getOnWall").setParameter("uId", userId).getResultList();
     }

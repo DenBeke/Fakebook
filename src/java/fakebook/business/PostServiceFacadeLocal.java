@@ -43,10 +43,16 @@ public interface PostServiceFacadeLocal {
     public Post getPost(long pId);
     
     /**
-     * Returns a list containing all posts
+     * Returns a list containing all posts including comments
      * @return 
      */
     public List<Post> getAllPosts();
+    
+    /**
+     * Returns a list containing all posts but not comments
+     * @return 
+     */
+    public List<Post> getAllWallPosts();
     
     /**
      * Return all posts on the wall of a single user.

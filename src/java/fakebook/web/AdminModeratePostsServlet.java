@@ -5,47 +5,31 @@
  */
 package fakebook.web;
 
-import fakebook.business.AdminServiceFacadeLocal;
-import fakebook.business.BiometricServiceFacadeLocal;
-import fakebook.business.PostServiceFacadeLocal;
 import fakebook.business.UserServiceFacadeLocal;
-import fakebook.persistence.BiometricData;
-import fakebook.persistence.Post;
-import fakebook.persistence.User;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import fakebook.business.AdminServiceFacadeLocal;
+import fakebook.persistence.Post;
 
 /**
  *
- * @author Mathias
+ * @author texus
  */
-@WebServlet(name = "AdminBiometric", urlPatterns = {"/admin-biometric"})
-public class AdminBiometric extends HttpServlet {
+@WebServlet(name = "AdminModeratePosts", urlPatterns = {"/admin-posts"})
+public class AdminModeratePostsServlet extends HttpServlet {
 
-    
     @EJB
     private UserServiceFacadeLocal userService;
-    
-    @EJB
-    private PostServiceFacadeLocal postService;
-    
+
     @EJB
     private AdminServiceFacadeLocal adminService;
-    
-    @EJB
-    private BiometricServiceFacadeLocal biometricService;
-    
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -55,9 +39,8 @@ public class AdminBiometric extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         // Redirect user to admin login page when not logged in or not an admin
         Long currentUserId = (Long)request.getSession().getAttribute("currentUser");
         if (currentUserId == null || userService.getUser(currentUserId) == null) {
@@ -69,33 +52,12 @@ public class AdminBiometric extends HttpServlet {
             request.getRequestDispatcher("admin-login.jsp").forward(request, response);
             return;
         }
-        
-        if (request.getParameter("post") != null) {
-            Long postId = Long.parseLong( request.getParameter("post") );
 
-            Post post = postService.getPost(postId);
-            if (post != null && post.getWall() != null && post.getSeen() != null) {
-                long userId = post.getWall().getId();
-                Calendar minTime = DateToCalendar(post.getSeen());
-                minTime.add(Calendar.SECOND, -10);
-                Calendar maxTime = DateToCalendar(post.getSeen());
-                maxTime.add(Calendar.SECOND, 10);
-
-                List<BiometricData> data = biometricService.getHeartrateData(userId, minTime, maxTime);
-                request.setAttribute("biometric_data", data);
-            }
-        }
-
-        request.getRequestDispatcher("admin-biometric.jsp").forward(request, response);
-        
+        List<Post> posts = adminService.getAllPosts();
+        request.setAttribute("posts", posts);
+        request.getRequestDispatcher("admin-posts.jsp").forward(request, response);
     }
     
-    public static Calendar DateToCalendar(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal;
-    }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -132,7 +94,7 @@ public class AdminBiometric extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Admin Moderate Posts Servlet";
     }// </editor-fold>
 
 }
