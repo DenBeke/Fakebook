@@ -40,13 +40,12 @@
                             </div>
                         </div>
                         <div class="of-words">
-                            <span>Magna</span> <span>Sit</span> <span>Ultricies<span> <span>Quam</span>
                         </div>
                         <textarea name="new_wall_post"></textarea>
                     </div>
                     Attach picture/video: <input type="file" name="attachment" accept="image/bmp, image/png, image/jpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
                     <input type="hidden" name="wall_user_id" value="${user}">
-                    <input type="hidden" name="cue" value="degree">
+                    <input type="hidden" name="cue" value="highlight">
                     <input type="submit" value="Write on wall" class="ui teal button">
                 </form>
 
@@ -266,11 +265,12 @@
                     data: postContent,
                     success:function (data){
                         
+                        console.log(postContent);
                         console.log(data);
                         
                         var cue = form.find("[name='cue']").val();
                         
-                        console.log(cue);
+                        //console.log(cue);
                         
                         
                         if(cue === "eyes") {
@@ -281,10 +281,10 @@
                             
                         }
                         else if(cue === "highlight") {
-                            form.find('textarea').highlightTextarea({
-                                //words: ['Lorem ipsum', 'vulputate', 'test']
-                                words: data.profanities
-                            });
+                            form.find(".of-words").html("");
+                            data.profanities.forEach(function(entry) {
+                                form.find(".of-words").append("<span>" + entry + "</span>");
+}                           );
                         }
                         else if(cue === "degree") {
                             if(data.value >= 0.3) {
