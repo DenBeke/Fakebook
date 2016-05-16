@@ -10,7 +10,7 @@
                 <i class="users icon"></i> Manage users
             </a>
             <a class="item" href="admin-posts">
-               <i class="comments outline icon"></i> Moderate posts
+               <i class="comments outline icon"></i> Analyze posts
             </a>
             <a class="item">
                 <i class="area chart icon"></i> Biometric data
