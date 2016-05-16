@@ -333,8 +333,9 @@
     
     
     
-    $('.text').click(function() {
+    $('.text pre').click(function(event) {
         var postContent = $(this).text().trim();
+        
         //console.log("CLICKED!")
         //console.log(postContent)
         $.ajax(
