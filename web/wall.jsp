@@ -45,7 +45,7 @@
                     </div>
                     Attach picture/video: <input type="file" name="attachment" accept="image/bmp, image/png, image/jpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
                     <input type="hidden" name="wall_user_id" value="${user}">
-                    <input type="hidden" name="cue" value="highlight">
+                    <input type="hidden" name="cue" value="">
                     <input type="submit" value="Write on wall" class="ui teal button">
                 </form>
 
@@ -249,6 +249,14 @@
     //var client = new $.RestClient("http://localhost:5000/");
 
     //post = client.add("post");
+    
+    
+    $("[name='cue']").each(function(){
+        
+        var cue = ['eyes', 'highlight', 'degree'][Math.floor(Math.random() * 3)];
+        $(this).val(cue);
+        
+    });
     
     
     $( 'form#wall_form' ).keypress(function() {
