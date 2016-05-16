@@ -70,22 +70,22 @@ public class AdminBiometric extends HttpServlet {
             return;
         }
         
-        
-        Long postId = Long.parseLong( request.getParameter("post") );
-        
-        Post post = postService.getPost(postId);
-        
-        long userId = post.getWall().getId();
-        Calendar minTime = DateToCalendar(post.getSeen());
-        minTime.add(Calendar.SECOND, -10);
-        Calendar maxTime = DateToCalendar(post.getSeen());
-        maxTime.add(Calendar.SECOND, 10);
-        
-        List<BiometricData> data = biometricService.getHeartrateData(userId, minTime, maxTime);
-        
+        if (request.getParameter("post") != null) {
+            Long postId = Long.parseLong( request.getParameter("post") );
 
-        request.setAttribute("biometric_data", data);
-        //request.setAttribute("allUsers", users);
+            Post post = postService.getPost(postId);
+            if (post != null && post.getWall() != null && post.getSeen() != null) {
+                long userId = post.getWall().getId();
+                Calendar minTime = DateToCalendar(post.getSeen());
+                minTime.add(Calendar.SECOND, -10);
+                Calendar maxTime = DateToCalendar(post.getSeen());
+                maxTime.add(Calendar.SECOND, 10);
+
+                List<BiometricData> data = biometricService.getHeartrateData(userId, minTime, maxTime);
+                request.setAttribute("biometric_data", data);
+            }
+        }
+
         request.getRequestDispatcher("admin-biometric.jsp").forward(request, response);
         
     }
