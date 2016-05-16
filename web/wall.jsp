@@ -283,7 +283,7 @@
     });
     
     
-    $( 'form#wall_form, form.reply-form' ).keypress(function() {
+    $( 'form#wall_form, form.reply-form' ).on("keyup", function() {
         
         var form = $(this);
         var postContent = form.find('textarea').val();
