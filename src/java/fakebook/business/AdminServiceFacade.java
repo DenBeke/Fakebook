@@ -5,7 +5,10 @@
  */
 package fakebook.business;
 
+import fakebook.persistence.Post;
 import fakebook.persistence.User;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +30,9 @@ public class AdminServiceFacade implements AdminServiceFacadeLocal, HttpSessionL
 
     @EJB
     private UserServiceFacadeLocal userService;
+    
+    @EJB
+    private PostServiceFacadeLocal postService;
     
     @EJB
     private RegisterServiceFacadeLocal registerService;
@@ -103,5 +109,19 @@ public class AdminServiceFacade implements AdminServiceFacadeLocal, HttpSessionL
     @Override
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @Override
+    public List<Post> getAllPosts() {
+        List<Post> posts = postService.getAllWallPosts();
+        
+        // Sort the posts based on their creation time (newest first)
+        Collections.sort(posts, new Comparator<Post>() {
+            public int compare(Post post1, Post post2) {
+                return post2.getTimestamp().compareTo(post1.getTimestamp());
+            }
+        });
+        
+        return posts;
     }
 }

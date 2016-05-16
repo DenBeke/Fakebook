@@ -20,12 +20,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
-import static javax.persistence.TemporalType.DATE;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 
 @Entity
 @NamedQueries({@NamedQuery(name="Posts.getAll",query="SELECT p FROM Post p"),
+               @NamedQuery(name="Posts.getAllWallPosts",query="SELECT p FROM Post p WHERE p.wall IS NOT NULL"),
                @NamedQuery(name="Posts.getOnWall", query="SELECT p FROM Post p WHERE p.wall.id = :uId"),
                @NamedQuery(name="Posts.getByPoster", query="SELECT p FROM Post p WHERE p.poster.id = :uId"),
                @NamedQuery(name="Posts.getWallPostsByPeriod", query="SELECT p FROM Post p WHERE p.wall IS NOT NULL AND p.timestamp BETWEEN :startDate AND :endDate"),
@@ -42,7 +42,7 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @ManyToOne 
+    @ManyToOne
     private User poster;  // The poster who posted the post
     @ManyToOne
     private User wall;    // The user on whose wall it will be posted, not necessarily the same as poster.
@@ -76,8 +76,6 @@ public class Post implements Serializable {
     
     @Temporal(TIMESTAMP)
     private Date seen; // The time the post was seen by the "wall owner".
-    
-    // TODO , depending on assignment allow for images/video/...
 
     /**
      * Empty Creator needed for Java EE.
