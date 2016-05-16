@@ -1,13 +1,15 @@
 <jsp:include page="header.jsp" />
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         
+        <jsp:include page="admin-header.jsp" />
+
         <div class="ui container">
 
             <h2 class="ui dividing header">Moderate posts</h2>
 
             <c:if test="${empty posts}"><p>There are no posts in the system yet.</p></c:if>
 
-            <div class="ui comments">
+            <div class="ui comments admin-posts">
                 <c:forEach items="${posts}" var="post">
 
                     <div class="comment fb-post" data-id="<c:out value="${post.getId()}"/>" data-seen="<c:out value="${post.getSeen()}"/>">
@@ -38,8 +40,27 @@
                                 </c:if>
                             </div>
                                 <c:if test="${not empty post.getCue()}">
-                                    Cue: <c:out value="${post.getCue()}"/><br>
-                                    <a href="admin-biometric?post=${post.getId()}">View biometric data</a>
+                                    <div class="ui label">
+                                        <i class="flag icon"></i>
+                                        Cue
+                                        <a class="detail"><c:out value="${post.getCue()}"/></a>
+                                    </div> 
+                                </c:if>
+                                    
+                                    <div class="ui label">
+                                        <i class="warning sign icon"></i>
+                                        Offensiveness
+                                        <a class="detail offensiveness-field"> 0%</a>
+                                    </div>
+                                    
+                                    
+                                <c:if test="${not empty post.getCue()}">
+                                    <a href="admin-biometric?post=${post.getId()}" class="">
+                                        <div class="ui label teal">
+                                            <i class="area chart icon"></i>
+                                            View biometric data
+                                        </div>
+                                    </a>
                                 </c:if>
                             <div class="actions">
                             </div>
@@ -60,11 +81,32 @@
                                     <div class="text">
                                         <pre><c:out value="${comment.getText()}"/></pre>
                                     </div>
-                                    <div class="actions">
+                                    
                                         <c:if test="${not empty comment.getCue()}">
-                                            Cue: <c:out value="${comment.getCue()}"/><br>
-                                            <a href="admin-biometric?post=${comment.getId()}">View biometric data</a>
+                                            <div class="ui label">
+                                                <i class="flag icon"></i>
+                                                Cue
+                                                <a class="detail"><c:out value="${comment.getCue()}"/></a>
+                                            </div> 
                                         </c:if>
+
+                                        <div class="ui label">
+                                            <i class="warning sign icon"></i>
+                                            Offensiveness
+                                            <a class="detail offensiveness-field"> 0%</a>
+                                        </div>
+
+
+                                        <c:if test="${not empty comment.getCue()}">
+                                            <a href="admin-biometric?post=${comment.getId()}" class="">
+                                                <div class="ui label teal">
+                                                    <i class="area chart icon"></i>
+                                                    View biometric data
+                                                </div>
+                                            </a>
+                                        </c:if>
+                                    
+                                    <div class="actions">
                                     </div>
                                 </div>
 
@@ -85,12 +127,31 @@
                                                         <pre><c:out value="${subComment.getText()}"/></pre>
                                                     </div>
 
-                                                    <div class="actions">
+                                                    
                                                         <c:if test="${not empty subComment.getCue()}">
-                                                            Cue: <c:out value="${subComment.getCue()}"/><br>
-                                                            <a href="admin-biometric?post=${subComment.getId()}">View biometric data</a>
+                                                            <div class="ui label">
+                                                                <i class="flag icon"></i>
+                                                                Cue
+                                                                <a class="detail"><c:out value="${subComment.getCue()}"/></a>
+                                                            </div> 
                                                         </c:if>
-                                                    </div>
+
+                                                        <div class="ui label">
+                                                            <i class="warning sign icon"></i>
+                                                            Offensiveness
+                                                            <a class="detail offensiveness-field"> 0%</a>
+                                                        </div>
+
+
+                                                        <c:if test="${not empty subComment.getCue()}">
+                                                            <a href="admin-biometric?post=${subComment.getId()}" class="">
+                                                                <div class="ui label teal">
+                                                                    <i class="area chart icon"></i>
+                                                                    View biometric data
+                                                                </div>
+                                                            </a>
+                                                        </c:if>
+                                                    
                                                 </div>
 
                                             </div>
@@ -116,5 +177,36 @@
             </div>
 
         </div>
+            
+            
+            <script>
+                
+                var bullyAnalyzerUrl = "http://localhost:8080/BullyAnalyzerJava/webresources/analyzer"
+                
+                $(".offensiveness-field").each(function(){
+        
+                    var field = $(this);
+                    var postContent = field.parent().prevAll('.text').text();
+                    
+                    
+                    $.ajax(
+                            {
+                                type:"POST",
+                                contentType: 'text/plain',
+                                dataType: "json",
+                                url:bullyAnalyzerUrl,
+                                data: postContent,
+                                success:function (data){
+                                    
+                                    field.html(data.value * 100 + "%");
+                                    
+                            }
+                        }
+                    )
+        
+                });
+                
+            </script>
+            
 
 <jsp:include page="footer.jsp" />

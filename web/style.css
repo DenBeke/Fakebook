@@ -102,4 +102,7 @@ pre {
   margin-top: -20px;
   background-color: #e74c3c; }
 
+.admin-posts img {
+  max-width: 300px !important; }
+
 /*# sourceMappingURL=style.css.map */
