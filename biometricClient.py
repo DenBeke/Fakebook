@@ -45,7 +45,7 @@ if __name__ == "__main__":
 			for line in bioData.readlines():
 				date = datetime.today()
 				time = date.strftime("%H:%M:%S")
-				parts = line.split("2015-01-01T")
+				parts = line.split("\"date_time\":\"2015-01-01T")
 				t = parts[1]
 				t = t[:8]
 				if not sending:
