@@ -106,7 +106,7 @@
                                         <div class="ui label">
                                             <i class="eye sign icon"></i>
                                             Seen
-                                            <a class="detail"><c:out value="${post.getSeen()}"/></a>
+                                            <a class="detail"><c:out value="${comment.getSeen()}"/></a>
                                         </div>
 
 
@@ -159,7 +159,7 @@
                                                         <div class="ui label">
                                                             <i class="eye sign icon"></i>
                                                             Seen
-                                                            <a class="detail"><c:out value="${post.getSeen()}"/></a>
+                                                            <a class="detail"><c:out value="${subComment.getSeen()}"/></a>
                                                         </div>
 
 
