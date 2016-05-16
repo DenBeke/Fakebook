@@ -95,11 +95,19 @@
                                     </form>
 
                                     <a class="reply" onclick="if ($(this).next('form').is(':hidden')) { $(this).next('form').show() } else { $(this).next('form').hide(); }">Reply</a>
-                                    <form action="?uid=${user}" method="POST" class="ui form" hidden>
+                                    <form action="?uid=${user}" method="POST" class="reply-form ui form" hidden>
                                         <div class="field">
+                                            <div class="eyes"></div>
+                                                    <div class="progress">
+                                                        <div class="value">
+                                                        </div>
+                                                    </div>
+                                                    <div class="of-words">
+                                                    </div>
                                             <textarea name="new_comment"></textarea>
                                         </div>
                                         <input type="hidden" name="parent_post_id" value="${post.getId()}">
+                                        <input type="hidden" name="cue" value="">
                                         <input type="submit" value="Post comment" class="ui teal button">
                                     </form>
                                 </div>
@@ -132,11 +140,19 @@
                                             </form>
                                                 
                                             <a class="reply" onclick="if ($(this).next('form').is(':hidden')) { $(this).next('form').show() } else { $(this).next('form').hide(); }">Reply</a>
-                                            <form action="?uid=${user}" method="POST" class="ui form" hidden>
+                                            <form action="?uid=${user}" method="POST" class="reply-form ui form" hidden>
                                                 <div class="field">
+                                                    <div class="eyes"></div>
+                                                    <div class="progress">
+                                                        <div class="value">
+                                                        </div>
+                                                    </div>
+                                                    <div class="of-words">
+                                                    </div>
                                                     <textarea name="new_comment"></textarea>
                                                 </div>
                                                 <input type="hidden" name="parent_post_id" value="${comment.getId()}">
+                                                <input type="hidden" name="cue" value="">
                                                 <input type="submit" value="Post comment" class="ui teal button">
                                             </form>
                                         </div>
@@ -170,11 +186,19 @@
                                                             </form>
                                                                 
                                                             <a class="reply" onclick="if ($(this).next('form').is(':hidden')) { $(this).next('form').show() } else { $(this).next('form').hide(); }">Reply</a>
-                                                            <form action="?uid=${user}" method="POST" class="ui form" hidden>
+                                                            <form action="?uid=${user}" method="POST" class="reply-form ui form" hidden>
                                                                 <div class="field">
+                                                                    <div class="eyes"></div>
+                                                                    <div class="progress">
+                                                                        <div class="value">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="of-words">
+                                                                    </div>
                                                                     <textarea name="new_comment"></textarea>
                                                                 </div>
                                                                 <input type="hidden" name="parent_post_id" value="${comment.getId()}"> <!-- "comment" instead of "subComment" because you can't comment on the subcomment itself -->
+                                                                <input type="hidden" name="cue" value="">
                                                                 <input type="submit" value="Post comment" class="ui teal button">
                                                             </form>
                                                         </div>
@@ -259,7 +283,7 @@
     });
     
     
-    $( 'form#wall_form' ).keypress(function() {
+    $( 'form#wall_form, form.reply-form' ).keypress(function() {
         
         var form = $(this);
         var postContent = form.find('textarea').val();
@@ -278,7 +302,7 @@
                         
                         var cue = form.find("[name='cue']").val();
                         
-                        //console.log(cue);
+                        console.log(cue);
                         
                         
                         if(cue === "eyes") {
