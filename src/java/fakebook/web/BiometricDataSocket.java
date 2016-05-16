@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fakebook.representation;
+package fakebook.web;
 
 import fakebook.business.BiometricServiceFacadeLocal;
 import java.io.StringReader;
