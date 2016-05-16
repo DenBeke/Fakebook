@@ -209,7 +209,7 @@
 
 
 <script>
-    
+    var bullyAnalyzerUrl = "http://localhost:8080/BullyAnalyzerJava/webresources/analyzer"
     $("form.wall_like").submit(function(e){
     var form = $(this);
     var request = "http://localhost:8080/Fakebook/postlike?liked_post_id=" + form.find("[name='liked_post_id']").val();
@@ -262,7 +262,7 @@
                     type:"POST",
                     contentType: 'text/plain',
                     dataType: "json",
-                    url:"http://localhost:8080/BullyAnalyzerJava/webresources/analyzer",
+                    url:bullyAnalyzerUrl,
                     data: postContent,
                     success:function (data){
                         
@@ -310,7 +310,7 @@
                     type:"POST",
                     contentType: 'text/plain',
                     dataType: "json",
-                    url:"http://localhost:8080/BullyAnalyzerJava/webresources/analyzer",
+                    url:bullyAnalyzerUrl,
                     data: postContent,
                     success:function (data){
             //alert('I have data: ' + data.value);
