@@ -2,6 +2,13 @@ from websocket import create_connection
 from datetime import datetime
 import sys
 from time import sleep
+
+# The URL With which we will connect:
+socketUrl = "ws://localhost:8080/Fakebook/BiometricDataEndpoint"
+# The file we use to upload the data:
+fileName = 'data/heart-rate.json'
+
+
 """
 Takes a json String and looks for the date field and changes it to the current date.
 """
@@ -13,6 +20,9 @@ def changeToCorrectDate(jsonString):
 	jsonString = jsonString.replace("2015-01-01", yearString)
 	return jsonString
 
+"""
+Sets the correct user ID
+"""
 def setUser(jsonString,userId):
 	pos = jsonString.find("joe")
 	jsonString = jsonString.replace("\"joe\"", str(userId))
@@ -22,12 +32,12 @@ def setUser(jsonString,userId):
 
 if __name__ == "__main__":
 
-	with open('data/heart-rate.json', 'r') as bioData:
-		ws = create_connection("ws://localhost:8080/Fakebook/BiometricDataEndpoint")
+	with open(fileName, 'r') as bioData:
+		ws = create_connection(socketUrl)	# Open a websocket conneciton
 		realTime = False
 		userId = 1
-		if len(sys.argv) == 2:
-			userId = int(sys.argv[1])
+		if len(sys.argv) >= 2:
+			userId = int(sys.argv[1])		# Reads the userid from the terminal params.
 		elif len(sys.argv) == 3:
 			realTime = (sys.argv[2]=="--realtime")
 			print realTime
@@ -48,16 +58,14 @@ if __name__ == "__main__":
 				parts = line.split("\"date_time\":\"2015-01-01T")
 				t = parts[1]
 				t = t[:8]
+				# Keep looping until we come to current time.
 				if not sending:
 					if t >= time:
 						print "start sending"
 						sending = True
 
 				if sending:
-					print "Sending data"
 					# send data.
-					# get time.
-
 					print t + " <-> " + time
 					while time < t:
 						print "waiting for " + t + "With time = " + time
