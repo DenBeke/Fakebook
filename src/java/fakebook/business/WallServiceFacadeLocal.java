@@ -16,7 +16,7 @@ public interface WallServiceFacadeLocal {
 
     public void addPost(Post post);
 
-    public void addComment(User author, String parentPostId, String newComment);
+    public void addComment(User author, String parentPostId, String newComment, String cue);
 
     public void addLike(User user, String postId);
 

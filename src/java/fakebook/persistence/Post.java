@@ -72,6 +72,8 @@ public class Post implements Serializable {
     private String video;   // URL of the attached video if there is one
     private String link;    // URL of the link if there is one
     
+    private String cue; // The offensivness 'cue'
+    
     @Temporal(TIMESTAMP)
     private Date seen; // The time the post was seen by the "wall owner".
     
@@ -92,8 +94,9 @@ public class Post implements Serializable {
      * @param likes
      * @param timestamp
      * @param text
+     * @param cue
      */
-    public Post(User poster, User wall, List<User> mentioned, List<Post> comments, List<User> likes, Date timestamp, String text) {
+    public Post(User poster, User wall, List<User> mentioned, List<Post> comments, List<User> likes, Date timestamp, String text, String cue) {
         this.poster = poster;
         this.wall = wall;
         this.mentioned = mentioned;
@@ -101,6 +104,7 @@ public class Post implements Serializable {
         this.likes = likes;
         this.timestamp = timestamp;
         this.text = text;
+        this.cue = cue;
     }        
 
     public Long getId() {
@@ -204,6 +208,14 @@ public class Post implements Serializable {
     
     public void setSeen(Date date) {
         this.seen = date;
+    }
+    
+    public void setCue(String c) {
+        this.cue = c;
+    }
+    
+    public String getCue() {
+        return this.cue;
     }
     
     @Override

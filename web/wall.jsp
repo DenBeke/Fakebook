@@ -39,10 +39,14 @@
                             <div class="value">
                             </div>
                         </div>
+                        <div class="of-words">
+                            <span>Magna</span> <span>Sit</span> <span>Ultricies<span> <span>Quam</span>
+                        </div>
                         <textarea name="new_wall_post"></textarea>
                     </div>
                     Attach picture/video: <input type="file" name="attachment" accept="image/bmp, image/png, image/jpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
                     <input type="hidden" name="wall_user_id" value="${user}">
+                    <input type="hidden" name="cue" value="degree">
                     <input type="submit" value="Write on wall" class="ui teal button">
                 </form>
 
@@ -248,13 +252,11 @@
     //post = client.add("post");
     
     
-    var cue = "degree";
-    
     $( 'form#wall_form' ).keypress(function() {
         
-        var postContent = $(this).find('textarea').val();
-        //console.log("CLICKED!")
-        //console.log(postContent)
+        var form = $(this);
+        var postContent = form.find('textarea').val();
+
         $.ajax(
                 {
                     type:"POST",
@@ -266,25 +268,29 @@
                         
                         console.log(data);
                         
+                        var cue = form.find("[name='cue']").val();
+                        
+                        console.log(cue);
+                        
                         
                         if(cue === "eyes") {
                             
                             if(data.value >= 0.3) {
-                                $( 'form#wall_form .eyes' ).fadeIn();
+                                form.find('.eyes' ).fadeIn();
                             }
                             
                         }
                         else if(cue === "highlight") {
-                            $( 'form#wall_form' ).find('textarea').highlightTextarea({
+                            form.find('textarea').highlightTextarea({
                                 //words: ['Lorem ipsum', 'vulputate', 'test']
                                 words: data.profanities
                             });
                         }
                         else if(cue === "degree") {
                             if(data.value >= 0.3) {
-                                $( 'form#wall_form' ).find('.progress').fadeIn();
+                                form.find('.progress').fadeIn();
                             }
-                            $( 'form#wall_form' ).find('.progress .value').height(data.value * 100);
+                            form.find('.progress .value').height(data.value * 100);
                         }
                         
                     }

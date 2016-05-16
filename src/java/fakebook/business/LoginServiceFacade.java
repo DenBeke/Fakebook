@@ -239,7 +239,7 @@ public class LoginServiceFacade implements LoginServiceFacadeLocal {
                                             continue;
                                         }
 
-                                        Post subcomment = new Post(subCommentPoster, null, new ArrayList<>(), new ArrayList<>(), subcommentLikes, fbSubComment.getCreatedTime(), fbSubComment.getMessage());
+                                        Post subcomment = new Post(subCommentPoster, null, new ArrayList<>(), new ArrayList<>(), subcommentLikes, fbSubComment.getCreatedTime(), fbSubComment.getMessage(), "");
                                         subcomments.add(subcomment);
                                         postService.newPost(subcomment);
                                     }
@@ -265,7 +265,7 @@ public class LoginServiceFacade implements LoginServiceFacadeLocal {
                                 continue;
                             }
                             
-                            Post comment = new Post(commentPoster, null, new ArrayList<>(), subcomments, commentLikes, fbcomment.getCreatedTime(), fbcomment.getMessage());
+                            Post comment = new Post(commentPoster, null, new ArrayList<>(), subcomments, commentLikes, fbcomment.getCreatedTime(), fbcomment.getMessage(), "");
                             comments.add(comment);
                             postService.newPost(comment);
                         }
@@ -300,7 +300,7 @@ public class LoginServiceFacade implements LoginServiceFacadeLocal {
                     }
                 }
 
-                Post post = new Post(poster, user, mentions, comments, likes, fbpost.getCreatedTime(), fbpost.getMessage());
+                Post post = new Post(poster, user, mentions, comments, likes, fbpost.getCreatedTime(), fbpost.getMessage(), "");
 
                 if (fbpost.getType().equals("photo") && fbpost.getFullPicture() != null && !fbpost.getFullPicture().isEmpty())
                     post.setPicture(fbpost.getFullPicture());
