@@ -52,6 +52,12 @@
                                         Offensiveness
                                         <a class="detail offensiveness-field"> 0%</a>
                                     </div>
+                            
+                                    <div class="ui label">
+                                        <i class="eye sign icon"></i>
+                                        Seen
+                                        <a class="detail"><c:out value="${post.getSeen()}"/></a>
+                                    </div>
                                     
                                     
                                 <c:if test="${not empty post.getCue()}">
@@ -94,6 +100,13 @@
                                             <i class="warning sign icon"></i>
                                             Offensiveness
                                             <a class="detail offensiveness-field"> 0%</a>
+                                        </div>
+                                    
+                                    
+                                        <div class="ui label">
+                                            <i class="eye sign icon"></i>
+                                            Seen
+                                            <a class="detail"><c:out value="${post.getSeen()}"/></a>
                                         </div>
 
 
@@ -140,6 +153,13 @@
                                                             <i class="warning sign icon"></i>
                                                             Offensiveness
                                                             <a class="detail offensiveness-field"> 0%</a>
+                                                        </div>
+                                                    
+                                                    
+                                                        <div class="ui label">
+                                                            <i class="eye sign icon"></i>
+                                                            Seen
+                                                            <a class="detail"><c:out value="${post.getSeen()}"/></a>
                                                         </div>
 
 
