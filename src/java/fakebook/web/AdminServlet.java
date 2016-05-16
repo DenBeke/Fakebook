@@ -50,6 +50,9 @@ public class AdminServlet extends HttpServlet {
                 return;
             }
 
+            if (user.getIsAdmin()) {
+                request.getSession().setAttribute("isAdmin", true);
+            }
             request.getSession().setAttribute("currentUser", user.getId());
         }
         

@@ -69,6 +69,12 @@
                         <i class="users icon"></i>
                         Friends
                     </a>
+                    <c:if test="${isAdmin}">
+                        <a class="item" href="admin">
+                            <i class="desktop icon"></i>
+                            Admin
+                        </a>
+                    </c:if>
                     <a class="item" href="logout">
                         <i class="power icon"></i>
                         Logout

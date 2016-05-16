@@ -6,6 +6,7 @@
 package fakebook.web;
 
 import fakebook.business.LoginServiceFacadeLocal;
+import fakebook.persistence.User;
 import java.io.IOException;
 import java.util.Map;
 import javax.ejb.EJB;
@@ -54,7 +55,11 @@ public class LoginServlet extends HttpServlet {
             Map<String, Object> result = loginService.login(fbToken, email, password);
             String error = (String)result.get("error");
             if (error.isEmpty()) {
-                request.getSession().setAttribute("currentUser", result.get("user"));
+                User user = (User)result.get("user");
+                if (user.getIsAdmin()) {
+                    request.getSession().setAttribute("isAdmin", true);
+                }
+                request.getSession().setAttribute("currentUser", user.getId());
                 response.sendRedirect(request.getContextPath() + "/wall");
             }
             else {
