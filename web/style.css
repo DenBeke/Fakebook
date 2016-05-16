@@ -54,6 +54,15 @@ body {
   left: -55px;
   top: 0; }
 
+.of-words {
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  left: -105px;
+  top: 0; }
+  .of-words span {
+    margin: 5px !important; }
+
 .progress {
   display: none;
   height: 100px;
@@ -80,5 +89,9 @@ pre {
   color: inherit;
   padding: 0;
   margin: 2px 0; }
+
+#admin-header {
+  margin-top: -20px;
+  background-color: #e74c3c; }
 
 /*# sourceMappingURL=style.css.map */

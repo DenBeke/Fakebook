@@ -39,6 +39,9 @@
                             <div class="value">
                             </div>
                         </div>
+                        <div class="of-words">
+                            <span>Magna</span> <span>Sit</span> <span>Ultricies<span> <span>Quam</span>
+                        </div>
                         <textarea name="new_wall_post"></textarea>
                     </div>
                     Attach picture/video: <input type="file" name="attachment" accept="image/bmp, image/png, image/jpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
