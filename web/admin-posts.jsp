@@ -5,7 +5,7 @@
 
         <div class="ui container">
 
-            <h2 class="ui dividing header">Moderate posts</h2>
+            <h2 class="ui dividing header">Analyze posts</h2>
 
             <c:if test="${empty posts}"><p>There are no posts in the system yet.</p></c:if>
 
