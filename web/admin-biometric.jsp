@@ -68,7 +68,7 @@
             </div>
             
             
-            <canvas id="myChart" width="800" height="400"></canvas>
+            <canvas id="myChart" width="800" height="250"></canvas>
             
             <script>
                 
@@ -101,7 +101,7 @@
                 
             var ctx = document.getElementById("myChart");
             var myChart = new Chart(ctx, {
-                type: 'bar',
+                type: 'line',
                 data: {
                 
                     labels: [
@@ -118,8 +118,10 @@
                                     <c:forEach items="${biometric_data}" var="item">
                                         <c:out value="${item.getHeartrate()}"/>,
                                     </c:forEach>
-                                ]
-                            }]
+                                ],
+                                backgroundColor: "rgba(52,152,219, 0.5)",
+                                borderColor: "#2980b9",
+                            }],
                     },
                     options: {
                         scales: {
