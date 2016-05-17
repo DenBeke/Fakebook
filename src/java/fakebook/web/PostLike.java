@@ -50,7 +50,7 @@ public class PostLike extends HttpServlet {
             
             Long currentUserId = (Long) (request.getSession().getAttribute("currentUser"));
             if (currentUserId == null || userService.getUser(currentUserId) == null) {
-                response.sendRedirect(request.getContextPath() + "/login");
+                //response.sendRedirect(request.getContextPath() + "/login");
                 return;
             }
 

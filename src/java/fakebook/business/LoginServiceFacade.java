@@ -103,7 +103,7 @@ public class LoginServiceFacade implements LoginServiceFacadeLocal {
                 
                 Map<String, Object> result = new HashMap<>();
                 result.put("error", "");
-                result.put("user", user.getId());
+                result.put("user", user);
                 return result;
             }
             else {
@@ -124,7 +124,7 @@ public class LoginServiceFacade implements LoginServiceFacadeLocal {
                 if (password.equals(user.getPassword())) {
                     Map<String, Object> result = new HashMap<>();
                     result.put("error", "");
-                    result.put("user", user.getId());
+                    result.put("user", user);
                     return result;
                 }
                 else {

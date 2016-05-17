@@ -41,7 +41,6 @@
             
         </div>
         
-        <div class="">
         
         <div class="ui left demo vertical inverted sidebar labeled icon menu visible">
             <a class="item" href="./">
@@ -69,6 +68,12 @@
                         <i class="users icon"></i>
                         Friends
                     </a>
+                    <c:if test="${isAdmin}">
+                        <a class="item" href="admin">
+                            <i class="desktop icon"></i>
+                            Admin
+                        </a>
+                    </c:if>
                     <a class="item" href="logout">
                         <i class="power icon"></i>
                         Logout
@@ -76,3 +81,17 @@
                 </c:otherwise>
             </c:choose>
         </div>
+        
+        
+        <noscript>
+        <div class="ui container">
+            <div class="ui negative message">
+                <div class="header">
+                    Javascript required
+                </div>
+                <p>
+                    We're sorry, but Fakebook really relies on Javascript...
+                </p>
+            </div>
+        </div>
+        </noscript>

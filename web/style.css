@@ -55,14 +55,21 @@ body {
   top: 0; }
 
 .of-words {
-  display: none;
   height: 100px;
   width: 100px;
   position: absolute;
   left: -105px;
-  top: 0; }
+  top: 0;
+  color: #c0392b;
+  font-weight: bolder;
+  text-align: right; }
   .of-words span {
-    margin: 5px !important; }
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    width: 100px; }
 
 .progress {
   display: none;
@@ -94,5 +101,8 @@ pre {
 #admin-header {
   margin-top: -20px;
   background-color: #e74c3c; }
+
+.admin-posts img {
+  max-width: 300px !important; }
 
 /*# sourceMappingURL=style.css.map */

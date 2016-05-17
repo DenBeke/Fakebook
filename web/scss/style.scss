@@ -81,15 +81,24 @@ body {
 }
 
 .of-words {
-    display: none;
+    //display: none;
     height: 100px;
     width: 100px;
     position: absolute;
     left: -105px;
     top: 0;
     
+    color: #c0392b;
+    font-weight: bolder;
+    text-align: right;
+    
     span {
-        margin: 5px !important;
+        width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        width: 100px;
     }
     
 }
@@ -136,4 +145,12 @@ pre {
 #admin-header {
     margin-top: -20px;
     background-color: #e74c3c;
+}
+
+.admin-posts {
+    
+    img {
+        max-width: 300px !important;
+    }
+    
 }

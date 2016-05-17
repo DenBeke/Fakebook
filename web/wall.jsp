@@ -40,13 +40,12 @@
                             </div>
                         </div>
                         <div class="of-words">
-                            <span>Magna</span> <span>Sit</span> <span>Ultricies<span> <span>Quam</span>
                         </div>
                         <textarea name="new_wall_post"></textarea>
                     </div>
                     Attach picture/video: <input type="file" name="attachment" accept="image/bmp, image/png, image/jpeg, image/gif, video/mp4, video/ogg, video/webm" /><br>
                     <input type="hidden" name="wall_user_id" value="${user}">
-                    <input type="hidden" name="cue" value="degree">
+                    <input type="hidden" name="cue" value="">
                     <input type="submit" value="Write on wall" class="ui teal button">
                 </form>
 
@@ -96,11 +95,19 @@
                                     </form>
 
                                     <a class="reply" onclick="if ($(this).next('form').is(':hidden')) { $(this).next('form').show() } else { $(this).next('form').hide(); }">Reply</a>
-                                    <form action="?uid=${user}" method="POST" class="ui form" hidden>
+                                    <form action="?uid=${user}" method="POST" class="reply-form ui form" hidden>
                                         <div class="field">
+                                            <div class="eyes"></div>
+                                                    <div class="progress">
+                                                        <div class="value">
+                                                        </div>
+                                                    </div>
+                                                    <div class="of-words">
+                                                    </div>
                                             <textarea name="new_comment"></textarea>
                                         </div>
                                         <input type="hidden" name="parent_post_id" value="${post.getId()}">
+                                        <input type="hidden" name="cue" value="">
                                         <input type="submit" value="Post comment" class="ui teal button">
                                     </form>
                                 </div>
@@ -133,11 +140,19 @@
                                             </form>
                                                 
                                             <a class="reply" onclick="if ($(this).next('form').is(':hidden')) { $(this).next('form').show() } else { $(this).next('form').hide(); }">Reply</a>
-                                            <form action="?uid=${user}" method="POST" class="ui form" hidden>
+                                            <form action="?uid=${user}" method="POST" class="reply-form ui form" hidden>
                                                 <div class="field">
+                                                    <div class="eyes"></div>
+                                                    <div class="progress">
+                                                        <div class="value">
+                                                        </div>
+                                                    </div>
+                                                    <div class="of-words">
+                                                    </div>
                                                     <textarea name="new_comment"></textarea>
                                                 </div>
                                                 <input type="hidden" name="parent_post_id" value="${comment.getId()}">
+                                                <input type="hidden" name="cue" value="">
                                                 <input type="submit" value="Post comment" class="ui teal button">
                                             </form>
                                         </div>
@@ -171,11 +186,19 @@
                                                             </form>
                                                                 
                                                             <a class="reply" onclick="if ($(this).next('form').is(':hidden')) { $(this).next('form').show() } else { $(this).next('form').hide(); }">Reply</a>
-                                                            <form action="?uid=${user}" method="POST" class="ui form" hidden>
+                                                            <form action="?uid=${user}" method="POST" class="reply-form ui form" hidden>
                                                                 <div class="field">
+                                                                    <div class="eyes"></div>
+                                                                    <div class="progress">
+                                                                        <div class="value">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="of-words">
+                                                                    </div>
                                                                     <textarea name="new_comment"></textarea>
                                                                 </div>
                                                                 <input type="hidden" name="parent_post_id" value="${comment.getId()}"> <!-- "comment" instead of "subComment" because you can't comment on the subcomment itself -->
+                                                                <input type="hidden" name="cue" value="">
                                                                 <input type="submit" value="Post comment" class="ui teal button">
                                                             </form>
                                                         </div>
@@ -252,7 +275,15 @@
     //post = client.add("post");
     
     
-    $( 'form#wall_form' ).keypress(function() {
+    $("[name='cue']").each(function(){
+        
+        var cue = ['eyes', 'highlight', 'degree'][Math.floor(Math.random() * 3)];
+        $(this).val(cue);
+        
+    });
+    
+    
+    $( 'form#wall_form, form.reply-form' ).on("keyup", function() {
         
         var form = $(this);
         var postContent = form.find('textarea').val();
@@ -266,6 +297,7 @@
                     data: postContent,
                     success:function (data){
                         
+                        console.log(postContent);
                         console.log(data);
                         
                         var cue = form.find("[name='cue']").val();
@@ -281,10 +313,10 @@
                             
                         }
                         else if(cue === "highlight") {
-                            form.find('textarea').highlightTextarea({
-                                //words: ['Lorem ipsum', 'vulputate', 'test']
-                                words: data.profanities
-                            });
+                            form.find(".of-words").html("");
+                            data.profanities.forEach(function(entry) {
+                                form.find(".of-words").append("<span>" + entry + "</span>");
+}                           );
                         }
                         else if(cue === "degree") {
                             if(data.value >= 0.3) {
@@ -301,8 +333,9 @@
     
     
     
-    $('.text').click(function() {
+    $('.text pre').click(function(event) {
         var postContent = $(this).text().trim();
+        
         //console.log("CLICKED!")
         //console.log(postContent)
         $.ajax(
