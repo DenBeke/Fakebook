@@ -130,7 +130,6 @@
                                             <pre><c:out value="${comment.getText()}"/></pre>
                                         </div>
                                         <div class="actions">
-                                            <!-- TODO: Don't redirect -->
                                             <form action="?uid=${user}" method="POST" class="ui form wall_like">
                                                 <input type="hidden" name="liked_post_id" value="${comment.getId()}">
                                                 <a class="like">
@@ -176,7 +175,6 @@
                                                         </div>
                                                             
                                                         <div class="actions">
-                                                            <!-- TODO: Don't redirect -->
                                                             <form action="?uid=${user}" method="POST" class="ui form wall_like">
                                                                 <input type="hidden" name="liked_post_id" value="${subComment.getId()}">
                                                                 <a class="like">

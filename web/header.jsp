@@ -64,6 +64,10 @@
                         <i class="smile icon"></i>
                         Wall
                     </a>
+                    <a class="item" href="feed">
+                        <i class="feed icon"></i>
+                        Feed
+                    </a>
                     <a class="item" href="friends">
                         <i class="users icon"></i>
                         Friends
