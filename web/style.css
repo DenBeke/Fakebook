@@ -105,4 +105,30 @@ pre {
 .admin-posts img {
   max-width: 300px !important; }
 
+.line-post-seen {
+  position: absolute;
+  height: 250px;
+  line-height: 250px;
+  width: 10px;
+  background-color: #8e44ad;
+  left: 50%;
+  margin-top: 30px;
+  margin-left: -5px;
+  border-radius: 3px; }
+
+.line-post-seen-label {
+  position: absolute;
+  width: 90px;
+  height: 25px;
+  left: 50%;
+  margin-top: 125px;
+  margin-left: -45px;
+  background-color: #8e44ad;
+  padding: 5px;
+  box-sizing: border-box;
+  text-align: center;
+  color: #fff;
+  border-radius: 3px;
+  font-size: 0.9em; }
+
 /*# sourceMappingURL=style.css.map */

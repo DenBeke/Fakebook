@@ -83,6 +83,19 @@ public class AdminBiometric extends HttpServlet {
 
                 List<BiometricData> data = biometricService.getHeartrateData(userId, minTime, maxTime);
                 request.setAttribute("biometric_data", data);
+                
+                
+                
+                userId = post.getPoster().getId();
+                minTime = DateToCalendar(post.getTimestamp());
+                minTime.add(Calendar.SECOND, -10);
+                maxTime = DateToCalendar(post.getTimestamp());
+                maxTime.add(Calendar.SECOND, 10);
+
+                List<BiometricData> data2 = biometricService.getHeartrateData(userId, minTime, maxTime);
+                request.setAttribute("biometric_data_written", data2);
+                
+                
             }
             
             request.setAttribute("post", post);

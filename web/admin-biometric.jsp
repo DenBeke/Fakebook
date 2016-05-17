@@ -67,46 +67,19 @@
                                     
             </div>
             
+                                    
+            <h4>Heart-rate while posting</h4>                       
+            <div class="line-post-seen"></div>
+            <div class="line-post-seen-label">POSTED</div>
+            <canvas id="myChart2" width="800" height="250"></canvas>
             
+                                    
+                                    
+            <h4>Heart-rate while reading</h4>
             <div class="line-post-seen"></div>
             <div class="line-post-seen-label">POST SEEN</div>
-
             <canvas id="myChart" width="800" height="250"></canvas>
-            
-            
-            <style>
-                .line-post-seen {
-                    position: absolute;
-                    height: 250px;
-                    line-height: 250px;
-                    width: 10px;
-                    background-color: #8e44ad;
-                    left: 50%;
-                    margin-top: 30px;
-                    margin-left: -5px;
-                    border-radius: 3px;
-                }   
-                
-                .line-post-seen-label {
-                    
-                    position: absolute;
-                    width: 90px;
-                    height: 25px;
-                    left: 50%;
-                    margin-top: 125px;
-                    margin-left: -45px;
-                    background-color: #8e44ad;
-                    padding: 5px;
-                    box-sizing: border-box;
-                    text-align: center;
-                    color: #fff;
-                    border-radius: 3px;
-                    font-size: 0.9em
-                    
-                }
-                
-                
-            </style>
+
             
             <script>                
                 $(".offensiveness-field").each(function(){
@@ -152,6 +125,44 @@
                         label: 'Heartrate',
                                 data: [
                                     <c:forEach items="${biometric_data}" var="item">
+                                        <c:out value="${item.getHeartrate()}"/>,
+                                    </c:forEach>
+                                ],
+                                backgroundColor: "rgba(52,152,219, 0.5)",
+                                borderColor: "#2980b9",
+                            }],
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                        }
+                    }
+                });
+                
+            
+            
+            var ctx2 = document.getElementById("myChart2");
+            
+            var myChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                
+                    labels: [
+                    <c:forEach items="${biometric_data_written}" var="item">
+                            '<c:out value="${item.getTimestampString()}"/>',
+                    </c:forEach>
+                    ],
+                    
+                    //labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                    
+                    datasets: [{
+                        label: 'Heartrate',
+                                data: [
+                                    <c:forEach items="${biometric_data_written}" var="item">
                                         <c:out value="${item.getHeartrate()}"/>,
                                     </c:forEach>
                                 ],
