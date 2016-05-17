@@ -38,7 +38,7 @@ if __name__ == "__main__":
 		userId = 1
 		if len(sys.argv) >= 2:
 			userId = int(sys.argv[1])		# Reads the userid from the terminal params.
-		elif len(sys.argv) == 3:
+		if len(sys.argv) == 3:
 			realTime = (sys.argv[2]=="--realtime")
 			print realTime
 
