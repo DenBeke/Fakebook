@@ -63,6 +63,12 @@
 
                         <td><a href="wall?uid=${user.getId()}"><c:out value="${user.getName()}"/></a></td>
                         <td>
+                            <form action="" method="POST" class="ui form">
+                                <input type="hidden" name="download_user_id" value="${user.getId()}">
+                                <input type="submit" value="Download data" class="ui teal button">
+                            </form>
+                        </td>
+                        <td>
                             <c:if test="${currentUser != user.getId()}">
                                 <form action="" method="POST" class="ui form">
                                     <input type="hidden" name="deleted_user_id" value="${user.getId()}">
@@ -87,6 +93,12 @@
                         </td>
 
                         <td><a href="wall?uid=${user.getId()}"><c:out value="${user.getName()}"/></a></td>
+                        <td>
+                            <form action="" method="POST" class="ui form">
+                                <input type="hidden" name="download_user_id" value="${user.getId()}">
+                                <input type="submit" value="Download data" class="ui teal button">
+                            </form>
+                        </td>
                         <td>
                             <c:if test="${currentUser != user.getId()}">
                                 <form action="" method="POST" class="ui form">

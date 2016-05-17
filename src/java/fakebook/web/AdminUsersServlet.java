@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import fakebook.business.AdminServiceFacadeLocal;
+import java.io.PrintWriter;
 
 /**
  *
@@ -84,6 +85,14 @@ public class AdminUsersServlet extends HttpServlet {
         
                 request.setAttribute("error", adminService.createUser(email, password, firstName, lastName, gender, birthday, createAdmin));
             }
+        }
+        
+        // Check if downloading data
+        if (request.getParameter("download_user_id") != null) {
+            Long userId = Long.decode(request.getParameter("download_user_id"));
+            String data = adminService.downloadData(userId);
+            response.getWriter().write(data);
+            return;
         }
         
         // Check if deleting a user

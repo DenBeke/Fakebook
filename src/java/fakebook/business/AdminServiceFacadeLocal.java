@@ -24,4 +24,6 @@ public interface AdminServiceFacadeLocal {
     public void deleteUser(long userId);
     
     public List<Post> getAllPosts();
+
+    public String downloadData(Long userId);
 }

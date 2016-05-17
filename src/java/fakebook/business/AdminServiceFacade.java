@@ -36,6 +36,10 @@ public class AdminServiceFacade implements AdminServiceFacadeLocal, HttpSessionL
     
     @EJB
     private RegisterServiceFacadeLocal registerService;
+    
+    @EJB
+    private BiometricServiceFacadeLocal biometricService;
+    
 
     private static final Map<String, HttpSession> sessions = new HashMap<String, HttpSession>();
     
@@ -123,5 +127,10 @@ public class AdminServiceFacade implements AdminServiceFacadeLocal, HttpSessionL
         });
         
         return posts;
+    }
+
+    @Override
+    public String downloadData(Long userId) {
+        return biometricService.getJsonString(userId);
     }
 }
