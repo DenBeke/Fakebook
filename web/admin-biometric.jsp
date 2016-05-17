@@ -108,10 +108,7 @@
                 
             </style>
             
-            <script>
-                
-            var bullyAnalyzerUrl = "http://localhost:8080/BullyAnalyzerJava/webresources/analyzer"
-                
+            <script>                
                 $(".offensiveness-field").each(function(){
         
                     var field = $(this);

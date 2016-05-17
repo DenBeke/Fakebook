@@ -18,7 +18,9 @@
         <script src="jquery.viewport.js"></script>
         <script src="Chart.min.js"></script>
         <script src="jquery.highlighttextarea.min.js"></script>
-        
+        <script>
+            var bullyAnalyzerUrl = "http://localhost:8080/BullyAnalyzerJava/webresources/analyzer"
+        </script>
         
     </head>
     <body>
