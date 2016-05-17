@@ -38,6 +38,7 @@ if __name__ == "__main__":
 		userId = 1
 		if len(sys.argv) >= 2:
 			userId = int(sys.argv[1])		# Reads the userid from the terminal params.
+			print "User ID = " + str(userId)
 		if len(sys.argv) == 3:
 			realTime = (sys.argv[2]=="--realtime")
 			print realTime
@@ -46,7 +47,7 @@ if __name__ == "__main__":
 		if not realTime:
 			for line in bioData.readlines():
 				data = changeToCorrectDate(line)
-				data = setUser(data, 1)
+				data = setUser(data, userId)
 				ws.send(data)
 		else:
 			# Look for data point in file corresponding to current time.
@@ -75,7 +76,7 @@ if __name__ == "__main__":
 						time = date.strftime("%H:%M:%S")
 					# push data:
 					data = changeToCorrectDate(line)
-					data = setUser(data, 1)
+					data = setUser(data, userId)
 					ws.send(data)
 
 		print "Sent all data."
