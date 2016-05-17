@@ -81,10 +81,7 @@
             <canvas id="myChart" width="800" height="250"></canvas>
 
             
-            <script>
-                
-            var bullyAnalyzerUrl = "http://localhost:8080/BullyAnalyzerJava/webresources/analyzer"
-                
+            <script>                
                 $(".offensiveness-field").each(function(){
         
                     var field = $(this);

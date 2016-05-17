@@ -22,7 +22,8 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 /**
  *
  * @author robin
@@ -104,10 +105,30 @@ public class BiometricServiceFacade implements BiometricServiceFacadeLocal {
             }
         }
         System.out.println("NR OF Values: " + retList.size());
+        System.out.println(this.getJsonString(userId));
         return retList;
     }
     
-    
+    /**
+     * returns a json string with the biometric data of a userID
+     * @param userId
+     * @return 
+     */
+    public String getJsonString(long userId){
+        JSONObject obj = new JSONObject();
+        JSONArray array = new JSONArray();
+        
+        List<BiometricData> list = em.createNamedQuery("BiometricData.getByUser").setParameter("uid", userId).getResultList();
+        for(BiometricData dataPoint: list) {
+            JSONObject dp = new JSONObject();
+            dp.put("timestamp", dataPoint.getTimestampString());
+            dp.put("heart_rate", dataPoint.getHeartrate());
+            array.add(dp);
+        }
+        obj.put("User_id", userId);
+        obj.put("Heart_rate_data", array);
+        return obj.toJSONString();
+    }
     
 
     // Add business logic below. (Right-click in editor and choose
