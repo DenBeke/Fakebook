@@ -232,20 +232,40 @@
 <script>
     var bullyAnalyzerUrl = "http://localhost:8080/BullyAnalyzerJava/webresources/analyzer"
     $("form.wall_like").submit(function(e){
-    var form = $(this);
-    var request = "http://localhost:8080/Fakebook/postlike?liked_post_id=" + form.find("[name='liked_post_id']").val();
+        var form = $(this);
+        var request = "http://localhost:8080/Fakebook/postlike?liked_post_id=" + form.find("[name='liked_post_id']").val();
+                    //console.log(id);
+                    //console.log(request);
+                    //console.log(request)
+                    $.get( request, function( data ) {
+                        text = ' like';
+                        if(parseInt(data) !== 1) {
+                            text = text + 's';
+                        }
+                        form.find('.fb-likes').text(data + text);
+                    });
+        return false;
+     });
+    
+    
+    $('.fb-post:in-viewport').each(function(){
+            if( $(this).data('seen').length === 0) {
+                var id = $(this).data('id');
+                var date = Math.floor(Date.now() / 1000);
+                $(this).data('seen', date);
+                
+                var request = "http://localhost:8080/Fakebook/postseen?post=" + id + "&date=" + date;
                 //console.log(id);
                 //console.log(request);
-                //console.log(request)
                 $.get( request, function( data ) {
-                    text = ' like';
-                    if(parseInt(data) !== 1) {
-                        text = text + 's';
-                    }
-                    form.find('.fb-likes').text(data + text);
+                    //$( ".result" ).html( data );
+                    //alert( "Load was performed." );
+                    //console.log(data);
                 });
-    return false;
- });
+            }
+            
+    });
+    
     
     
     $(window).scroll(function(){
