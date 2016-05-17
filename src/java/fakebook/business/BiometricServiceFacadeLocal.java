@@ -39,5 +39,8 @@ public interface BiometricServiceFacadeLocal {
     public List<BiometricData> getHeartrateData(long userId, Calendar minTime, Calendar maxTime);
 
     public void pushHeartrateJson(JsonObject json);
+        
+    public String getJsonString(long userId);
+
     
 }

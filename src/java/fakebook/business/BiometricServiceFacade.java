@@ -114,6 +114,7 @@ public class BiometricServiceFacade implements BiometricServiceFacadeLocal {
      * @param userId
      * @return 
      */
+    @Override
     public String getJsonString(long userId){
         JSONObject obj = new JSONObject();
         JSONArray array = new JSONArray();
