@@ -131,7 +131,7 @@
 <script>
     $("form.wall_like").submit(function(e){
         var form = $(this);
-        var request = "http://localhost:8080/Fakebook/postlike?liked_post_id=" + form.find("[name='liked_post_id']").val();
+        var request = "postlike?liked_post_id=" + form.find("[name='liked_post_id']").val();
                     $.get( request, function( data ) {
                         text = ' like';
                         if(parseInt(data) !== 1) {

@@ -232,7 +232,7 @@
 <script>
     $("form.wall_like").submit(function(e){
         var form = $(this);
-        var request = "http://localhost:8080/Fakebook/postlike?liked_post_id=" + form.find("[name='liked_post_id']").val();
+        var request = "postlike?liked_post_id=" + form.find("[name='liked_post_id']").val();
                     //console.log(id);
                     //console.log(request);
                     //console.log(request)
@@ -253,7 +253,7 @@
                 var date = Math.floor(Date.now() / 1000);
                 $(this).data('seen', date);
                 
-                var request = "http://localhost:8080/Fakebook/postseen?post=" + id + "&date=" + date;
+                var request = "postseen?post=" + id + "&date=" + date;
                 //console.log(id);
                 //console.log(request);
                 $.get( request, function( data ) {
@@ -274,7 +274,7 @@
                 var date = Math.floor(Date.now() / 1000);
                 $(this).data('seen', date);
                 
-                var request = "http://localhost:8080/Fakebook/postseen?post=" + id + "&date=" + date;
+                var request = "postseen?post=" + id + "&date=" + date;
                 //console.log(id);
                 //console.log(request);
                 $.get( request, function( data ) {
